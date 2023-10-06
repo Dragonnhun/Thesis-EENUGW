@@ -1,1 +1,1 @@
-# Thesis-EENUGW
+# Jakab Ádám Győző - EENUGW
