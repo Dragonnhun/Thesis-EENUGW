@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -53,18 +52,18 @@ public class UserEndpoint {
     }
 
     @Transactional
-    public Pair<HttpStatus, String> verifyRegistration(String verificationCode) {
-        if (verificationCode == null) {
-            return Pair.of(HttpStatus.UNPROCESSABLE_ENTITY, "Verification code is not provided.");
+    public Pair<String, String> verifyRegistration(String verificationCode) {
+        if (verificationCode == null || verificationCode.isEmpty()) {
+            return Pair.of("Error", "Verification code is not provided.");
         }
 
         var result = _userService.verifyRegistration(verificationCode);
 
         if (result.getFirst()) {
-            return Pair.of(HttpStatus.OK, result.getSecond());
+            return Pair.of("Success", result.getSecond());
         } 
         else {
-            return Pair.of(HttpStatus.UNAUTHORIZED, result.getSecond());
+            return Pair.of("Error", result.getSecond());
         }
     }
 

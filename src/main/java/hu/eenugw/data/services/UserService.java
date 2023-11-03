@@ -63,6 +63,10 @@ public class UserService {
     }
 
     public Pair<Boolean, String> verifyRegistration(String verificationCode) {
+        if (verificationCode == null || verificationCode.isEmpty()) {
+            return Pair.of(false, "Verification code is not provided.");
+        }
+
         var optionalUser = _userRepository.findByVerificationCode(verificationCode);
          
         if (optionalUser.isEmpty()) return Pair.of(false, "User could not be found!");

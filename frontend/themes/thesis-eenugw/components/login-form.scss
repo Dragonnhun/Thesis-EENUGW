@@ -51,13 +51,13 @@
 
     &-register-button, &-forgotten-password-button {
         background-color: transparent;
+
+        &:hover {
+            background-color: $primary-transparent-button-hover-background-color;
+        }
     }
 
     &-forgotten-password-button {
         margin-bottom: $spacing-size-normal * 1.2;
-    }
-
-    ::part(form) {
-        padding-bottom: 0;
     }
 }

@@ -66,6 +66,15 @@
         margin-bottom: var(--lumo-space-s);
     }
 
+    &-login-button {
+        background-color: transparent;
+        margin-bottom: $spacing-size-normal * 1.2;
+
+        &:hover {
+            background-color: $primary-transparent-button-hover-background-color;
+        }
+    }
+
     &-title {
         margin-top: calc(var(--lumo-font-size-xxxl) - var(--lumo-font-size-xxl));
     }
