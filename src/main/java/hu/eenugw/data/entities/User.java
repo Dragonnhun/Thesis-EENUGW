@@ -22,7 +22,8 @@ public class User extends AbstractEntity {
     private String username;
 
     @Nonnull
-    @Email(message = "Email-Address must be valid.")
+    @Email(message = "E-mail Address must be valid.")
+    @Size(min = 5, max = 255, message = "E-mail Address must be between 5 and 255 characters long.")
     private String email;
 
     @Nonnull

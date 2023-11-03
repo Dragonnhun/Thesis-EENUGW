@@ -13,7 +13,7 @@ import 'themes/thesis-eenugw/components/register-form.scss';
 export default function RegsiterView() {
   const blockName = 'register-form';
 
-  const { state, authenticate } = useContext(AuthContext);
+  const { state } = useContext(AuthContext);
   const [url, setUrl] = useState<string>();
   const [siteName, setSiteName] = useState<string>();
   const [verificationResult, setVerificationResult] = useState({ status: '', message: '' });
@@ -35,6 +35,12 @@ export default function RegsiterView() {
         const result = await UserEndpoint.verifyRegistration(verificationCode!);
 
         setVerificationResult({ status: result.first as string, message: result.second as string });
+
+        if ((result.first as string) === 'Success') {
+          setTimeout(async function () {
+            setUrl(await RouteEndpoint.getLoginUrl());
+          }, 30000);
+        }
       }
 
       verifyRegistration();
@@ -52,7 +58,7 @@ export default function RegsiterView() {
             duration: 2000,
             theme: 'error',
           });
-  
+
           return;
         }
 
@@ -66,7 +72,17 @@ export default function RegsiterView() {
     
             return;
           } else {
-            UserEndpoint.register(user);
+            UserEndpoint.register(user).then(() => {
+              Notification.show('Registration was successful! Please, check your inbox and verify your E-mail Address!', {
+                position: 'top-center',
+                duration: 30000,
+                theme: 'success',
+              });
+
+              setTimeout(async function () {
+                setUrl(await RouteEndpoint.getLoginUrl());
+              }, 30000);
+            });
           }
         });
       });
@@ -88,14 +104,14 @@ export default function RegsiterView() {
           <section className={ `${ blockName }` }>
             <h2 className={ `${ blockName }-title` }>{ verificationResult.status }</h2>
             <h3 className={ `${ blockName }-title` }>{ verificationResult.message }</h3>
-            <Button
+          </section>
+          <Button
               className={ `${ blockName }-login-button` }
               title={'Login'}
               onClick={async () => {
                 setUrl(await RouteEndpoint.getLoginUrl());
               }}
-            >Login</Button>
-          </section>
+            >Log in here!</Button>
         </section>
       </div>
     );
@@ -112,8 +128,15 @@ export default function RegsiterView() {
             <TextField label='Username' { ...field(model.username) } />
             <TextField label='E-mail Address' { ...field(model.email) } />
             <PasswordField label='Password' { ...field( model.password) } />
-            <Button title='Register' className={ `${ blockName }-register-button` } onClick={submit}>Register</Button>
+            <Button theme='primary contained submit' title='Register' className={ `${ blockName }-register-button` } onClick={submit}>Register</Button>
           </section>
+          <Button
+              className={ `${ blockName }-login-button` }
+              title={'Login'}
+              onClick={async () => {
+                setUrl(await RouteEndpoint.getLoginUrl());
+              }}
+            >Already a user? Log in here!</Button>
         </section>
       </div>
     );

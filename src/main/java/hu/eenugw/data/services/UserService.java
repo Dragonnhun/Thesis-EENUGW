@@ -69,7 +69,7 @@ public class UserService {
 
         var optionalUser = _userRepository.findByVerificationCode(verificationCode);
          
-        if (optionalUser.isEmpty()) return Pair.of(false, "User could not be found!");
+        if (optionalUser.isEmpty()) return Pair.of(false, "User could not be found based on the provided verification code!");
 
         var user = optionalUser.get();
          
@@ -78,7 +78,7 @@ public class UserService {
          
         _userRepository.save(user);
          
-        return Pair.of(true, "User has been successfully verified!");
+        return Pair.of(true, "User has been successfully verified and enabled!");
     }
 
     public void delete(Long id) {
