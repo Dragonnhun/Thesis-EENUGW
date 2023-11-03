@@ -1,7 +1,5 @@
 package hu.eenugw.data.entities;
 
-import hu.eenugw.data.Role;
-
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -13,6 +11,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 
 import java.util.Set;
+
+import hu.eenugw.data.constants.Role;
 
 @Entity
 @Table(name = "users")

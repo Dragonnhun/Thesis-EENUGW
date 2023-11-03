@@ -1,4 +1,4 @@
-package hu.eenugw.data;
+package hu.eenugw.data.constants;
 
 public enum Role {
     GUEST,

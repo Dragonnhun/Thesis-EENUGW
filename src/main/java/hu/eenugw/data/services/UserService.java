@@ -52,7 +52,7 @@ public class UserService {
     public User register(User entity) throws UnsupportedEncodingException, MessagingException {
         entity.setPassword(new BCryptPasswordEncoder().encode(entity.getPassword()));
         entity.setEnabled(false);
-        entity.setRoles(new java.util.HashSet<>(java.util.Arrays.asList(hu.eenugw.data.Role.USER)));
+        entity.setRoles(new java.util.HashSet<>(java.util.Arrays.asList(hu.eenugw.data.constants.Role.USER)));
          
         var randomCode = RandomString.make(64);
         entity.setVerificationCode(randomCode);

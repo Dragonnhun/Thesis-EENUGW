@@ -1,5 +1,5 @@
 import type User from 'Frontend/generated/hu/eenugw/data/entities/User.js';
-import type Role from 'Frontend/generated/hu/eenugw/data/Role.js';
+import type Role from 'Frontend/generated/hu/eenugw/data/constants/Role.js';
 import { UserEndpoint } from 'Frontend/generated/endpoints.js';
 import { createContext, Dispatch, useEffect, useReducer } from 'react';
 
