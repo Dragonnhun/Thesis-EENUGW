@@ -1,14 +1,11 @@
 import Placeholder from 'Frontend/components/placeholder/Placeholder.js';
 import AuthControl from 'Frontend/views/AuthControl.js';
 import HelloWorldView from 'Frontend/views/helloworld/HelloWorldView.js';
-import LoginView from 'Frontend/views/login/LoginView.js';
-import RegisterView from 'Frontend/views/register/RegisterView.js';
-import ForgottenPasswordView from 'Frontend/views/forgotten-password/ForgottenPasswordView.js';
 import MainLayout from 'Frontend/views/MainLayout.js';
-import { lazy } from 'react';
+import LoginView from 'Frontend/views/login/LoginView.js';
+import RegisterView from 'Frontend/views/register/RegisterView';
+import ForgottenPasswordView from 'Frontend/views/forgotten-password/ForgottenPasswordView';
 import { createBrowserRouter, RouteObject } from 'react-router-dom';
-
-const AboutView = lazy(async () => import('Frontend/views/about/AboutView.js'));
 
 export const routes: RouteObject[] = [
   {
@@ -21,6 +18,9 @@ export const routes: RouteObject[] = [
     children: [
     ],
   },
+  { path: "/login", element: <LoginView />, handle: { title: 'Log In', requiresLogin: false } },
+  { path: '/register', element: <RegisterView />, handle: { title: 'Register', requiresLogin: false } },
+  { path: '/forgotten-password', element: <ForgottenPasswordView />, handle: { title: 'Forgotten Password', requiresLogin: false } },
 ];
 
 export default createBrowserRouter(routes);

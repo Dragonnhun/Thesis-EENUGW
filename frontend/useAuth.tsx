@@ -1,4 +1,4 @@
-import type User from 'Frontend/generated/hu/eenugw/data/entity/User.js';
+import type User from 'Frontend/generated/hu/eenugw/data/entities/User.js';
 import type Role from 'Frontend/generated/hu/eenugw/data/Role.js';
 import { UserEndpoint } from 'Frontend/generated/endpoints.js';
 import { createContext, Dispatch, useEffect, useReducer } from 'react';
