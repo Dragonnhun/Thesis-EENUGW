@@ -1,10 +1,10 @@
-import { LoginI18n, LoginForm } from '@hilla/react-components/LoginForm.js';
-import { login } from 'Frontend/auth.js';
-import { AuthContext } from 'Frontend/useAuth.js';
 import { useContext, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { RouteEndpoint, SiteEndpoint } from 'Frontend/generated/endpoints';
+import { LoginI18n, LoginForm } from '@hilla/react-components/LoginForm.js';
 import { Button } from '@hilla/react-components/Button.js';
+import { login } from 'Frontend/auth.js';
+import { AuthContext } from 'Frontend/useAuth.js';
+import { RouteEndpoint, SiteEndpoint } from 'Frontend/generated/endpoints';
 import 'themes/thesis-eenugw/components/login-form.scss';
 
 const loginI18nDefault: LoginI18n = {
@@ -41,16 +41,13 @@ export default function LoginView() {
     fetchSiteName();
   }, []);
 
-  if (url || state.user) {
-    const path = new URL(url ?? "/", document.baseURI).pathname;
-    return <Navigate to={path} replace />;
-  }
+  if (url || state.user) return <Navigate to={ new URL(url ?? "/", document.baseURI).pathname } />;
 
   return (
     <div className={ `${ blockName }-container` }>
       <section className={ `${ blockName }-section` }>
         <div className={ `${ blockName }-header` }>
-          <h1 className={ `${ blockName }-header-title` }>Welcome to { siteName }!</h1>
+          <h1 className={ `${ blockName }-header-title` }>{ siteName }</h1>
           <p className={ `${ blockName }-header-description` }>Please log in using your credentials below.</p>
         </div>
         <LoginForm
@@ -75,14 +72,14 @@ export default function LoginView() {
           onClick={async () => {
             setUrl(await RouteEndpoint.getRegisterUrl());
           }}
-        >Not a user yet? Register here!</Button>
+        >Register</Button>
         <Button
           className={ `${ blockName }-forgotten-password-button` }
           title={'Forgotten Password'}
           onClick={async () => {
             setUrl(await RouteEndpoint.getForgottenPasswordUrl());
           }}
-        >Forgot your password? Recover here!</Button>
+        >Forgotten Password</Button>
       </section>
     </div>
   );
