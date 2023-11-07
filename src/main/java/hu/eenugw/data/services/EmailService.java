@@ -76,7 +76,7 @@ public class EmailService {
         helper.setSubject(subject);
         
         content = content.replace("[[name]]", user.getUsername());
-        var resetPasswordUrl = siteUrl + "/forgotten-password?token=" + user.getForgottenPasswordToken();
+        var resetPasswordUrl = siteUrl + "/reset-forgotten-password?token=" + user.getForgottenPasswordToken();
         
         content = content.replace("[[URL]]", resetPasswordUrl);
         

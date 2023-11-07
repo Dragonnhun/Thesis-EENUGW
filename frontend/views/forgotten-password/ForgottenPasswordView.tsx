@@ -27,7 +27,6 @@ export default function ForgottenPasswordView() {
   }, []);
 
   const submit = async function () {
-    debugger;
     UserEndpoint.getByEmail(email).then((result) => {
       if (result === undefined) {
         Notification.show('E-mail Address has not been registered yet!', {
@@ -84,7 +83,7 @@ export default function ForgottenPasswordView() {
               label='E-mail Address'
               name='email'
               value={ email }
-              errorMessage={ 'Please enter a valid E-mail Address!' }
+              errorMessage='Please enter a valid E-mail Address!'
               required={ true }
               clearButtonVisible={ true }
               onValueChanged={ (event) => setEmail(event.detail.value) }
