@@ -10,6 +10,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 
+import java.time.Instant;
 import java.util.Set;
 
 import hu.eenugw.data.constants.Role;
@@ -34,6 +35,10 @@ public class User extends AbstractEntity {
     private Boolean enabled;
 
     private String verificationCode;
+
+    private String forgottenPasswordToken;
+
+    private Instant forgottenPasswordTokenExpirationDate;
 
     @Nonnull
     @Enumerated(EnumType.STRING)
@@ -80,6 +85,21 @@ public class User extends AbstractEntity {
 
     public void setVerificationCode(String verificationCode) {
         this.verificationCode = verificationCode;
+
+    public String getForgottenPasswordToken() {
+        return forgottenPasswordToken;
+    }
+
+    public void setForgottenPasswordToken(String forgottenPasswordToken) {
+        this.forgottenPasswordToken = forgottenPasswordToken;
+    }
+
+    public Instant getForgottenPasswordTokenExpirationDate() {
+        return forgottenPasswordTokenExpirationDate;
+    }
+
+    public void setForgottenPasswordTokenExpirationDate(Instant forgottenPasswordTokenExpirationDate) {
+        this.forgottenPasswordTokenExpirationDate = forgottenPasswordTokenExpirationDate;
     }
 
     public Set<Role> getRoles() {

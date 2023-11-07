@@ -46,6 +46,34 @@ public class EmailService {
         var verifyURL = siteURL + "/register?verification-code=" + user.getVerificationCode();
         
         content = content.replace("[[URL]]", verifyURL);
+
+    public void sendForgottenPasswordEmail(User user, String siteUrl)
+        throws MessagingException, UnsupportedEncodingException {
+        var toAddress = user.getEmail();
+        var fromAddress = _siteService.getSiteEmail();
+        String senderName = _siteService.getSiteName();
+        String subject = "Password change has been requested";
+        String content = 
+            "Dear [[name]],<br>" 
+            + "Our site has received a request to change your password.<br>"
+            + "If you did not request this, please ignore this email.<br>"
+            + "Otherwise, please click the link below to change your password.<br>"
+            + "The link below is valid for 24 hours.<br>"
+            + "<h3><a href=\"[[URL]]\" target=\"_self\">RESET PASSWORD</a></h3>" 
+            + "Thank you,<br>" 
+            + _siteService.getSiteName();
+
+        var message = _javaMailSender.createMimeMessage();
+        var helper = new MimeMessageHelper(message);
+        
+        helper.setFrom(fromAddress, senderName);
+        helper.setTo(toAddress);
+        helper.setSubject(subject);
+        
+        content = content.replace("[[name]]", user.getUsername());
+        var resetPasswordUrl = siteUrl + "/forgotten-password?token=" + user.getForgottenPasswordToken();
+        
+        content = content.replace("[[URL]]", resetPasswordUrl);
         
         helper.setText(content, true);
         
