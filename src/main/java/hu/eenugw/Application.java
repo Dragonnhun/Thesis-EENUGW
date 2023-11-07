@@ -25,7 +25,7 @@ public class Application implements AppShellConfigurator {
     @Bean
     SqlDataSourceScriptDatabaseInitializer dataSourceScriptDatabaseInitializer(
         DataSource dataSource, SqlInitializationProperties properties, UserRepository repository) {
-        // This bean ensures the database is only initialized when empty
+        // This bean ensures the database is only initialized when empty.
         return new SqlDataSourceScriptDatabaseInitializer(dataSource, properties) {
             @Override
             public boolean initializeDatabase() {

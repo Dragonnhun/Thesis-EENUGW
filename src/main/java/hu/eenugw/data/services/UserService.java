@@ -14,8 +14,6 @@ import org.springframework.data.util.Pair;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import net.bytebuddy.utility.RandomString;
-
 import hu.eenugw.data.entities.User;
 import hu.eenugw.site.services.SiteService;
 import jakarta.mail.MessagingException;
@@ -59,32 +57,32 @@ public class UserService {
     }
 
     @Transactional
-    public User register(User entity) throws UnsupportedEncodingException, MessagingException {
-        entity.setPassword(new BCryptPasswordEncoder().encode(entity.getPassword()));
-        entity.setEnabled(false);
-        entity.setRoles(new java.util.HashSet<>(java.util.Arrays.asList(hu.eenugw.data.constants.Role.USER)));
+    public User register(User user) throws UnsupportedEncodingException, MessagingException {
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        user.setEnabled(false);
+        user.setRoles(new java.util.HashSet<>(java.util.Arrays.asList(hu.eenugw.data.constants.Role.USER)));
          
-        var randomCode = RandomString.make(64);
-        entity.setVerificationCode(randomCode);
+        var token = UUID.randomUUID().toString();
+        user.setRegistrationToken(token);
          
-        _emailService.sendVerificationEmail(entity, _siteService.getSiteUrl());
+        _emailService.sendVerificationEmail(user, _siteService.getSiteUrl());
 
-        return _userRepository.save(entity);
+        return _userRepository.save(user);
     }
 
-    public Pair<Boolean, String> verifyRegistration(String verificationCode) {
-        if (verificationCode == null || verificationCode.isEmpty()) {
-            return Pair.of(false, "Verification code is not provided.");
+    public Pair<Boolean, String> verifyRegistration(String registrationToken) {
+        if (registrationToken == null || registrationToken.isEmpty()) {
+            return Pair.of(false, "Registration token is not provided.");
         }
 
-        var optionalUser = _userRepository.findByVerificationCode(verificationCode);
+        var optionalUser = _userRepository.findByRegistrationToken(registrationToken);
          
-        if (optionalUser.isEmpty()) return Pair.of(false, "User could not be found based on the provided verification code!");
+        if (optionalUser.isEmpty()) return Pair.of(false, "User could not be found based on the provided registration token!");
 
         var user = optionalUser.get();
          
         user.setEnabled(true);
-        user.setVerificationCode(null);
+        user.setRegistrationToken(null);
          
         _userRepository.save(user);
          

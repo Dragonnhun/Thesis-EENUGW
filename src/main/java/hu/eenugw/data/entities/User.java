@@ -34,7 +34,7 @@ public class User extends AbstractEntity {
     @Nonnull
     private Boolean enabled;
 
-    private String verificationCode;
+    private String registrationToken;
 
     private String forgottenPasswordToken;
 
@@ -79,12 +79,13 @@ public class User extends AbstractEntity {
         this.enabled = enabled;
     }
 
-    public String getVerificationCode() {
-        return verificationCode;
+    public String getRegistrationToken() {
+        return registrationToken;
     }
 
-    public void setVerificationCode(String verificationCode) {
-        this.verificationCode = verificationCode;
+    public void setRegistrationToken(String registrationToken) {
+        this.registrationToken = registrationToken;
+    }
 
     public String getForgottenPasswordToken() {
         return forgottenPasswordToken;

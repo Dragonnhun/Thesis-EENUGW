@@ -22,7 +22,7 @@ public class EmailService {
         _siteService = siteService;
     }
 
-    public void sendVerificationEmail(User user, String siteURL)
+    public void sendVerificationEmail(User user, String siteUrl)
         throws MessagingException, UnsupportedEncodingException {
         var toAddress = user.getEmail();
         var fromAddress = _siteService.getSiteEmail();
@@ -43,9 +43,14 @@ public class EmailService {
         helper.setSubject(subject);
         
         content = content.replace("[[name]]", user.getUsername());
-        var verifyURL = siteURL + "/register?verification-code=" + user.getVerificationCode();
+        var verifyUrl = siteUrl + "/register?token=" + user.getRegistrationToken();
         
-        content = content.replace("[[URL]]", verifyURL);
+        content = content.replace("[[URL]]", verifyUrl);
+        
+        helper.setText(content, true);
+        
+        _javaMailSender.send(message);        
+    }
 
     public void sendForgottenPasswordEmail(User user, String siteUrl)
         throws MessagingException, UnsupportedEncodingException {

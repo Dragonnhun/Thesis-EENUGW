@@ -62,18 +62,14 @@ public class UserEndpoint {
     }
 
     @Transactional
-    public Pair<String, String> verifyRegistration(String verificationCode) {
-        if (verificationCode == null || verificationCode.isEmpty()) {
-            return Pair.of("Error", "Verification code is not provided.");
+    public Pair<String, String> verifyRegistration(String registrationToken) {
+        if (registrationToken == null || registrationToken.isEmpty()) {
+            return Pair.of("Error", "Registration token is not provided.");
         }
 
-        var result = _userService.verifyRegistration(verificationCode);
+        return ServiceResult(_userService.verifyRegistration(registrationToken));
+    }
 
-        if (result.getFirst()) {
-            return Pair.of("Success", result.getSecond());
-        } 
-        else {
-            return Pair.of("Error", result.getSecond());
     @Transactional
     public Pair<String, String> requestResettingForgottenPassword(String email) throws UnsupportedEncodingException, MessagingException {
         var emailRegex = "^.+@.+\\..+$";
