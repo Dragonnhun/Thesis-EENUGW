@@ -1,0 +1,32 @@
+{"properties": [
+  {
+    "name": "site.name",
+    "type": "java.lang.String",
+    "description": "The name of the site."
+  },
+  {
+    "name": "site.url",
+    "type": "java.lang.String",
+    "description": "The url of the site."
+  },
+  {
+    "name": "site.url",
+    "type": "java.lang.String",
+    "description": "The url of the site."
+  },
+  {
+    "name": "site.email",
+    "type": "java.lang.String",
+    "description": "The email of the site."
+  },
+  {
+    "name": "site.zone",
+    "type": "java.lang.String",
+    "description": "The zone of the site."
+  },
+  {
+    "name": "site.environment",
+    "type": "java.lang.String",
+    "description": "The environment the site is running in."
+  }
+]}

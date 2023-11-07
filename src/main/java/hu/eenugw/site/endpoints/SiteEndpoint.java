@@ -1,5 +1,7 @@
 package hu.eenugw.site.endpoints;
 
+import java.time.ZoneId;
+
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 
 import dev.hilla.Endpoint;
@@ -24,5 +26,13 @@ public class SiteEndpoint {
 
     public String getSiteEmail() {
         return _siteService.getSiteEmail();
+    }
+
+    public ZoneId getSiteZone() {
+        return _siteService.getSiteZone();
+    }
+
+    public String getSiteEnvironment() {
+        return _siteService.getSiteEnvironment();
     }
 }
