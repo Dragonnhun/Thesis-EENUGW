@@ -33,4 +33,8 @@ public class RouteEndpoint {
     public String getForgottenPasswordUrl() {
         return _routeService.getForgottenPasswordUrl();
     }
+
+    public String getResetForgottenPasswordUrl() {
+        return _routeService.getResetForgottenPasswordUrl();
+    }
 }

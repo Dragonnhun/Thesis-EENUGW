@@ -29,4 +29,8 @@ public class RouteService {
     public String getForgottenPasswordUrl() {
         return RouteUrls.FORGOTTEN_PASSWORD;
     }
+
+        public String getResetForgottenPasswordUrl() {
+        return RouteUrls.RESET_FORGOTTEN_PASSWORD;
+    }
 }

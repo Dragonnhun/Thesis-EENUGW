@@ -14,7 +14,7 @@ public class SiteService {
     private String SITE_URL;
 
     @Value("${site.email}")
-    private String SITE_EMAIL = "dragonhun98@gmail.com";
+    private String SITE_EMAIL;
 
     @Value("${site.zone}")
     private String siteZoneString;
