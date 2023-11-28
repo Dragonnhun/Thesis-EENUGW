@@ -4,7 +4,7 @@ import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 
-import hu.eenugw.data.services.UserRepository;
+import hu.eenugw.usermanagement.services.UserRepository;
 
 import javax.sql.DataSource;
 import org.springframework.boot.SpringApplication;
@@ -14,8 +14,8 @@ import org.springframework.boot.autoconfigure.sql.init.SqlInitializationProperti
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-@Theme(value = "thesis-eenugw", variant = "light")
-@PWA(name = "thesis-eenugw", shortName = "thesis-eenugw", offlineResources = {})
+@Theme(value = "intertwine", variant = "light")
+@PWA(name = "intertwine", shortName = "intertwine", offlineResources = {})
 public class Application implements AppShellConfigurator {
 
     public static void main(String[] args) {

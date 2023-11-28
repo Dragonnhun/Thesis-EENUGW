@@ -6,7 +6,7 @@ import { Icon } from '@hilla/react-components/Icon.js';
 import { login } from 'Frontend/auth.js';
 import { AuthContext } from 'Frontend/useAuth.js';
 import { RouteEndpoint, SiteEndpoint } from 'Frontend/generated/endpoints';
-import 'themes/thesis-eenugw/components/login-form.scss';
+import 'themes/intertwine/components/login-form.scss';
 import '@vaadin/icons';
 import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
 

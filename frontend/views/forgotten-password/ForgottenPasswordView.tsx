@@ -7,7 +7,7 @@ import { EmailField } from '@hilla/react-components/EmailField.js';
 import { Notification } from '@hilla/react-components/Notification.js';
 import { AuthContext } from 'Frontend/useAuth.js';
 import { RouteEndpoint, SiteEndpoint, UserEndpoint } from 'Frontend/generated/endpoints';
-import 'themes/thesis-eenugw/components/forgotten-password-form.scss';
+import 'themes/intertwine/components/forgotten-password-form.scss';
 
 export default function ForgottenPasswordView() {
   const blockName = 'forgotten-password-form';

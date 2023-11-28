@@ -1,4 +1,4 @@
-import UserModel from 'Frontend/generated/hu/eenugw/data/entities/UserModel';
+import UserModel from 'Frontend/generated/hu/eenugw/usermanagement/entities/UserModel';
 import { useContext, useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useForm } from '@hilla/react-form';
@@ -9,7 +9,7 @@ import { Notification } from '@hilla/react-components/Notification.js';
 import { Icon } from '@hilla/react-components/Icon.js';
 import { AuthContext } from 'Frontend/useAuth.js';
 import { RouteEndpoint, SiteEndpoint, UserEndpoint } from 'Frontend/generated/endpoints';
-import 'themes/thesis-eenugw/components/register-form.scss';
+import 'themes/intertwine/components/register-form.scss';
 import '@vaadin/icons';
 
 export default function RegsiterView() {
