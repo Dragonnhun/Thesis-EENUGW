@@ -1,6 +1,7 @@
 package hu.eenugw.data.entities;
 
 import jakarta.annotation.Nonnull;
+import jakarta.persistence.Convert;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -11,9 +12,11 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.Set;
 
 import hu.eenugw.data.constants.Role;
+import hu.eenugw.data.helpers.InstantConverter;
 
 @Entity
 @Table(name = "users")
@@ -38,7 +41,8 @@ public class User extends AbstractEntity {
 
     private String forgottenPasswordToken;
 
-    private Instant forgottenPasswordTokenExpirationDate;
+    @Convert(converter = InstantConverter.class)
+    private Optional<Instant> forgottenPasswordTokenExpirationDate;
 
     @Nonnull
     @Enumerated(EnumType.STRING)
@@ -95,11 +99,11 @@ public class User extends AbstractEntity {
         this.forgottenPasswordToken = forgottenPasswordToken;
     }
 
-    public Instant getForgottenPasswordTokenExpirationDate() {
+    public Optional<Instant> getForgottenPasswordTokenExpirationDate() {
         return forgottenPasswordTokenExpirationDate;
     }
 
-    public void setForgottenPasswordTokenExpirationDate(Instant forgottenPasswordTokenExpirationDate) {
+    public void setForgottenPasswordTokenExpirationDate(Optional<Instant> forgottenPasswordTokenExpirationDate) {
         this.forgottenPasswordTokenExpirationDate = forgottenPasswordTokenExpirationDate;
     }
 

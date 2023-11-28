@@ -19,6 +19,8 @@ import hu.eenugw.site.services.SiteService;
 import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 
+import static hu.eenugw.data.helpers.InstantHelpers.utcNow;
+
 @Service
 public class UserService {
     private final SiteService _siteService;
@@ -100,7 +102,7 @@ public class UserService {
         user.setEnabled(false);
         var token = UUID.randomUUID().toString();
         user.setForgottenPasswordToken(token);
-        user.setForgottenPasswordTokenExpirationDate(Instant.now().plusSeconds(86400));
+        user.setForgottenPasswordTokenExpirationDate(Optional.of(utcNow().plusSeconds(86400)));
 
         _userRepository.save(user);
 
@@ -117,11 +119,12 @@ public class UserService {
 
         var user = optionalUser.get();
 
-        if (Instant.now().isAfter(user.getForgottenPasswordTokenExpirationDate()))
+        if (utcNow().isAfter(user.getForgottenPasswordTokenExpirationDate().orElse(Instant.EPOCH)))
             return Pair.of(false, "The request to reset forgotten password has expired! Please request a new one. if you would like to change your password!");
 
         user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
         user.setForgottenPasswordToken(null);
+        user.setForgottenPasswordTokenExpirationDate(null);
         user.setEnabled(true);
 
         _userRepository.save(user);
@@ -152,7 +155,7 @@ public class UserService {
         if (user.getForgottenPasswordToken() == null || user.getForgottenPasswordToken().isEmpty())
             return false;
 
-        if (Instant.now().isBefore(user.getForgottenPasswordTokenExpirationDate()))
+        if (utcNow().isBefore(user.getForgottenPasswordTokenExpirationDate().orElse(Instant.EPOCH)))
             return false;
 
         return true;
