@@ -6,6 +6,7 @@ import hu.eenugw.security.AuthenticatedUser;
 import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 
+import com.sanctionco.jmail.JMail;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import dev.hilla.Endpoint;
 import dev.hilla.Nonnull;
@@ -13,7 +14,6 @@ import dev.hilla.Nonnull;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
@@ -72,16 +72,11 @@ public class UserEndpoint {
 
     @Transactional
     public Pair<String, String> requestResettingForgottenPassword(String email) throws UnsupportedEncodingException, MessagingException {
-        var emailRegex = "^.+@.+\\..+$";
-
         if (email == null || email.isEmpty()) {
             return Pair.of("Error", "E-mail Address is not provided.");
         }
 
-        var pattern = Pattern.compile(emailRegex);
-        var matcher = pattern.matcher(email);
-
-        if (matcher.matches()) {
+        if (JMail.isValid(email)) {
             return ServiceResult(_userService.requestResettingForgottenPassword(email));
         } else {
             return Pair.of("Error", "The provided E-mail Address is not valid.");
