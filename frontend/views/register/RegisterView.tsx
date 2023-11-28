@@ -6,16 +6,18 @@ import { Button } from '@hilla/react-components/Button.js';
 import { TextField } from '@hilla/react-components/TextField.js';
 import { PasswordField } from '@hilla/react-components/PasswordField.js';
 import { Notification } from '@hilla/react-components/Notification.js';
+import { Icon } from '@hilla/react-components/Icon.js';
 import { AuthContext } from 'Frontend/useAuth.js';
 import { RouteEndpoint, SiteEndpoint, UserEndpoint } from 'Frontend/generated/endpoints';
 import 'themes/thesis-eenugw/components/register-form.scss';
+import '@vaadin/icons';
 
 export default function RegsiterView() {
   const blockName = 'register-form';
 
   const { state } = useContext(AuthContext);
   const [url, setUrl] = useState<string>();
-  const [siteName, setSiteName] = useState<string>();
+  const [siteName, setSiteName] = useState<string>('');
   const [verificationResult, setVerificationResult] = useState({ status: '', message: '' });
 
   // Get the value of a specific query parameter.
@@ -76,7 +78,7 @@ export default function RegsiterView() {
               Notification.show(
                 'Registration was successful! ' + 
                 'Please, check your inbox and verify your E-mail Address!' +
-                '<br>You will be redirected to the log in page in 30 seconds.', {
+                'You will be redirected to the log in page in 30 seconds.', {
                 position: 'top-center',
                 duration: 30000,
                 theme: 'success',
@@ -95,51 +97,80 @@ export default function RegsiterView() {
     }
   });
 
-  if (url || state.user) return <Navigate to={ new URL(url ?? "/", document.baseURI).pathname } />;
+  if (url || state.user) return <Navigate to={ new URL(url ?? '/', document.baseURI).pathname } />;
 
   if (registrationToken) {
     return (
-      <div className={ `${ blockName }-container` }>
-        <section className={ `${ blockName }-section` }>
-          <div className={ `${ blockName }-header` }>
-            <h1 className={ `${ blockName }-header-title` }>{ siteName }</h1>
+      <div className={`${ blockName }-container`}>
+        <section className={`${ blockName }-section`}>
+          <div className={`${ blockName }-header`}>
+            <h1 className={`${ blockName }-header-title`}>{siteName}</h1>
           </div>
-          <section className={ `${ blockName }` }>
-            <h2 className={ `${ blockName }-title` }>{ verificationResult.status }</h2>
-            <h3 className={ `${ blockName }-title` }>{ verificationResult.message }</h3>
+          <section className={`${ blockName }`}>
+            <h2 className={`${ blockName }-title`}>{verificationResult.status}</h2>
+            <h3 className={`${ blockName }-title`}>{verificationResult.message}</h3>
           </section>
           <Button
-            className={ `${ blockName }-login-button` }
-            title={'Login'}
+            className={`${ blockName }-login-button`}
+            title='Login'
             onClick={async () => {
               setUrl(await RouteEndpoint.getLoginUrl());
-            }}
-          >Log In</Button>
+            }}>
+            <Icon slot='prefix' icon='vaadin:unlock' />
+            Log In
+          </Button>
         </section>
       </div>
     );
   } else {
     return (
-      <div className={ `${ blockName }-container` }>
-        <section className={ `${ blockName }-section` }>
-          <div className={ `${ blockName }-header` }>
-            <h1 className={ `${ blockName }-header-title` }>{ siteName }</h1>
-            <p className={ `${ blockName }-header-description` }>Please register below.</p>
+      <div className={`${ blockName }-container`}>
+        <section className={`${ blockName }-section`}>
+          <div className={`${ blockName }-header`}>
+            <h1 className={`${ blockName }-header-title`}>{siteName}</h1>
+            <p className={`${ blockName }-header-description`}>Please register below and join our community.</p>
           </div>
-          <section className={ `${ blockName }` }>
-            <h2 className={ `${ blockName }-title` }>Register</h2>
-            <TextField label='Username' { ...field(model.username) } />
-            <TextField label='E-mail Address' { ...field(model.email) } />
-            <PasswordField label='Password' { ...field( model.password) } />
-            <Button theme='primary contained submit' title='Register' className={ `${ blockName }-register-button` } onClick={submit}>Register</Button>
+          <section className={`${ blockName }`}>
+            <h2 className={`${ blockName }-title`}>Register</h2>
+            <TextField
+              label='Username'
+              helperText='Please specify the username you would like to use.'
+              clearButtonVisible={true}
+              {...field(model.username)}>
+              <Icon slot='prefix' icon='vaadin:user' />
+            </TextField>
+            <TextField
+              label='E-mail Address'
+              helperText='Please specify the E-mail Address you would like to use.'
+              clearButtonVisible={true}
+              {...field(model.email)}>
+              <Icon slot='prefix' icon='vaadin:envelope' />
+            </TextField>
+            <PasswordField
+              label='Password'
+              helperText='Please specify the password you would like to use.'
+              clearButtonVisible={true}
+              {...field( model.password)}>
+              <Icon slot='prefix' icon='vaadin:lock' />
+            </PasswordField>
+            <Button 
+              theme='primary contained submit'
+              title='Register'
+              className={`${ blockName }-register-button`}
+              onClick={submit}>
+              <Icon slot='prefix' icon='vaadin:paperplane' />
+              Register
+            </Button>
           </section>
           <Button
-            className={ `${ blockName }-login-button` }
-            title={'Login'}
+            className={`${ blockName }-login-button`}
+            title='Login'
             onClick={async () => {
               setUrl(await RouteEndpoint.getLoginUrl());
-            }}
-          >Log In</Button>
+            }}>
+            <Icon slot='prefix' icon='vaadin:unlock' />
+            Log In
+          </Button>
         </section>
       </div>
     );

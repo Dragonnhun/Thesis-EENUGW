@@ -2,6 +2,7 @@ import validator from "validator";
 import { useContext, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { Button } from '@hilla/react-components/Button.js';
+import { Icon } from '@hilla/react-components/Icon.js';
 import { EmailField } from '@hilla/react-components/EmailField.js';
 import { Notification } from '@hilla/react-components/Notification.js';
 import { AuthContext } from 'Frontend/useAuth.js';
@@ -12,9 +13,9 @@ export default function ForgottenPasswordView() {
   const blockName = 'forgotten-password-form';
 
   const { state } = useContext(AuthContext);
-  const [siteName, setSiteName] = useState<string>();
   const [url, setUrl] = useState<string>();
-  const [email, setEmail] = useState('');
+  const [siteName, setSiteName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
 
   useEffect(() => {
     async function fetchSiteName() {
@@ -54,7 +55,7 @@ export default function ForgottenPasswordView() {
             'Your request to reset your password has been successful! ' + 
             'You will not be able to log in to the site until your password is renewed. ' + 
             'Please, check your inbox and continue with the steps specified in the E-mail!' +
-            '<br>You will be redirected to the log in page in 30 seconds.', {
+            'You will be redirected to the log in page in 30 seconds.', {
             position: 'top-center',
             duration: 30000,
             theme: 'success',
@@ -68,35 +69,46 @@ export default function ForgottenPasswordView() {
     });
   }
 
-  if (url || state.user) return <Navigate to={ new URL(url ?? "/", document.baseURI).pathname } />;
+  if (url || state.user) return <Navigate to={ new URL(url ?? '/', document.baseURI).pathname } />;
 
   return (
-    <div className={ `${ blockName }-container` }>
-        <section className={ `${ blockName }-section` }>
-          <div className={ `${ blockName }-header` }>
-            <h1 className={ `${ blockName }-header-title` }>{ siteName }</h1>
-            <p className={ `${ blockName }-header-description` }>Please provide your E-mail Address to which you want to reset your password below.</p>
+    <div className={`${ blockName }-container`}>
+        <section className={`${ blockName }-section`}>
+          <div className={`${ blockName }-header`}>
+            <h1 className={`${ blockName }-header-title`}>{siteName}</h1>
+            <p className={`${ blockName }-header-description`}>Please specify the E-mail Address associated with the account for which you would like to reset the password.</p>
           </div>
-          <section className={ `${ blockName }` }>
-            <h2 className={ `${ blockName }-title` }>Forgotten Password</h2>
+          <section className={`${ blockName }`}>
+            <h2 className={`${ blockName }-title`}>Forgotten Password</h2>
             <EmailField
               label='E-mail Address'
               name='email'
-              value={ email }
+              value={email}
               errorMessage='Please enter a valid E-mail Address!'
-              required={ true }
-              clearButtonVisible={ true }
-              onValueChanged={ (event) => setEmail(event.detail.value) }
-            />
-            <Button disabled={!validator.isEmail(email)} onClick={submit} theme='primary contained submit' title='Reset Password' className={ `${ blockName }-request-button` }>Request</Button>
+              required={true}
+              clearButtonVisible={true}
+              onValueChanged={(event) => setEmail(event.detail.value)}>
+              <Icon slot='prefix' icon='vaadin:envelope' />
+            </EmailField>
+            <Button 
+              disabled={!validator.isEmail(email)}
+              onClick={submit}
+              theme='primary contained submit'
+              title='Request Resetting Password'
+              className={`${ blockName }-request-button`}>
+              <Icon slot='prefix' icon='vaadin:paperplane' />
+              Reset Password
+            </Button>
           </section>
           <Button
-            className={ `${ blockName }-login-button` }
-            title={'Login'}
+            className={`${ blockName }-login-button`}
+            title='Log In'
             onClick={async () => {
               setUrl(await RouteEndpoint.getLoginUrl());
-            }}
-          >Log In</Button>
+            }}>
+            <Icon slot='prefix' icon='vaadin:unlock' />
+            Log In
+          </Button>
       </section>
     </div>
   );

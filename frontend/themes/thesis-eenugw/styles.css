@@ -10,3 +10,7 @@
     --lumo-primary-color-50pct: hsl(150, 90%, 45%, 0.5);
     --lumo-primary-color-10pct: hsl(150, 90%, 45%, 0.1);
 }
+
+.fa {
+    line-height: 1.5em;
+}

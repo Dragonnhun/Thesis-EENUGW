@@ -2,10 +2,13 @@ import { useContext, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { LoginI18n, LoginForm } from '@hilla/react-components/LoginForm.js';
 import { Button } from '@hilla/react-components/Button.js';
+import { Icon } from '@hilla/react-components/Icon.js';
 import { login } from 'Frontend/auth.js';
 import { AuthContext } from 'Frontend/useAuth.js';
 import { RouteEndpoint, SiteEndpoint } from 'Frontend/generated/endpoints';
 import 'themes/thesis-eenugw/components/login-form.scss';
+import '@vaadin/icons';
+import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
 
 const loginI18nDefault: LoginI18n = {
   form: {
@@ -27,9 +30,9 @@ export default function LoginView() {
   const blockName = 'login-form';
 
   const { state, authenticate } = useContext(AuthContext);
-  const [hasError, setError] = useState<boolean>();
   const [url, setUrl] = useState<string>();
-  const [siteName, setSiteName] = useState<string>();
+  const [hasError, setError] = useState<boolean>();
+  const [siteName, setSiteName] = useState<string>('');
   
   useEffect(() => {
     async function fetchSiteName() {
@@ -41,21 +44,21 @@ export default function LoginView() {
     fetchSiteName();
   }, []);
 
-  if (url || state.user) return <Navigate to={ new URL(url ?? "/", document.baseURI).pathname } />;
+  if (url || state.user) return <Navigate to={ new URL(url ?? '/', document.baseURI).pathname } />;
 
   return (
-    <div className={ `${ blockName }-container` }>
-      <section className={ `${ blockName }-section` }>
-        <div className={ `${ blockName }-header` }>
-          <h1 className={ `${ blockName }-header-title` }>{ siteName }</h1>
-          <p className={ `${ blockName }-header-description` }>Please log in using your credentials below.</p>
+    <div className={`${ blockName }-container`}>
+      <section className={`${ blockName }-section`}>
+        <div className={`${ blockName }-header`}>
+          <h1 className={`${ blockName }-header-title`}>{siteName}</h1>
+          <p className={`${ blockName }-header-description`}>Please log in using your credentials below.</p>
         </div>
         <LoginForm
-          className={ blockName }
+          className={blockName}
           title='Log In'
-          error={ hasError }
-          i18n={ loginI18nDefault }
-          noForgotPassword={ true }
+          error={hasError}
+          i18n={loginI18nDefault}
+          noForgotPassword={true}
           onLogin={async ({ detail: { username, password } }) => {
             const { defaultUrl, error, redirectUrl } = await login(username, password, authenticate);
 
@@ -67,19 +70,23 @@ export default function LoginView() {
           }}
         />
         <Button
-          className={ `${ blockName }-register-button` }
-          title={'Register'}
+          className={`${ blockName }-register-button`}
+          title='Register'
           onClick={async () => {
             setUrl(await RouteEndpoint.getRegisterUrl());
-          }}
-        >Register</Button>
+          }}>
+          <Icon slot='prefix' className='fa fa-user-plus' />
+          Register
+        </Button>
         <Button
-          className={ `${ blockName }-forgotten-password-button` }
-          title={'Forgotten Password'}
+          className={`${ blockName }-forgotten-password-button`}
+          title='Forgotten Password'
           onClick={async () => {
             setUrl(await RouteEndpoint.getForgottenPasswordUrl());
-          }}
-        >Forgotten Password</Button>
+          }}>
+          <Icon slot='prefix' className='fa fa-rotate-left' />
+          Forgotten Password
+        </Button>
       </section>
     </div>
   );
