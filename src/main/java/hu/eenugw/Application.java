@@ -1,9 +1,11 @@
 package hu.eenugw;
 
-import hu.eenugw.data.service.UserRepository;
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
+
+import hu.eenugw.usermanagement.services.UserRepository;
+
 import javax.sql.DataSource;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,8 +14,8 @@ import org.springframework.boot.autoconfigure.sql.init.SqlInitializationProperti
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-@Theme(value = "thesis-eenugw", variant = "light")
-@PWA(name = "thesis-eenugw", shortName = "thesis-eenugw", offlineResources = {})
+@Theme(value = "intertwine", variant = "light")
+@PWA(name = "intertwine", shortName = "intertwine", offlineResources = {})
 public class Application implements AppShellConfigurator {
 
     public static void main(String[] args) {
@@ -23,7 +25,7 @@ public class Application implements AppShellConfigurator {
     @Bean
     SqlDataSourceScriptDatabaseInitializer dataSourceScriptDatabaseInitializer(
         DataSource dataSource, SqlInitializationProperties properties, UserRepository repository) {
-        // This bean ensures the database is only initialized when empty
+        // This bean ensures the database is only initialized when empty.
         return new SqlDataSourceScriptDatabaseInitializer(dataSource, properties) {
             @Override
             public boolean initializeDatabase() {

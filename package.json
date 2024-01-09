@@ -32,6 +32,7 @@
     "@rollup/pluginutils": "5.0.2",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.8",
+    "@types/validator": "^13.11.5",
     "@vitejs/plugin-react": "4.0.0",
     "async": "3.2.2",
     "glob": "7.2.3",
@@ -111,6 +112,6 @@
       "workbox-core": "7.0.0",
       "workbox-precaching": "7.0.0"
     },
-    "hash": "f51e70a5364e4dc966bc56165423a5397f8e5ed7f97c508b193b00fc2b85554c"
+    "hash": "941f3c2ae00ff31465f1b8fc838b93fa3c391d9522b839a8979684ffe759586e"
   }
 }

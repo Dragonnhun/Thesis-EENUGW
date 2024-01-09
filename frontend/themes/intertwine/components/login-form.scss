@@ -1,0 +1,65 @@
+@import "../variables/variables.scss";
+@import url('../fontawesome/css/solid.css');
+@import url('../fontawesome/css/fontawesome.css');
+
+// The Login Form styling is based on the Vaadin Login Form component styling.
+.login-form {
+    &-container {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+    }
+
+    &-section {
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        border-radius: var(--lumo-border-radius-l);
+        box-shadow: var(--lumo-box-shadow-s);
+        margin: var(--lumo-space-s);
+        height: auto;
+        width: calc(var(--lumo-size-m) * 10);
+        background: var(--lumo-base-color) linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
+    }
+
+    &-header {
+        box-sizing: border-box;
+        overflow: hidden;
+        flex-grow: 1;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: var(--lumo-space-l) var(--lumo-space-xl) var(--lumo-space-l) var(--lumo-space-l);
+        background-color: var(--lumo-primary-color);
+        color: var(--lumo-primary-contrast-color);
+        min-height: calc(var(--lumo-size-m) * 5);
+
+        &-title {
+            color: inherit;
+            margin: 0;
+        }
+
+        &-description {
+            line-height: var(--lumo-line-height-s);
+            color: var(--lumo-tint-70pct);
+            margin-bottom: 0;
+        }
+    }
+
+    &-register-button, &-forgotten-password-button {
+        background-color: transparent;
+
+        &:hover {
+            background-color: $primary-transparent-button-hover-background-color;
+        }
+    }
+
+    &-forgotten-password-button {
+        margin-bottom: $spacing-size-normal * 1.2;
+    }
+}
