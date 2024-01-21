@@ -11,11 +11,20 @@ public class EmailExtensions {
             siteService.getSiteEmail(),
             siteService.getSiteName(),
             "Please verify your registration",
-            "Dear [[NAME]],<br>" 
-            + "Please click the link below to verify your registration:<br>" 
-            + "<h3><a href=\"[[URL]]\" target=\"_self\">Verify Registration</a></h3>" 
-            + "Thank you,<br>" 
-            + siteService.getSiteName()
+            """
+                <div style="text-align: center; padding: 20px; font-family: Arial;">
+                    <p>
+                        Dear [[NAME]],<br>
+                        Please click the link below to verify your registration:<br>
+                        <h3>
+                            <a href=\"[[URL]]\" target=\"_self\" style="color: hsl(150, 90%, 45%); text-decoration: none;">
+                                Verify Registration
+                            </a>
+                        </h3>
+                        Thank you,
+                    </p>
+                </div>
+            """
         );
         
         var verifyUrl = siteService.getSiteUrl() + "/register?token=" + user.getRegistrationToken();
@@ -32,14 +41,23 @@ public class EmailExtensions {
             siteService.getSiteEmail(),
             siteService.getSiteName(),
             "Password change has been requested",
-            "Dear [[NAME]],<br>"
-            + "Our site has received a request to change your password.<br>"
-            + "If you did not request this, please ignore this email.<br>"
-            + "Otherwise, please click the link below to change your password.<br>"
-            + "The link below is valid for 24 hours.<br>"
-            + "<h3><a href=\"[[URL]]\" target=\"_self\">Reset Password</a></h3>"
-            + "Thank you,<br>"
-            + siteService.getSiteName()
+            """
+                <div style="text-align: center; padding: 20px; font-family: Arial;">
+                    <p>
+                        Dear [[NAME]],<br>
+                        Our site has received a request to change your password.<br>
+                        If you did not request this, please ignore this email.<br>
+                        Otherwise, please click the link below to change your password.<br>
+                        The link below is valid for 24 hours.<br>
+                        <h3>
+                            <a href=\"[[URL]]\" target=\"_self\" style="color: hsl(150, 90%, 45%); text-decoration: none;">
+                                Reset Password
+                            </a>
+                        </h3>
+                        Thank you,
+                    </p>
+                </div>
+            """
         );
         
         var resetPasswordUrl = siteService.getSiteUrl() + "/reset-forgotten-password?token=" + user.getForgottenPasswordToken();
@@ -56,11 +74,16 @@ public class EmailExtensions {
             siteService.getSiteEmail(),
             siteService.getSiteName(),
             "Your password has been changed",
-            "Dear [[NAME]],<br>"
-            + "This is a confirmation that the password for your account [[USERNAME]] has just been changed.<br>"
-            + "If you did not request this change, please contact us immediately.<br>"
-            + "Thank you,<br>"
-            + siteService.getSiteName()
+            """
+                <div style="text-align: center; padding: 20px; font-family: Arial;">
+                    <p>
+                        Dear [[NAME]],<br>
+                        This is a confirmation that the password for your account [[USERNAME]] has just been changed.<br>
+                        If you did not request this change, please contact us immediately.<br>
+                        Thank you,
+                    </p>
+                </div>
+            """
         );
 
         passwordChangedEmail.setContent(passwordChangedEmail.getContent().replace("[[NAME]]", user.getUsername()));

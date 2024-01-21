@@ -19,6 +19,9 @@ import org.springframework.stereotype.Service;
 import hu.eenugw.core.services.EmailService;
 import hu.eenugw.core.services.SiteService;
 import hu.eenugw.usermanagement.entities.User;
+import hu.eenugw.usermanagement.repositories.UserRepository;
+import hu.eenugw.userprofilemanagement.entities.UserProfile;
+import hu.eenugw.userprofilemanagement.repositories.UserProfileRepository;
 import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 
@@ -28,15 +31,23 @@ import static hu.eenugw.usermanagement.extensions.EmailExtensions.passwordChange
 
 @Service
 public class UserService {
-    private final SiteService _siteService;
-    private final EmailService _emailService;
     @Autowired
     private final UserRepository _userRepository;
+    @Autowired
+    private final UserProfileRepository _userProfileRepository;
 
-    public UserService(UserRepository userRepository, EmailService emailService, SiteService siteService) {
+    private final SiteService _siteService;
+    private final EmailService _emailService;
+
+    public UserService(
+        UserRepository userRepository,
+        UserProfileRepository userProfileRepository,
+        EmailService emailService,
+        SiteService siteService) {
+        _siteService = siteService;
         _emailService = emailService;
         _userRepository = userRepository;
-        _siteService = siteService;
+        _userProfileRepository = userProfileRepository;
     }
 
     public Optional<User> getById(Long id) {
@@ -71,7 +82,11 @@ public class UserService {
          
         var token = UUID.randomUUID().toString();
         user.setRegistrationToken(token);
-         
+        
+        var userProfile = _userProfileRepository.save(new UserProfile());
+        user.setUserProfile(userProfile);
+        userProfile.setUser(user);
+
         _emailService.sendEmail(verificationEmail(user, _siteService));
 
         return _userRepository.save(user);
@@ -107,7 +122,7 @@ public class UserService {
         user.setEnabled(false);
         var token = UUID.randomUUID().toString();
         user.setForgottenPasswordToken(token);
-        user.setForgottenPasswordTokenExpirationDate(Optional.of(utcNow().plusSeconds(86400)));
+        user.setForgottenPasswordTokenExpirationDateUtc(Optional.of(utcNow().plusSeconds(86400)));
 
         _userRepository.save(user);
 
@@ -124,12 +139,12 @@ public class UserService {
 
         var user = optionalUser.get();
 
-        if (utcNow().isAfter(user.getForgottenPasswordTokenExpirationDate().orElse(Instant.EPOCH)))
+        if (utcNow().isAfter(user.getForgottenPasswordTokenExpirationDateUtc().orElse(Instant.EPOCH)))
             return Pair.of(false, "The request to reset forgotten password has expired! Please request a new one. if you would like to change your password!");
 
         user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
         user.setForgottenPasswordToken(null);
-        user.setForgottenPasswordTokenExpirationDate(Optional.ofNullable(null));
+        user.setForgottenPasswordTokenExpirationDateUtc(Optional.ofNullable(null));
         user.setEnabled(true);
 
         _userRepository.save(user);
@@ -162,7 +177,7 @@ public class UserService {
         if (user.getForgottenPasswordToken() == null || user.getForgottenPasswordToken().isEmpty())
             return false;
 
-        if (utcNow().isBefore(user.getForgottenPasswordTokenExpirationDate().orElse(Instant.EPOCH)))
+        if (utcNow().isBefore(user.getForgottenPasswordTokenExpirationDateUtc().orElse(Instant.EPOCH)))
             return false;
 
         return true;

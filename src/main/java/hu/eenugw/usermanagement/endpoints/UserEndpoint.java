@@ -36,6 +36,10 @@ public class UserEndpoint {
         return _userService.listAll();
     }
 
+    public Optional<User> getById(Long id) {
+        return _userService.getById(id);
+    }
+
     public Optional<User> getByUsername(String username) {
         return _userService.getByUsername(username);
     }
@@ -105,13 +109,15 @@ public class UserEndpoint {
     }
 
     public Optional<User> getAuthenticatedUser() {
-        var authenticatedUserDetails = authenticatedUser.get();
+        // var authenticatedUserDetails = authenticatedUser.get();
 
-        if (!authenticatedUserDetails.isPresent()) {
-            return Optional.empty();
-        }
+        // if (authenticatedUserDetails.isEmpty()) {
+        //     return Optional.empty();
+        // }
 
-        return _userService.getByUsername(authenticatedUserDetails.get().getUsername());
+        // return _userService.getByUsername(authenticatedUserDetails.get().getUsername());
+
+        return authenticatedUser.get();
     }
 
     @AnonymousAllowed

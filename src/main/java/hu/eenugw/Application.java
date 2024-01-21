@@ -4,7 +4,7 @@ import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 
-import hu.eenugw.usermanagement.services.UserRepository;
+import hu.eenugw.usermanagement.repositories.UserRepository;
 
 import javax.sql.DataSource;
 import org.springframework.boot.SpringApplication;

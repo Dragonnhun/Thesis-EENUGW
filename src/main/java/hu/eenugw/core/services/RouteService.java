@@ -30,7 +30,7 @@ public class RouteService {
         return RouteUrls.FORGOTTEN_PASSWORD;
     }
 
-        public String getResetForgottenPasswordUrl() {
+    public String getResetForgottenPasswordUrl() {
         return RouteUrls.RESET_FORGOTTEN_PASSWORD;
     }
 }
