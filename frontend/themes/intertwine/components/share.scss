@@ -1,0 +1,76 @@
+@import "../variables/variables.scss";
+
+.share {
+    width: 100%;
+    height: 170px;
+    border-radius: 10px;
+    box-shadow: var(--lumo-box-shadow-m);
+    // box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+
+    &-wrapper {
+        padding: 20px;
+
+        &-top {
+            display: flex;
+            align-items: center;
+
+            &-image {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                object-fit: cover;
+                margin-right: 10px;
+            }
+
+            &-input {
+                border: none;
+                width: 90%;
+
+                &:focus {
+                    outline: none;
+                }
+            }
+        }
+
+        &-line {
+            margin: 20px;
+            background-color: $secondary-color;
+        }
+
+        &-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            &-options {
+                display: flex;
+                margin-left: 20px;
+
+                &-item {
+                    display: flex;
+                    align-items: center;
+                    margin-right: 15px;
+                    cursor: pointer;
+
+                    &-icon {
+                        font-size: 18px;
+                        margin-right: 3px;
+                    }
+
+                    &-text {
+                        font-size: 14px;
+                        font-weight: 500;
+                    }
+                }
+            }
+
+            &-share-button {
+                color: $white-color;
+                background-color: $primary-color;
+                font-weight: 600;
+                margin-right: 20px;
+                cursor: pointer;
+            }
+        }
+    }
+}

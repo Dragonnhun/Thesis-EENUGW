@@ -1,0 +1,110 @@
+@import "../variables/variables.scss";
+
+vaadin-app-layout {
+    --_vaadin-app-layout-navbar-offset-size: 0 !important;
+    --_vaadin-app-layout-navbar-offset-size-bottom: 0 !important;
+    --_vaadin-app-layout-drawer-offset-size: 0 !important;
+    
+    &::part(navbar) {
+        height: 56px;
+        width: 100%;
+        background-color: var(--lumo-primary-color);
+        display: flex;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 999;
+        box-shadow: var(--lumo-box-shadow-s);
+    }
+}
+
+.navbar {
+    &-left {
+        flex: 3;
+
+        .navbar-logo {
+            font-size: 24px;
+            margin-left: 20px;
+            font-weight: bold;
+            color: $white-color;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    }
+
+    &-center {
+        flex: 5;
+        margin: auto;
+
+        .searchbar {
+            width: 100%;
+            height: 30px;
+            background-color: $white-color;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;    
+
+            &-icon {
+                font-size: 15px;
+                margin-left: 10px;
+            }
+
+            &-input {
+                border: none;
+                width: 90%;
+
+                &:focus {
+                    outline: none;
+                }
+            }
+        }
+    }
+
+    &-right {
+        flex: 4;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        color: $white-color;
+
+        .navbar-links {
+            .navbar-link {
+                margin-right: 10px;
+                font-size: 14px;
+                cursor: pointer;
+            }
+        }
+
+        .navbar-icons {
+            display: flex;
+
+            .navbar-icon-item {
+                margin-right: 15px;
+                cursor: pointer;
+                position: relative;
+            }
+
+            .navbar-icon-badge {
+                width: 15px;
+                height: 15px;
+                background-color: $red-color;
+                border-radius: 50%;
+                position: absolute;
+                top: -5px;
+                right: -5px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 12px;
+            }
+        }
+
+        .navbar-image {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+        }
+    }
+}

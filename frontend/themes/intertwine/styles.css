@@ -1,3 +1,24 @@
+@import url('fontawesome/css/solid.css');
+@import url('fontawesome/css/fontawesome.css');
+
+* {
+    --lumo-font-family: "Arial", sans-serif;
+}
+
+html, body, #outlet {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.app-layout-container {
+    height: calc(100vh - 56px);
+}
+
+.fa, .fas {
+    line-height: 1.5em;
+}
+
 [theme~="dark"] {
     --lumo-primary-color: hsl(150, 90%, 45%);
     --lumo-primary-color-50pct: hsl(150, 90%, 45%, 0.5);

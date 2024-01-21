@@ -1,0 +1,88 @@
+@import "../variables/variables.scss";
+
+.rightbar {
+    flex: 3.5;
+
+    &-wrapper {
+        padding: 20px 20px 0 0;
+    }
+
+    &-birthday {
+        &-container {
+            display: flex;
+            align-items: center;
+        }
+
+        &-image {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        &-text {
+            font-size: 15px;
+        }
+    }
+
+    &-advert{
+        width: 100%;
+        border-radius: 10px;
+        margin: 30px 0;
+    }
+
+    &-title {
+        margin-bottom: 20px;
+    }
+
+    &-friend-list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    &-user {
+        &-information {
+            &-title {
+                font-size: 18px;
+                margin-bottom: 30px;
+            }
+
+            &-information {
+                &-item {
+                    margin-bottom: 10px;
+
+                    &-key {
+                        margin-right: 15px;
+                        color: $primary-color;
+                    }
+                }
+            }
+        }
+
+        &-friends {
+            &-title {
+                margin-top: 30px;
+            }
+
+            &-followings {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+
+                &-following {
+                    display: flex;
+                    flex-direction: column;
+                    margin-bottom: 20px;
+                    cursor: pointer;
+
+                    &-image {
+                        width: 100px;
+                        height: 100px;
+                        object-fit: cover;
+                        border-radius: 5px;
+                    }
+                }
+            }
+        }
+    }
+}

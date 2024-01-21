@@ -6,7 +6,7 @@ import { Icon } from '@hilla/react-components/Icon.js';
 import { Notification } from '@hilla/react-components/Notification.js';
 import { AuthContext } from 'Frontend/useAuth.js';
 import { RouteEndpoint, SiteEndpoint, UserEndpoint } from 'Frontend/generated/endpoints';
-import 'themes/intertwine/components/reset-forgotten-password-form.scss';
+import 'themes/intertwine/views/reset-forgotten-password-form.scss';
 import '@vaadin/icons';
 
 export default function ResetForgottenPasswordView() {

@@ -1,3 +1,4 @@
+import 'themes/intertwine/views/login-form.scss';
 import { useContext, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { LoginI18n, LoginForm } from '@hilla/react-components/LoginForm.js';
@@ -6,9 +7,6 @@ import { Icon } from '@hilla/react-components/Icon.js';
 import { login } from 'Frontend/auth.js';
 import { AuthContext } from 'Frontend/useAuth.js';
 import { RouteEndpoint, SiteEndpoint } from 'Frontend/generated/endpoints';
-import 'themes/intertwine/components/login-form.scss';
-import '@vaadin/icons';
-import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
 
 const loginI18nDefault: LoginI18n = {
   form: {

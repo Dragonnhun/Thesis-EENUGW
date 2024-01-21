@@ -1,0 +1,38 @@
+@import "../variables/variables.scss";
+
+.rightbar {
+    &-friend-list {
+        &-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+
+            &-avatar-container {
+                margin-right: 10px;
+                position: relative;
+            }
+
+            &-avatar {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+
+            &-online {
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                background-color: $primary-color;
+                position: absolute;
+                top: -2px;
+                right: -2px;
+                border: 2px solid $secondary-color;
+            }
+
+            &-text {
+                font-weight: bold;
+            }
+        }
+    }
+}

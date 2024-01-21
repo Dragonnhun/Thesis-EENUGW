@@ -1,0 +1,74 @@
+@import "../variables/variables.scss";
+
+.sidebar {
+    flex:3;
+    height: calc(100vh - 56px);
+    overflow-y: scroll;
+    position: sticky;
+    top: 0;
+
+    &-wrapper {
+        padding: 20px;
+    }
+
+    &-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        &-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+    }
+
+    &-icon {
+        margin-right: 15px;
+    }
+
+    &-button {
+        width: 150px;
+        color: $white-color;
+        background-color: $primary-color;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    &-line {
+        margin: 20px 0;
+        background-color: $secondary-color;
+    }
+
+    &-friend-list {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+
+        &-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+
+            &-avatar {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                object-fit: cover;
+                margin-right: 10px;
+            }
+        }
+    }
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: $secondary-color;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--lumo-primary-color);
+}

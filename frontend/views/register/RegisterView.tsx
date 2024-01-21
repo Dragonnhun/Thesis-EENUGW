@@ -1,4 +1,5 @@
-import UserModel from 'Frontend/generated/hu/eenugw/usermanagement/entities/UserModel';
+import 'themes/intertwine/views/register-form.scss';
+import '@vaadin/icons';
 import { useContext, useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useForm } from '@hilla/react-form';
@@ -9,8 +10,7 @@ import { Notification } from '@hilla/react-components/Notification.js';
 import { Icon } from '@hilla/react-components/Icon.js';
 import { AuthContext } from 'Frontend/useAuth.js';
 import { RouteEndpoint, SiteEndpoint, UserEndpoint } from 'Frontend/generated/endpoints';
-import 'themes/intertwine/components/register-form.scss';
-import '@vaadin/icons';
+import UserModel from 'Frontend/generated/hu/eenugw/usermanagement/entities/UserModel';
 
 export default function RegsiterView() {
   const blockName = 'register-form';
@@ -150,7 +150,7 @@ export default function RegsiterView() {
               label='Password'
               helperText='Please specify the password you would like to use.'
               clearButtonVisible={true}
-              {...field( model.password)}>
+              {...field(model.password)}>
               <Icon slot='prefix' icon='vaadin:lock' />
             </PasswordField>
             <Button 
