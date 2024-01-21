@@ -24,7 +24,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 @Configuration
 public class SecurityConfiguration extends VaadinWebSecurity {
-    @Value("${hu.eenugw.auth.secret}")
+    @Value("${AUTH_SECRET}")
     private String authSecret;
 
     @Bean
@@ -48,6 +48,9 @@ public class SecurityConfiguration extends VaadinWebSecurity {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // Allowing requests without authentication.
+        // http.authorizeHttpRequests(authorize -> authorize.requestMatchers(new AntPathRequestMatcher("/assets/**")).permitAll());
+        // http.authorizeHttpRequests(authorize -> authorize.requestMatchers(new AntPathRequestMatcher("/assets/images/profile-pictures/*.jpg")).permitAll());
+        // http.authorizeHttpRequests(authorize -> authorize.requestMatchers(new AntPathRequestMatcher("/assets/images/profile-pictures/*.png")).permitAll());
         http.authorizeHttpRequests(authorize -> authorize.requestMatchers(new AntPathRequestMatcher("/images/*.png")).permitAll());
         http.authorizeHttpRequests(authorize -> authorize.requestMatchers(new AntPathRequestMatcher("/line-awesome/**/*.svg")).permitAll());
         http.authorizeHttpRequests(authorize -> authorize.requestMatchers(new AntPathRequestMatcher("/register")).permitAll());
@@ -61,5 +64,4 @@ public class SecurityConfiguration extends VaadinWebSecurity {
         setStatelessAuthentication(
             http, new SecretKeySpec(Base64.getDecoder().decode(authSecret), JwsAlgorithms.HS256), "hu.eenugw");
     }
-
 }
