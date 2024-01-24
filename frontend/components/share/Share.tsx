@@ -1,13 +1,12 @@
 import 'themes/intertwine/components/share.scss';
 import { Avatar } from '@hilla/react-components/Avatar.js';
-import { AuthContext } from 'Frontend/useAuth';
-import { useContext } from 'react';
 import { Icon } from '@hilla/react-components/Icon.js';
 import { Button } from '@hilla/react-components/Button.js';
+import { useAuth } from 'Frontend/util/auth';
 
 export default function Share() {
     const blockName = 'share';
-    const { state } = useContext(AuthContext);
+    const { state } = useAuth();
     const assetsFolder = import.meta.env.VITE_ASSETS_FOLDER;
 
     return (

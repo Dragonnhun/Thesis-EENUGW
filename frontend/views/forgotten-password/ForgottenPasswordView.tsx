@@ -1,18 +1,18 @@
 import validator from "validator";
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { Button } from '@hilla/react-components/Button.js';
 import { Icon } from '@hilla/react-components/Icon.js';
 import { EmailField } from '@hilla/react-components/EmailField.js';
 import { Notification } from '@hilla/react-components/Notification.js';
-import { AuthContext } from 'Frontend/useAuth.js';
 import { RouteEndpoint, SiteEndpoint, UserEndpoint } from 'Frontend/generated/endpoints';
 import 'themes/intertwine/views/forgotten-password-form.scss';
+import { useAuth } from "Frontend/util/auth";
 
 export default function ForgottenPasswordView() {
   const blockName = 'forgotten-password-form';
 
-  const { state } = useContext(AuthContext);
+  const { state } = useAuth();
   const [url, setUrl] = useState<string>();
   const [siteName, setSiteName] = useState<string>('');
   const [email, setEmail] = useState<string>('');

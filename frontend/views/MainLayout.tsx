@@ -3,10 +3,10 @@ import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
 import Placeholder from 'Frontend/components/placeholder/Placeholder';
 import Navbar from 'Frontend/components/navbar/Navbar';
 import { AppLayout } from '@hilla/react-components/AppLayout.js';
-import { AuthContext } from 'Frontend/useAuth.js';
 import { useRouteMetadata } from 'Frontend/util/routing';
-import { Suspense, useContext } from 'react';
+import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
+import { useAuth } from 'Frontend/util/auth';
 
 const navLinkClasses = ({ isActive }: any) => {
     return `block rounded-m p-s ${isActive ? 'bg-primary-10 text-primary' : 'text-body'}`;
@@ -14,7 +14,7 @@ const navLinkClasses = ({ isActive }: any) => {
 
 export default function MainLayout() {
     const currentTitle = useRouteMetadata()?.title ?? 'InterTwine';
-    const { state, unauthenticate } = useContext(AuthContext);
+    const { state } = useAuth();
     
     return (
         <div className='app-layout-container'>

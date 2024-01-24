@@ -2,12 +2,12 @@ import 'themes/intertwine/components/feed.scss';
 import Share from 'Frontend/components/share/Share';
 import Post from 'Frontend/components/post/Post';
 import UserProfilePost from 'Frontend/generated/hu/eenugw/userprofilemanagement/entities/UserProfilePost';
-import { useContext, useEffect, useState } from 'react';
-import { AuthContext } from 'Frontend/useAuth';
+import { useEffect, useState } from 'react';
 import { UserProfilePostEndpoint } from 'Frontend/generated/endpoints';
+import { useAuth } from 'Frontend/util/auth';
 
 export default function Feed({isForProfile}: {isForProfile: boolean}) {
-    const { state, unauthenticate } = useContext(AuthContext);
+    const { state } = useAuth();
 
     const ProfileFeed = () => {
         return (

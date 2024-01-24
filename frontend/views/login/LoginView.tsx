@@ -1,11 +1,10 @@
 import 'themes/intertwine/views/login-form.scss';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { LoginI18n, LoginForm } from '@hilla/react-components/LoginForm.js';
 import { Button } from '@hilla/react-components/Button.js';
 import { Icon } from '@hilla/react-components/Icon.js';
-import { login } from 'Frontend/auth.js';
-import { AuthContext } from 'Frontend/useAuth.js';
+import { useAuth } from 'Frontend/util/auth.js';
 import { RouteEndpoint, SiteEndpoint } from 'Frontend/generated/endpoints';
 
 const loginI18nDefault: LoginI18n = {
@@ -27,7 +26,7 @@ const loginI18nDefault: LoginI18n = {
 export default function LoginView() {
   const blockName = 'login-form';
 
-  const { state, authenticate } = useContext(AuthContext);
+  const { state, login } = useAuth();
   const [url, setUrl] = useState<string>();
   const [hasError, setError] = useState<boolean>();
   const [siteName, setSiteName] = useState<string>('');
@@ -58,7 +57,7 @@ export default function LoginView() {
           i18n={loginI18nDefault}
           noForgotPassword={true}
           onLogin={async ({ detail: { username, password } }) => {
-            const { defaultUrl, error, redirectUrl } = await login(username, password, authenticate);
+            const { defaultUrl, error, redirectUrl } = await login(username, password);
 
             if (error) {
               setError(true);

@@ -1,6 +1,7 @@
 import 'themes/intertwine/views/register-form.scss';
 import '@vaadin/icons';
-import { useContext, useEffect, useState } from 'react';
+import UserModel from 'Frontend/generated/hu/eenugw/usermanagement/entities/UserModel';
+import { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useForm } from '@hilla/react-form';
 import { Button } from '@hilla/react-components/Button.js';
@@ -8,14 +9,13 @@ import { TextField } from '@hilla/react-components/TextField.js';
 import { PasswordField } from '@hilla/react-components/PasswordField.js';
 import { Notification } from '@hilla/react-components/Notification.js';
 import { Icon } from '@hilla/react-components/Icon.js';
-import { AuthContext } from 'Frontend/useAuth.js';
 import { RouteEndpoint, SiteEndpoint, UserEndpoint } from 'Frontend/generated/endpoints';
-import UserModel from 'Frontend/generated/hu/eenugw/usermanagement/entities/UserModel';
+import { useAuth } from 'Frontend/util/auth';
 
 export default function RegsiterView() {
   const blockName = 'register-form';
 
-  const { state } = useContext(AuthContext);
+  const { state } = useAuth();
   const [url, setUrl] = useState<string>();
   const [siteName, setSiteName] = useState<string>('');
   const [verificationResult, setVerificationResult] = useState({ status: '', message: '' });
