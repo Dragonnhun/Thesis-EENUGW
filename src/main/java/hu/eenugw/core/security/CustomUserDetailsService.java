@@ -10,49 +10,50 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import hu.eenugw.usermanagement.entities.User;
+import hu.eenugw.usermanagement.entities.UserEntity;
 import hu.eenugw.usermanagement.exceptions.EmailNotFoundException;
 import hu.eenugw.usermanagement.exceptions.UsernameNotFoundException;
 import hu.eenugw.usermanagement.services.UserService;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class CustomUserDetailsService implements UserDetailsService {
+    
     private final UserService _userService;
 
-    public UserDetailsServiceImpl(UserService userService) {
+    public CustomUserDetailsService(UserService userService) {
         _userService = userService;
     }
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        var user = _userService.getByUsername(username);
+        var optionalUserEntity = _userService.getUserEntityByUsername(username);
 
-        if (!user.isPresent()) {
+        if (!optionalUserEntity.isPresent()) {
             throw new UsernameNotFoundException("No user present with username: " + username);
         } else {
-            var loadedUser = user.get();
+            var userEntity = optionalUserEntity.get();
 
             return new org.springframework.security.core.userdetails.User(
-                loadedUser.getUsername(), loadedUser.getPassword(), getAuthorities(loadedUser));
+                userEntity.getUsername(), userEntity.getPassword(), getAuthorities(userEntity));
         }
     }
 
     @Transactional
     public UserDetails loadUserByEmail(String email) throws EmailNotFoundException {
-        var user = _userService.getByEmail(email);
+        var optionalUserEntity = _userService.getUserEntityByEmail(email);
 
-        if (!user.isPresent()) {
+        if (!optionalUserEntity.isPresent()) {
             throw new EmailNotFoundException("No user present with email: " + email);
         } else {
-            var loadedUser = user.get();
+            var userEntity = optionalUserEntity.get();
 
             return new org.springframework.security.core.userdetails.User(
-                loadedUser.getUsername(), loadedUser.getPassword(), getAuthorities(loadedUser));
+                userEntity.getUsername(), userEntity.getPassword(), getAuthorities(userEntity));
         }
     }
 
-    private static List<GrantedAuthority> getAuthorities(User user) {
-        return user.getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role)).collect(Collectors.toList());
+    private static List<GrantedAuthority> getAuthorities(UserEntity userEntity) {
+        return userEntity.getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role)).collect(Collectors.toList());
     }
 }

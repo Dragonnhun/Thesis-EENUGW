@@ -5,12 +5,12 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-import hu.eenugw.usermanagement.entities.User;
+import hu.eenugw.usermanagement.entities.UserEntity;
 
-public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
-    Optional<User> findByUsername(String username);
-    Optional<User> findByEmail(String email);
-    Optional<User> findByUsernameOrEmail(String username, String email);
-    Optional<User> findByRegistrationToken(String registrationToken);
-    Optional<User> findByForgottenPasswordToken(String forgottenPasswordToken);
+public interface UserRepository extends JpaRepository<UserEntity, String>, JpaSpecificationExecutor<UserEntity> {
+    Optional<UserEntity> findByUsername(String username);
+    Optional<UserEntity> findByEmail(String email);
+    Optional<UserEntity> findByUsernameOrEmail(String username, String email);
+    Optional<UserEntity> findByRegistrationToken(String registrationToken);
+    Optional<UserEntity> findByForgottenPasswordToken(String forgottenPasswordToken);
 }

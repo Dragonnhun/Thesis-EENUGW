@@ -2,10 +2,10 @@ package hu.eenugw.usermanagement.extensions;
 
 import hu.eenugw.core.models.Email;
 import hu.eenugw.core.services.SiteService;
-import hu.eenugw.usermanagement.entities.User;
+import hu.eenugw.usermanagement.entities.UserEntity;
 
 public class EmailExtensions {
-    public static Email verificationEmail(User user, SiteService siteService) {
+    public static Email verificationEmail(UserEntity user, SiteService siteService) {
         var verificationEmail = new Email(
             user.getEmail(),
             siteService.getSiteEmail(),
@@ -35,7 +35,7 @@ public class EmailExtensions {
         return verificationEmail;
     }
 
-    public static Email forgottenPasswordEmail(User user, SiteService siteService) {
+    public static Email forgottenPasswordEmail(UserEntity user, SiteService siteService) {
         var forgottenPasswordEmail = new Email(
             user.getEmail(),
             siteService.getSiteEmail(),
@@ -68,7 +68,7 @@ public class EmailExtensions {
         return forgottenPasswordEmail;
     }
 
-    public static Email passwordChangedEmail(User user, SiteService siteService) {
+    public static Email passwordChangedEmail(UserEntity user, SiteService siteService) {
         var passwordChangedEmail = new Email(
             user.getEmail(),
             siteService.getSiteEmail(),
