@@ -1,49 +1,46 @@
 import 'themes/intertwine/components/feed.scss';
 import Share from 'Frontend/components/share/Share';
 import Post from 'Frontend/components/post/Post';
-import UserProfilePost from 'Frontend/generated/hu/eenugw/userprofilemanagement/entities/UserProfilePost';
+import UserProfilePost from 'Frontend/generated/hu/eenugw/userprofilemanagement/models/UserProfilePost';
 import { useEffect, useState } from 'react';
-import { UserProfilePostEndpoint } from 'Frontend/generated/endpoints';
+import { UserProfileEndpoint, UserProfilePostEndpoint } from 'Frontend/generated/endpoints';
 import { useAuth } from 'Frontend/util/auth';
+import UserProfile from 'Frontend/generated/hu/eenugw/userprofilemanagement/models/UserProfile';
 
-export default function Feed({isForProfile}: {isForProfile: boolean}) {
+export default function Feed({profileDisplayId}: {profileDisplayId?: string}) {
     const { state } = useAuth();
+    const [userProfile, setUserProfile] = useState<UserProfile>();
+    const [userProfilePosts, setUserProfilePosts] = useState<UserProfilePost[]>([]);
+    const [posted, setPosted] = useState<boolean>(false);
 
-    const ProfileFeed = () => {
-        return (
-            <>
-                PROFILE FEED
-            </>
-        )
-    }
+    useEffect(() => {
+        (async () => {
+            const userProfile = await UserProfileEndpoint.getUserProfileByUserId(state.user?.id!);
+            setUserProfile(userProfile);
+        })();
+    }, [state.user]);
 
-    const Feed = () => {
-        const [posts, setPosts] = useState<UserProfilePost[]>([]);
+    useEffect(() => {
+        (async () => {
+            const userProfilePosts = profileDisplayId
+                ? await UserProfilePostEndpoint.getAllByUserProfileDisplayId(profileDisplayId)
+                : await UserProfilePostEndpoint.getTimelineByUserProfileId(state.user?.userProfileId!);
 
-        useEffect(() => {
-            const fetchPosts = async () => {
-                const posts = await UserProfilePostEndpoint.getTimelineForUserProfileId(state?.user?.userProfile?.id ?? 0);
+            setUserProfilePosts(userProfilePosts
+                .sort((postA, postB) => new Date(postB.creationDateUtc).getTime() - new Date(postA.creationDateUtc).getTime())
+            );
 
-                setPosts(posts);
-            }
-
-            fetchPosts();
-        }, []);
-
-        return (
-           <>
-                {posts.map((post) => (
-                    <Post key={post.id} post={post} />
-                ))}
-           </>
-        )
-    }
+            setPosted(false);
+        })();
+    }, [state.user, profileDisplayId, posted]);
 
     return (
         <div className='feed'>
             <div className='feed-wrapper'>
-                <Share />
-                {isForProfile ? <ProfileFeed /> : <Feed />}
+                { profileDisplayId == userProfile?.profileDisplayId || !profileDisplayId ? <Share posted={() => setPosted(true)} /> : null }
+                {userProfilePosts.map((userProfilePost) => (
+                    <Post key={userProfilePost?.id} userProfilePost={userProfilePost} />
+                ))}
             </div>
         </div>
     )
