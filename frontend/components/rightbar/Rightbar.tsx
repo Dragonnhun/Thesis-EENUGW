@@ -53,14 +53,11 @@ export default function Rightbar({userProfile}: {userProfile?: UserProfile}) {
 
         const followHandler = async () => {
             try {
-                await UserProfileEndpoint.followUnfollowUserProfile(state.user?.userProfileId!, userProfile?.id!);
-                //const result = 
-                // if (result) {
-                //     const userProfileFollowers = await UserProfileEndpoint.getUserProfileFollowersById(userProfile?.id!);
-                //     setUserProfileFollowers(userProfileFollowers);
-                // }
+                const result = await UserProfileEndpoint.followUnfollowUserProfile(state.user?.userProfileId!, userProfile?.id!);
 
-                setFollowed(!followed);
+                if (result) {
+                    setFollowed(!followed);
+                }
             } catch (error) {
                 console.error(error);
             }
