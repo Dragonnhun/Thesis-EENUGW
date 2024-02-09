@@ -24,17 +24,29 @@
                 height: 32px;
                 border-radius: 50%;
                 object-fit: cover;
+                cursor: pointer;
+
+                &-link {
+                    height: 32px;
+                }
             }
 
-            &-username {
+            &-name {
                 font-size: 15px;
                 font-weight: 600;
                 margin: 0 10px;
+                cursor: pointer;
+
+                &-link {
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
             }
 
             &-date {
+                margin-top: 3px;
                 font-size: 12px;
-                
             }
         }
 
@@ -69,6 +81,15 @@
                 height: 24px;
                 margin-right: 5px;
                 cursor: pointer;
+                
+                &:focus {
+                    outline: none;
+                }
+
+                &.active {
+                    border-radius: 50%;
+                    border: 3px solid $primary-color;
+                }
             }
 
             &-like-counter {
