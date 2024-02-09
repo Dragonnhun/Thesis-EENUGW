@@ -8,7 +8,6 @@ import jakarta.persistence.Converter;
 
 @Converter(autoApply = true)
 public class InstantConverter implements AttributeConverter<Instant, Timestamp> {
-
     @Override
     public Timestamp convertToDatabaseColumn(Instant attribute) {
         return attribute != null ? Timestamp.from(attribute) : null;

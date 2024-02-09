@@ -1,5 +1,4 @@
 import 'themes/intertwine/components/sidebar.scss';
-import CloseFriend from 'Frontend/components/close-friend/CloseFriend'
 import { Icon } from "@hilla/react-components/Icon.js";
 import { Button } from '@hilla/react-components/Button.js';
 

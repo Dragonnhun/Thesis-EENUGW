@@ -13,8 +13,12 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Email {
     private String toAddress;
+
     private String fromAddress;
+
     private String senderName;
+
     private String subject;
+    
     private String content;
 }

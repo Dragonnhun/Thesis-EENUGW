@@ -14,7 +14,7 @@ export const routes = protectRoutes([
         handle: { title: 'Main' },
         children: [
             { path: '/', element: <HomeView />, handle: { title: 'Home', requiresLogin: true } },
-            { path: '/profile/:username', element: <ProfileView />, handle: { title: 'Profile', requiresLogin: true } },
+            { path: '/profile/:profileDisplayId', element: <ProfileView />, handle: { title: 'Profile', requiresLogin: true } },
         ],
     },
     { path: '/login', element: <LoginView />, handle: { title: 'Log In', requiresLogin: false } },

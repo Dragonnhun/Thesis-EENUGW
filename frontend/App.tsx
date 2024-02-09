@@ -6,9 +6,9 @@ import { RouterProvider } from 'react-router-dom';
 export default function App() {
     return (
         <React.StrictMode>
-          <AuthProvider>
-            <RouterProvider router={router} />
-          </AuthProvider>
+            <AuthProvider>
+                <RouterProvider router={router} />
+            </AuthProvider>
         </React.StrictMode>
     );
 }
