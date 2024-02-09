@@ -1,4 +1,4 @@
 @NonNullApi
-package hu.eenugw.core.entities;
+package hu.eenugw.userprofilemanagement.models;
 
 import org.springframework.lang.NonNullApi;

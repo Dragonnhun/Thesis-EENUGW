@@ -9,11 +9,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,23 +27,26 @@ import lombok.Setter;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.Set;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
-import hu.eenugw.core.entities.AbstractEntity;
 import hu.eenugw.core.helpers.InstantOptionalConverter;
 import hu.eenugw.usermanagement.constants.Role;
-import hu.eenugw.userprofilemanagement.entities.UserProfile;
+import hu.eenugw.userprofilemanagement.entities.UserProfileEntity;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+@EqualsAndHashCode(of = "id")
+@Entity(name = "user")
 @Table(name = "users")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class User extends AbstractEntity {
+public class UserEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
+
+    @Version
+    private int version;
+
     @Nonnull
     @Size(min = 3, max = 255, message = "Username must be between 3 and 255 characters long.")
     private String username;
@@ -54,8 +63,10 @@ public class User extends AbstractEntity {
     @Nonnull
     private Boolean enabled;
 
+    @Nullable
     private String registrationToken;
 
+    @Nullable
     private String forgottenPasswordToken;
 
     @Convert(converter = InstantOptionalConverter.class)
@@ -68,9 +79,9 @@ public class User extends AbstractEntity {
 
     @Nullable
     @OneToOne(
-        targetEntity = UserProfile.class,
+        targetEntity = UserProfileEntity.class,
         mappedBy = "user",
-        fetch = FetchType.EAGER,
+        fetch = FetchType.LAZY,
         cascade = CascadeType.ALL)
-    private UserProfile userProfile;
+    private UserProfileEntity userProfile;
 }

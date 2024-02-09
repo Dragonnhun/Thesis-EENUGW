@@ -1,31 +1,47 @@
 package hu.eenugw.userprofilemanagement.entities;
 
 import java.time.Instant;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.type.descriptor.jdbc.VarcharJdbcType;
 
-import hu.eenugw.core.entities.AbstractEntity;
 import hu.eenugw.core.helpers.InstantConverter;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "userprofilepostcomments")
-// @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class UserProfileComment extends AbstractEntity {
+@EqualsAndHashCode(of = "id")
+@Entity(name = "userProfilePostComment")
+@Table(name = "user_profile_post_comments")
+public class UserProfilePostCommentEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @JdbcType(VarcharJdbcType.class)
+    private String id;
+
+    @Version
+    private int version;
+
     @Lob
     private String comment;
 
@@ -38,15 +54,15 @@ public class UserProfileComment extends AbstractEntity {
 
     @Nullable
     @OneToOne(
-        targetEntity = UserProfile.class,
-        fetch = FetchType.EAGER)
+        targetEntity = UserProfileEntity.class,
+        fetch = FetchType.LAZY)
     @JoinColumn(name = "user_profile_id")
-    private UserProfile userProfile;
+    private UserProfileEntity userProfile;
 
     @Nullable
     @ManyToOne(
-        targetEntity = UserProfilePost.class,
-        fetch = FetchType.EAGER)
+        targetEntity = UserProfilePostEntity.class,
+        fetch = FetchType.LAZY)
     @JoinColumn(name = "user_profile_post_id")
-    private UserProfilePost userProfilePost;
+    private UserProfilePostEntity userProfilePost;
 }
