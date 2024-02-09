@@ -6,7 +6,6 @@ import { useAuth } from 'Frontend/util/auth';
 
 export default function Share() {
     const blockName = 'share';
-    const { state } = useAuth();
     const assetsFolder = import.meta.env.VITE_ASSETS_FOLDER;
 
     return (

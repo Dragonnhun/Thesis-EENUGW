@@ -11,8 +11,8 @@ export default function Rightbar({isForProfile}: {isForProfile: boolean}) {
                     <span className='rightbar-birthday-text'><b>Hipster Guy</b> and <b>3 other friends</b> have a birthday today.</span>
                 </div>
                 <img className='rightbar-advert' src='images/Lombiq-logo.png' alt='advert' />
-                <h4 className="rightbar-title">Online Friends</h4>
-                <ul className="rightbar-friend-list">
+                <h4 className='rightbar-title'>Online Friends</h4>
+                <ul className='rightbar-friend-list'>
                     {/* {Users.map((u) => (
                         <OnlineFriend key={u.id} user={u} />
                     ))} */}
