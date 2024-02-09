@@ -25,18 +25,23 @@
     "classnames": "^2.3.2",
     "construct-style-sheets-polyfill": "3.1.0",
     "lit": "3.1.0",
+    "luxon": "^3.4.4",
+    "promise-file-reader": "^1.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.2",
     "sass": "^1.69.7",
-    "timeago.js": "^4.0.2"
+    "timeago.js": "^4.0.2",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@lit-labs/react": "^1.1.0",
     "@rollup/plugin-replace": "5.0.4",
     "@rollup/pluginutils": "5.0.5",
+    "@types/luxon": "^3.4.2",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.8",
+    "@types/uuid": "^9.0.8",
     "@types/validator": "^13.11.8",
     "@vitejs/plugin-react": "4.2.0",
     "@vitejs/plugin-react-swc": "3.5.0",
@@ -80,7 +85,10 @@
     "@hilla/generator-typescript-plugin-backbone": "$@hilla/generator-typescript-plugin-backbone",
     "@hilla/generator-typescript-cli": "$@hilla/generator-typescript-cli",
     "sass": "$sass",
-    "timeago.js": "$timeago.js"
+    "timeago.js": "$timeago.js",
+    "luxon": "$luxon",
+    "uuid": "$uuid",
+    "promise-file-reader": "$promise-file-reader"
   },
   "vaadin": {
     "dependencies": {
@@ -124,6 +132,6 @@
       "workbox-core": "7.0.0",
       "workbox-precaching": "7.0.0"
     },
-    "hash": "54b4b94abebc3ad6c38d5dd7d68e982b4063b61fe6a9ef3673f4152b3ddf54f3"
+    "hash": "39f6b6e9f44df337b7f433828ee43d00caf4e152ed241f61293d7cfd018d1cd3"
   }
 }
