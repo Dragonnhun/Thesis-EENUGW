@@ -5,6 +5,7 @@ import ForgottenPasswordView from 'Frontend/views/forgotten-password/ForgottenPa
 import ResetForgottenPasswordView from 'Frontend/views/forgotten-password/ResetForgottenPasswordView';
 import HomeView from 'Frontend/views/home/HomeView';
 import ProfileView from 'Frontend/views/profile/ProfileView';
+import MessengerView from './views/messenger/MessengerView';
 import { protectRoutes } from '@hilla/react-auth';
 import { createBrowserRouter, RouteObject } from 'react-router-dom';
 
@@ -15,6 +16,7 @@ export const routes = protectRoutes([
         children: [
             { path: '/', element: <HomeView />, handle: { title: 'Home', requiresLogin: true } },
             { path: '/profile/:profileDisplayId', element: <ProfileView />, handle: { title: 'Profile', requiresLogin: true } },
+            { path: '/messenger', element: <MessengerView />, handle: { title: 'Messenger', requiresLogin: true } },
         ],
     },
     { path: '/login', element: <LoginView />, handle: { title: 'Log In', requiresLogin: false } },

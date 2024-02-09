@@ -80,10 +80,12 @@ export default function Navbar() {
                         <Icon icon='vaadin:home' />
                         <span className='navbar-icon-badge'>1</span>
                     </div>
-                    <div className='navbar-icon-item'>
-                        <Icon icon='vaadin:chat' />
-                        <span className='navbar-icon-badge'>2</span>
-                    </div>
+                    <Link to='/messenger'>
+                        <div className='navbar-icon-item'>
+                            <Icon icon='vaadin:chat' />
+                            <span className='navbar-icon-badge'>2</span>
+                        </div>
+                    </Link>
                     <div className='navbar-icon-item'>
                         <Icon icon='vaadin:bell' />
                         <span className='navbar-icon-badge'>1</span>
