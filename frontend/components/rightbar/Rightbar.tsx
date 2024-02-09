@@ -1,7 +1,15 @@
 import 'themes/intertwine/components/rightbar.scss';
 import OnlineFriend from 'Frontend/components/online-friend/OnlineFriend'
+import UserProfile from 'Frontend/generated/hu/eenugw/userprofilemanagement/models/UserProfile';
+import StringHelpers from 'Frontend/helpers/stringHelpers';
+import { useEffect, useState } from 'react';
+import { UserProfileEndpoint } from 'Frontend/generated/endpoints';
+import ProfileFriend from '../profile-friend/ProfileFriend';
+import { useAuth } from 'Frontend/util/auth';
+import { Button } from '@hilla/react-components/Button.js';
+import { Icon } from '@hilla/react-components/Icon.js';
 
-export default function Rightbar({isForProfile}: {isForProfile: boolean}) {
+export default function Rightbar({userProfile}: {userProfile?: UserProfile}) {
 
     const HomeRightbar = () => {
         return (
@@ -22,49 +30,70 @@ export default function Rightbar({isForProfile}: {isForProfile: boolean}) {
     };
 
     const ProfileRightbar = () => {
+        const { state } = useAuth();
+        const [userProfileFollowers, setUserProfileFollowers] = useState<UserProfile[]>();
+        const [followed, setFollowed] = useState<boolean>(false);
+
+        useEffect(() => {
+            (async () => {
+                const userProfileFollowers = await UserProfileEndpoint.getUserProfileFollowersById(userProfile?.id!);
+                setUserProfileFollowers(userProfileFollowers);
+            })();
+        }, [userProfile, followed]);
+
+        useEffect(() => {
+            (async () => {
+                userProfileFollowers?.forEach((follower) => {
+                    if (follower?.userId === state.user?.id) {
+                        setFollowed(true);
+                    }
+                });
+            })();
+        }, [userProfileFollowers]);
+
+        const followHandler = async () => {
+            try {
+                await UserProfileEndpoint.followUnfollowUserProfile(state.user?.userProfileId!, userProfile?.id!);
+                //const result = 
+                // if (result) {
+                //     const userProfileFollowers = await UserProfileEndpoint.getUserProfileFollowersById(userProfile?.id!);
+                //     setUserProfileFollowers(userProfileFollowers);
+                // }
+
+                setFollowed(!followed);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
         return (
             <>
-                <h4 className="rightbar-user-information-title">User Information</h4>
-                <div className="rightbar-user-information-information">
-                    <div className="rightbar-user-information-information-item">
-                        <span className="rightbar-user-information-information-item-key">City:</span>
-                        <span className="rightbar-user-information-information-item-value">New York</span>
+                {state.user?.id != userProfile?.userId && (
+                    <Button theme='primary' className='rightbar-follow-button' onClick={followHandler}>
+                        <Icon className='rightbar-follow-icon' slot='suffix' icon={followed ? 'vaadin:minus' : 'vaadin:plus'} />
+                        {followed ? 'Unfollow' : 'Follow'}
+                    </Button>
+                )}
+                <h4 className='rightbar-user-information-title'>User Information</h4>
+                <div className='rightbar-user-information-information'>
+                    <div className='rightbar-user-information-information-item'>
+                        <span className='rightbar-user-information-information-item-key'>City:</span>
+                        <span className='rightbar-user-information-information-item-value'>{userProfile?.city}</span>
                     </div>
-                    <div className="rightbar-user-information-information-item">
-                        <span className="rightbar-user-information-information-item-key">From:</span>
-                        <span className="rightbar-user-information-information-item-value">Madrid</span>
+                    <div className='rightbar-user-information-information-item'>
+                        <span className='rightbar-user-information-information-item-key'>Hometown:</span>
+                        <span className='rightbar-user-information-information-item-value'>{userProfile?.hometown}</span>
                     </div>
-                    <div className="rightbar-user-information-information-item">
-                        <span className="rightbar-user-information-information-item-key">Relationship:</span>
-                        <span className="rightbar-user-information-information-item-value">Single</span>
+                    <div className='rightbar-user-information-information-item'>
+                        <span className='rightbar-user-information-information-item-key'>Relationship:</span>
+                        <span className='rightbar-user-information-information-item-value'>{StringHelpers.removeUnderscoresAndCapitalizeFirst(userProfile?.relationshipStatus)}</span>
                     </div>
                 </div>
-                <h4 className="rightbar-user-friends-title">User Friends</h4>
-                <div className="rightbar-user-friends-followings">
-                    <div className="rightbar-user-friends-followings-following">
-                        <img className="rightbar-user-friends-followings-following-image" src="images/Lombiq-logo.png" alt="user-following" />
-                        <span className="rightbar-user-friends-followings-following-name">John Carter</span>
-                    </div>
-                    <div className="rightbar-user-friends-followings-following">
-                        <img className="rightbar-user-friends-followings-following-image" src="images/Lombiq-logo.png" alt="user-following" />
-                        <span className="rightbar-user-friends-followings-following-name">John Carter</span>
-                    </div>
-                    <div className="rightbar-user-friends-followings-following">
-                        <img className="rightbar-user-friends-followings-following-image" src="images/Lombiq-logo.png" alt="user-following" />
-                        <span className="rightbar-user-friends-followings-following-name">John Carter</span>
-                    </div>
-                    <div className="rightbar-user-friends-followings-following">
-                        <img className="rightbar-user-friends-followings-following-image" src="images/Lombiq-logo.png" alt="user-following" />
-                        <span className="rightbar-user-friends-followings-following-name">John Carter</span>
-                    </div>
-                    <div className="rightbar-user-friends-followings-following">
-                        <img className="rightbar-user-friends-followings-following-image" src="images/Lombiq-logo.png" alt="user-following" />
-                        <span className="rightbar-user-friends-followings-following-name">John Carter</span>
-                    </div>
-                    <div className="rightbar-user-friends-followings-following">
-                        <img className="rightbar-user-friends-followings-following-image" src="images/Lombiq-logo.png" alt="user-following" />
-                        <span className="rightbar-user-friends-followings-following-name">John Carter</span>
-                    </div>
+                <h4 className='rightbar-user-friends-title'>User Friends</h4>
+                <div className='rightbar-user-friends-followings'>
+                    {userProfileFollowers?.map((follower) => (
+                        <ProfileFriend key={follower?.id} userProfile={follower} />
+                    ))}
                 </div>
             </>
         )
@@ -73,7 +102,7 @@ export default function Rightbar({isForProfile}: {isForProfile: boolean}) {
     return (
         <div className='rightbar'>
             <div className='rightbar-wrapper'>
-                {isForProfile ? <ProfileRightbar /> : <HomeRightbar />}
+                {userProfile ? <ProfileRightbar /> : <HomeRightbar />}
             </div>
         </div>
     )
