@@ -1,0 +1,14 @@
+@import "../variables/variables.scss";
+
+.logout {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+    &-text {
+        font-size: 30px;
+        color: $black-color;
+    }
+}

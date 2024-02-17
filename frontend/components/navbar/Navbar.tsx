@@ -1,6 +1,5 @@
 import 'themes/intertwine/components/navbar.scss';
 import MenuBarHelpers from 'Frontend/helpers/menuBarHelpers';
-import User from 'Frontend/generated/hu/eenugw/usermanagement/models/User';
 import UserProfile from 'Frontend/generated/hu/eenugw/userprofilemanagement/models/UserProfile';
 import { Icon } from '@hilla/react-components/Icon.js';
 import { Avatar } from '@hilla/react-components/Avatar.js';
@@ -13,7 +12,7 @@ import { MenuBar, } from '@hilla/react-components/MenuBar.js';
 export default function Navbar() {
     const assetsFolder = import.meta.env.VITE_ASSETS_FOLDER;
 
-    const { state, logout } = useAuth();
+    const { state } = useAuth();
     const [siteName, setSiteName] = useState<string>('');
     const [userProfile, setUserProfile] = useState<UserProfile | undefined>();
 
@@ -91,31 +90,15 @@ export default function Navbar() {
                         <span className='navbar-icon-badge'>1</span>
                     </div>
                 </div>
-                {/* {currentUser && (
-                    <>
-                        <MenuBar
-                            className='navbar-menu-bar'
-                            items={menuBarItems}
-                            theme="tertiary-inline"
-                            onItemSelected={(event) => {
-                                if (event.detail.value.text === 'Log out') {
-                                    logout();
-                                }
-                                if (event.detail.value.text === 'Profile') {
-                                    navigate(new URL(`profile/${userProfile?.profileDisplayId}`, document.baseURI).pathname);
-                                }
-                            }} />
-                    </>
-                )} */}
                 <MenuBar
                     className='navbar-menu-bar'
                     items={menuBarItems}
                     theme="tertiary-inline"
                     onItemSelected={(event) => {
                         if (event.detail.value.text === 'Log out') {
-                            logout();
+                            navigate(new URL('/logout', document.baseURI).pathname);
                         }
-                        if (event.detail.value.text === 'Profile') {
+                        else if (event.detail.value.text === 'Profile') {
                             navigate(new URL(`profile/${userProfile?.profileDisplayId}`, document.baseURI).pathname);
                         }
                     }} />

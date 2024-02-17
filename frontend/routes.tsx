@@ -1,5 +1,6 @@
 import MainLayout from 'Frontend/views/MainLayout.js';
 import LoginView from 'Frontend/views/login/LoginView.js';
+import LogoutView from './views/logout/LogoutView';
 import RegisterView from 'Frontend/views/register/RegisterView';
 import ForgottenPasswordView from 'Frontend/views/forgotten-password/ForgottenPasswordView';
 import ResetForgottenPasswordView from 'Frontend/views/forgotten-password/ResetForgottenPasswordView';
@@ -20,6 +21,7 @@ export const routes = protectRoutes([
         ],
     },
     { path: '/login', element: <LoginView />, handle: { title: 'Log In', requiresLogin: false } },
+    { path: '/logout', element: <LogoutView />, handle: { title: 'Log Out', requiresLogin: true } },
     { path: '/register', element: <RegisterView />, handle: { title: 'Register', requiresLogin: false } },
     { path: '/forgotten-password', element: <ForgottenPasswordView />, handle: { title: 'Forgotten Password', requiresLogin: false } },
     { path: '/reset-forgotten-password', element: <ResetForgottenPasswordView />, handle: { title: 'Reset Forgotten Password', requiresLogin: false } },
