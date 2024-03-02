@@ -77,6 +77,20 @@ public class UserProfileService {
         return userProfileEntity.get().getFollowers();
     }
 
+    public List<UserProfileEntity> getUserProfileFollowingsById(String id) {
+        if (id == null) {
+            return List.of();
+        }
+
+        var userProfileEntity = _userProfileRepository.findById(id);
+
+        if (userProfileEntity.isEmpty()) {
+            return List.of();
+        }
+
+        return userProfileEntity.get().getFollowings();
+    }
+
     @Transactional
     public Pair<Boolean, String> followUnfollowUserProfile(String followerUserProfileId, String followedUserProfileId) {
         if (followerUserProfileId == null || followerUserProfileId.isBlank() || followedUserProfileId == null || followedUserProfileId.isBlank()) {

@@ -23,6 +23,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+
+import hu.eenugw.privatemessaging.entities.PrivateConversationEntity;
+import hu.eenugw.privatemessaging.entities.PrivateMessageEntity;
 import hu.eenugw.usermanagement.entities.UserEntity;
 import hu.eenugw.userprofilemanagement.constants.RelationshipStatus;
 
@@ -42,7 +45,6 @@ public class UserProfileEntity {
     @Version
     private int version;
 
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String profileDisplayId;
 
     private String firstName;
@@ -117,4 +119,20 @@ public class UserProfileEntity {
         mappedBy = "userProfileHearts",
         fetch = FetchType.LAZY)
     private List<UserProfilePostEntity> heartedUserProfilePosts;
+
+    @Nullable
+    @ManyToMany(
+        targetEntity = PrivateConversationEntity.class,
+        mappedBy = "memberUserProfiles",
+        fetch = FetchType.LAZY,
+        cascade = CascadeType.ALL)
+    private List<PrivateConversationEntity> privateConversations;
+
+    @Nullable
+    @OneToMany(
+        targetEntity = PrivateMessageEntity.class,
+        mappedBy = "senderUserProfile",
+        fetch = FetchType.LAZY,
+        cascade = CascadeType.ALL)
+    private List<PrivateMessageEntity> privateMessages;
 }

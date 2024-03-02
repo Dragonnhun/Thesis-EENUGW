@@ -3,9 +3,6 @@ package hu.eenugw.userprofilemanagement.entities;
 import java.time.Instant;
 import java.util.List;
 
-import org.hibernate.annotations.JdbcType;
-import org.hibernate.type.descriptor.jdbc.VarcharJdbcType;
-
 import hu.eenugw.core.helpers.InstantConverter;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
@@ -41,7 +38,6 @@ import lombok.Setter;
 public class UserProfilePostEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @JdbcType(VarcharJdbcType.class)
     private String id;
 
     @Version

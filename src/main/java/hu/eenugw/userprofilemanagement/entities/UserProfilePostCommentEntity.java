@@ -1,9 +1,6 @@
 package hu.eenugw.userprofilemanagement.entities;
 
 import java.time.Instant;
-import org.hibernate.annotations.JdbcType;
-import org.hibernate.type.descriptor.jdbc.VarcharJdbcType;
-
 import hu.eenugw.core.helpers.InstantConverter;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Convert;
@@ -36,7 +33,6 @@ import lombok.Setter;
 public class UserProfilePostCommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @JdbcType(VarcharJdbcType.class)
     private String id;
 
     @Version
