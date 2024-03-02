@@ -62,7 +62,7 @@ export default function Sidebar() {
                         </span>
                     </li>
                 </ul>
-                <Button className='sidebar-button'>Show More</Button>
+                <Button className='sidebar-button' theme='primary'>Show More</Button>
                 <hr className='sidebar-line'/>
                 <ul className="sidebar-friend-list">
                     {/* {Users.map((u) => (
