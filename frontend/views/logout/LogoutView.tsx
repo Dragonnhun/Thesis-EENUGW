@@ -1,20 +1,30 @@
 import 'themes/intertwine/views/logout.scss';
 import { useAuth } from 'Frontend/util/auth';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ProgressBar } from '@hilla/react-components/ProgressBar.js';
+import { Socket, io } from 'socket.io-client';
 
 export default function LogoutView() {
     const blockName = 'logout';
-    const { logout } = useAuth();
+    const { state, logout } = useAuth();
     const navigate = useNavigate();
+    const socket = useRef<Socket>();
 
     useEffect(() => {
-        logout();
+        (async () => {
+            socket.current = io('ws://localhost:8089');
 
-        setTimeout(() => {
-            navigate(new URL('/login', document.baseURI).pathname);
-        }, 1000);
+            socket.current?.emit('disconnectUser', state.user?.userProfileId);
+
+            setTimeout(() => {
+                logout();
+    
+                setTimeout(() => {
+                    navigate(new URL('/login', document.baseURI).pathname);
+                }, 2000);
+            }, 1000);
+        })();
     }, []);
 
     return (
