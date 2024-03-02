@@ -74,6 +74,14 @@
                     }
                 }
             }
+
+            &-no-private-conversation-selected {
+                position: absolute;
+                top: 10%;
+                font-size: 50px;
+                color: $primary-color;
+                cursor: default;
+            }
         }
 
         &-online-friends {
