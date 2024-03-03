@@ -129,6 +129,14 @@ public class UserProfileService {
         return Pair.of(true, "Success");
     }
 
+    public List<UserProfileEntity> searchUserProfilesByName(String name) {
+        if (isNullOrEmptyOrBlank(name)) {
+            return List.of();
+        }
+
+        return _userProfileRepository.findByFirstNameOrLastNameContainingIgnoreCase(name, name);
+    }
+
     public UserProfile convertUserProfileEntityToModel(UserProfileEntity userProfileEntity) {
         var followerUserProfileIds = Optional.ofNullable(userProfileEntity.getFollowers()).isEmpty()
             ? new ArrayList<String>()

@@ -24,6 +24,8 @@ export default function MessengerView() {
     const [onlineUsers, setOnlineUsers] = useState({});
     const [followings, setFollowings] = useState<UserProfile[]>([]);
     const [onlineFriends, setOnlineFriends] = useState<UserProfile[]>([]);
+    const [searchValue, setSearchValue] = useState<string>('');
+    const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout>();
     const socket = useRef<Socket>();
     const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -75,13 +77,23 @@ export default function MessengerView() {
     useEffect(() => {
         (async () => {
             try {
-                const privateConversations = await PrivateConversationEndpoint.getPrivateConversationsByUserProfileId(userProfile?.id!);
+                let privateConversations = await PrivateConversationEndpoint.getPrivateConversationsByUserProfileId(userProfile?.id!);
+
+                if (searchValue) {
+                    privateConversations = privateConversations.filter(privateConversation => {
+                        return privateConversation.memberUserProfileNames.some(memberUserProfileName => {
+                            const pattern = new RegExp(searchValue, 'i');
+                            return pattern.test(memberUserProfileName);
+                        });
+                    });
+                }
+
                 setPrivateConversations(privateConversations);
             } catch (error) {
                 console.error(error);
             }
         })();
-    }, [userProfile]);
+    }, [userProfile, searchValue]);
 
     useEffect(() => {
         (async () => {
@@ -124,6 +136,10 @@ export default function MessengerView() {
     const handlePrivateMessageSubmit = async (event: { preventDefault: () => void; }) => {
         event.preventDefault();
 
+        if (!newPrivateMessage) {
+            return;
+        }
+
         const newPrivateMessageModel = PrivateMessageModel.createEmptyValue();
         newPrivateMessageModel.senderUserProfileId = userProfile?.id!;
         newPrivateMessageModel.privateConversationId = currentPrivateConversation?.id!;
@@ -147,12 +163,20 @@ export default function MessengerView() {
         }
     }
 
+    useEffect(() => {
+        return () => clearTimeout(typingTimeout!);
+    }, [typingTimeout]);
+
     return (
         <div className='messenger'>
             <div className="chat-menu">
                 <div className="chat-menu-wrapper">
-                    <input type="text" placeholder='Search for friends' className="chat-menu-search" />
-                    {privateConversations.map((privateConversation) =>
+                    <input type="text" placeholder='Search for friends' className="chat-menu-search" onChange={event => {
+                        clearTimeout(typingTimeout!);
+                        const value = event.target.value;
+                        setTypingTimeout(setTimeout(() => setSearchValue(value), 500));
+                    }} />
+                    {privateConversations?.slice(0, 15).map((privateConversation) =>
                         <div key={privateConversation?.id} onClick={() => setCurrentPrivateConversation(privateConversation)}>
                             <Conversation key={privateConversation?.id} userProfile={userProfile!} privateConversation={privateConversation} />
                         </div>

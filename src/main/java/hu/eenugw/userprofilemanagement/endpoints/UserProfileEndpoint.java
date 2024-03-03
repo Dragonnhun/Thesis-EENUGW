@@ -56,4 +56,12 @@ public class UserProfileEndpoint {
     public Pair<Boolean, String> followUnfollowUserProfile(String followerUserProfileId, String followedUserProfileId) {
         return _userProfileService.followUnfollowUserProfile(followerUserProfileId, followedUserProfileId);
     }
+
+    public List<UserProfile> searchUserProfilesByName(String name) {
+        return _userProfileService
+            .searchUserProfilesByName(name)
+            .stream()
+            .map(_userProfileService::convertUserProfileEntityToModel)
+            .toList();
+    }
 }

@@ -1,6 +1,7 @@
 import 'themes/intertwine/components/navbar.scss';
 import MenuBarHelpers from 'Frontend/helpers/menuBarHelpers';
 import UserProfile from 'Frontend/generated/hu/eenugw/userprofilemanagement/models/UserProfile';
+import ProfileSearchResult from '../profile-search-result/ProfileSearchResult';
 import { Icon } from '@hilla/react-components/Icon.js';
 import { Avatar } from '@hilla/react-components/Avatar.js';
 import { Link, useNavigate } from 'react-router-dom';
@@ -8,6 +9,9 @@ import { useAuth } from 'Frontend/util/auth';
 import { useEffect, useRef, useState } from 'react';
 import { SiteEndpoint, UserProfileEndpoint } from 'Frontend/generated/endpoints';
 import { MenuBar, } from '@hilla/react-components/MenuBar.js';
+import { Button } from '@hilla/react-components/Button.js';
+import { Dialog } from '@hilla/react-components/Dialog.js';
+import { VerticalLayout } from '@hilla/react-components/VerticalLayout.js';
 
 export default function Navbar() {
     const assetsFolder = import.meta.env.VITE_ASSETS_FOLDER;
@@ -15,6 +19,18 @@ export default function Navbar() {
     const { state } = useAuth();
     const [siteName, setSiteName] = useState<string>('');
     const [userProfile, setUserProfile] = useState<UserProfile | undefined>();
+    const [isSearchDialogOpened, setIsSearchDialogOpened] = useState(false);
+    const [searchResult, setSearchResult] = useState<UserProfile[]>([]);
+
+    const searchValueRef = useRef<HTMLInputElement>(undefined!);
+
+    const openSearchDialog = () => {
+        setIsSearchDialogOpened(true);
+    };
+  
+    const closeSearchDialog = () => {
+        setIsSearchDialogOpened(false);
+    };
 
     const navigate = useNavigate();
 
@@ -27,6 +43,19 @@ export default function Navbar() {
             setUserProfile(userProfile);
         })();
     }, [state.user]);
+
+    const submitSearch = async () => {
+        const searchValue = searchValueRef.current.value;
+
+        if (!searchValue) {
+            return;
+        }
+
+        const searchResult = await UserProfileEndpoint.searchUserProfilesByName(searchValue);
+        setSearchResult(searchResult);
+
+        openSearchDialog();
+    };
 
     const menuBarItems = [
         {
@@ -64,16 +93,29 @@ export default function Navbar() {
             <div slot='navbar' className='navbar-center'>
                 <div className='searchbar'>
                     <Icon className='searchbar-icon' icon='vaadin:search' />
-                    <input placeholder='Search for friend, post or video' className='searchbar-input' />
+                    <input
+                        ref={searchValueRef}
+                        placeholder='Search for friend, post or video'
+                        className='searchbar-input'
+                        onKeyDown={(event) => {
+                            if (event.key === 'Enter') {
+                                submitSearch();
+                            }
+                        }}>
+                    </input>
+                    <Button onClick={submitSearch} className='searchbar-button' theme='tertiary'>Search</Button>
                 </div>
             </div>
             <div slot='navbar' className='navbar-right'>
                 <div className='navbar-links'>
+                    <Link to={'/profile/' + userProfile?.profileDisplayId}>
+                        <span className='navbar-link'>Profile</span>
+                    </Link>
                     <Link to='/'>
-                        <span className='navbar-link'>Homepage</span>
                         <span className='navbar-link'>Timeline</span>
                     </Link>
                 </div>
+                <span className='navbar-text'>Welcome {userProfile?.firstName}!</span>
                 <div className='navbar-icons'>
                     <div className='navbar-icon-item'>
                         <Icon icon='vaadin:home' />
@@ -93,7 +135,7 @@ export default function Navbar() {
                 <MenuBar
                     className='navbar-menu-bar'
                     items={menuBarItems}
-                    theme="tertiary-inline"
+                    theme='tertiary-inline'
                     onItemSelected={(event) => {
                         if (event.detail.value.text === 'Log out') {
                             navigate(new URL('/logout', document.baseURI).pathname);
@@ -103,6 +145,38 @@ export default function Navbar() {
                         }
                     }} />
             </div>
+            <Dialog
+                headerTitle={'Search result'}
+                className='search-dialog'
+                draggable={false}
+                modeless={false}
+                opened={isSearchDialogOpened}
+                onOpenedChanged={(event) => {
+                    setIsSearchDialogOpened(event.detail.value);
+                }}>
+                <VerticalLayout className='search-dialog-main-layout' style={{ alignItems: 'stretch', minWidth: '50vh', maxWidth: '100vh' }}>
+                    <VerticalLayout style={{ alignItems: 'stretch' }}>
+                        {searchResult.map((searchResultUserProfile) => (
+                            <ProfileSearchResult key={searchResultUserProfile.id} userProfile={searchResultUserProfile} closeSearchDialog={closeSearchDialog} />
+                        ))}
+                                                {searchResult.map((searchResultUserProfile) => (
+                            <ProfileSearchResult key={searchResultUserProfile.id} userProfile={searchResultUserProfile} closeSearchDialog={closeSearchDialog} />
+                        ))}
+                                                {searchResult.map((searchResultUserProfile) => (
+                            <ProfileSearchResult key={searchResultUserProfile.id} userProfile={searchResultUserProfile} closeSearchDialog={closeSearchDialog} />
+                        ))}
+                                                {searchResult.map((searchResultUserProfile) => (
+                            <ProfileSearchResult key={searchResultUserProfile.id} userProfile={searchResultUserProfile} closeSearchDialog={closeSearchDialog} />
+                        ))}
+                                                {searchResult.map((searchResultUserProfile) => (
+                            <ProfileSearchResult key={searchResultUserProfile.id} userProfile={searchResultUserProfile} closeSearchDialog={closeSearchDialog} />
+                        ))}
+                                                {searchResult.map((searchResultUserProfile) => (
+                            <ProfileSearchResult key={searchResultUserProfile.id} userProfile={searchResultUserProfile} closeSearchDialog={closeSearchDialog} />
+                        ))}
+                    </VerticalLayout>
+                </VerticalLayout>
+            </Dialog>
         </>
     )
 }

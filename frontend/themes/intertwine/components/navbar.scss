@@ -18,6 +18,15 @@ vaadin-app-layout {
     }
 }
 
+vaadin-dialog-overlay {
+    padding-top: 56px;
+
+    &::part(header) {
+        display: flex;
+        align-self: center;
+    }
+}
+
 .navbar {
     &-left {
         flex: 3;
@@ -57,6 +66,11 @@ vaadin-app-layout {
                     outline: none;
                 }
             }
+
+            &-button {
+                margin-right: 10px;
+                cursor: pointer;
+            }
         }
     }
 
@@ -74,6 +88,12 @@ vaadin-app-layout {
                 font-size: 14px;
                 cursor: pointer;
             }
+        }
+
+        .navbar-text {
+            color: $white-color;
+            margin-right: 10px;
+            font-size: 14px;
         }
 
         .navbar-icons {

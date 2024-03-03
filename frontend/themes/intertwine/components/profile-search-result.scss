@@ -1,0 +1,33 @@
+@import "../variables/variables.scss";
+
+.profile-search-result {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    margin-top: 10px;
+
+    &:hover {
+        background-color: $secondary-color;
+    }
+
+    &-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 20px;
+        cursor: pointer;
+    }
+
+    &-name {
+        color: $black-color;
+        font-weight: bold;
+    }
+
+    &-link {
+        &:hover {
+            text-decoration: none;
+        }
+    }
+}

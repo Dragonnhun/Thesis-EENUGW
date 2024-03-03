@@ -120,10 +120,15 @@ public class PrivateConversationService {
             ? new ArrayList<String>()
             : privateConversationEntity.getMemberUserProfiles().stream().map(profile -> profile.getId()).toList();
 
+        var memberUserProfileNames = Optional.ofNullable(privateConversationEntity.getMemberUserProfiles()).isEmpty()
+            ? new ArrayList<String>()
+            : privateConversationEntity.getMemberUserProfiles().stream().map(profile -> profile.getFirstName() + " " + profile.getLastName()).toList();
+
         return new PrivateConversation (
             privateConversationEntity.getId(),
             privateConversationEntity.getVersion(),
-            memberUserProfileIds
+            memberUserProfileIds,
+            memberUserProfileNames
         );
     }
 

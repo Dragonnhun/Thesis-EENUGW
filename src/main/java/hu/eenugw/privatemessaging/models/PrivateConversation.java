@@ -19,4 +19,6 @@ public class PrivateConversation {
     private int version;
 
     private List<String> memberUserProfileIds;
+
+    private List<String> memberUserProfileNames;
 }
