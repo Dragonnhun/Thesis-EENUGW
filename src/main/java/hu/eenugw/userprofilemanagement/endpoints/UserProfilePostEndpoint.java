@@ -65,4 +65,12 @@ public class UserProfilePostEndpoint {
         
         return Optional.of(_userProfilePostService.createPost(userProfilePostEntity)).map(_userProfilePostService::convertUserProfilePostEntityToModel).orElse(null);
     }
+
+    public boolean deleteUserProfilePostByUserProfilePostId(String userProfilePostId) {
+        if (isNullOrEmptyOrBlank(userProfilePostId)) {
+            Optional.empty();
+        }
+
+        return _userProfilePostService.deleteUserProfilePostByUserProfilePostId(userProfilePostId);
+    }
 }

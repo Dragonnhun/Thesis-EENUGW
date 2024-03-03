@@ -36,12 +36,19 @@ export default function Feed({profileDisplayId}: {profileDisplayId?: string}) {
         })();
     }, [currentUserProfile, profileDisplayId, posted]);
 
+    const deletePostHandler = async (userProfilePostId: string) => {
+        const result = await UserProfilePostEndpoint.deleteUserProfilePostByUserProfilePostId(userProfilePostId);
+        console.log("handled");
+        console.log(result);
+        if (result) setUserProfilePosts(userProfilePosts.filter((post) => post.id !== userProfilePostId));
+    }
+
     return (
         <div className={blockName}>
             <div className={`${blockName}-wrapper`}>
                 {(profileDisplayId == currentUserProfile?.profileDisplayId || !profileDisplayId) && <Share posted={() => setPosted(true)} />}
                 {userProfilePosts.map((userProfilePost) => (
-                    <Post key={userProfilePost?.id} userProfilePost={userProfilePost} />
+                    <Post key={userProfilePost?.id} userProfilePost={userProfilePost} deletePostHandler={deletePostHandler} />
                 ))}
             </div>
         </div>

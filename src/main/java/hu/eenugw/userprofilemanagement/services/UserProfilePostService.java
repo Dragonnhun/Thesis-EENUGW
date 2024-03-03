@@ -163,6 +163,23 @@ public class UserProfilePostService {
         return _userProfilePostRepository.save(userProfilePostEntity);
     }
 
+    @Transactional
+    public boolean deleteUserProfilePostByUserProfilePostId(String userProfilePostId) {
+        if (isNullOrEmptyOrBlank(userProfilePostId)) {
+            return false;
+        }
+
+        var optionalUserProfilePost = _userProfilePostRepository.findById(userProfilePostId);
+
+        if (optionalUserProfilePost.isEmpty()) {
+            return false;
+        }
+
+        _userProfilePostRepository.delete(optionalUserProfilePost.get());
+
+        return true;
+    }
+
     public UserProfilePost convertUserProfilePostEntityToModel(UserProfilePostEntity userProfilePostEntity) {
         var userProfilePostCommentIds = Optional.ofNullable(userProfilePostEntity.getUserProfilePostComments()).isEmpty()
             ? new ArrayList<String>()

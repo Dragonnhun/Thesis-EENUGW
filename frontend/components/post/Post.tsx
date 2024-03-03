@@ -13,7 +13,7 @@ import { DateTime } from 'luxon';
 import { useAuth } from 'Frontend/util/auth';
 import { MenuBar } from '@hilla/react-components/MenuBar.js';
 
-export default function Post({userProfilePost}: {userProfilePost: UserProfilePost | undefined}) {
+export default function Post({userProfilePost, deletePostHandler}: {userProfilePost?: UserProfilePost, deletePostHandler: (userProfilePostId: string) => void}) {
     const assetsFolder = import.meta.env.VITE_ASSETS_FOLDER;
     const { state } = useAuth();
     const [userProfile, setUserProfile] = useState<UserProfile | undefined>();
@@ -94,7 +94,32 @@ export default function Post({userProfilePost}: {userProfilePost: UserProfilePos
                         <span className='post-top-left-date'>{format(creationDateLocal as TDate)}</span>
                     </div>
                     <div className='post-top-right'>
-                        <Icon className='post-top-right-icon fa fa-ellipsis-h' />
+                        {state.user?.userProfileId === userProfilePost?.userProfileId && (
+                            <MenuBar
+                                className='navbar-menu-bar'
+                                items={
+                                    [
+                                        {
+                                            component: MenuBarHelpers.renderMenuComponent(
+                                                <Icon className='post-top-right-icon fa fa-ellipsis-h' />
+                                            ),
+                                            children: [
+                                                {
+                                                    text: 'Delete',
+                                                },
+                                            ],
+                                        },
+                                    ]
+                                }
+                                theme='tertiary'
+                                onItemSelected={(event) => {
+                                    console.log("ASD");
+                                    if (event.detail.value.text === 'Delete') {
+                                        deletePostHandler(userProfilePost?.id!);
+                                        console.log("clicked");
+                                    }
+                                }} />
+                        )}
                     </div>
                 </div>
                 <div className='post-center'>
