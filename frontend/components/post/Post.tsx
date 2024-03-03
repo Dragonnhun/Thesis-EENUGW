@@ -1,8 +1,8 @@
 import 'themes/intertwine/components/post.scss';
-import User from 'Frontend/generated/hu/eenugw/usermanagement/models/User';
 import UserProfile from 'Frontend/generated/hu/eenugw/userprofilemanagement/models/UserProfile';
 import UserProfilePost from 'Frontend/generated/hu/eenugw/userprofilemanagement/models/UserProfilePost';
 import ReactionType from 'Frontend/generated/hu/eenugw/userprofilemanagement/constants/ReactionType';
+import MenuBarHelpers from 'Frontend/helpers/menuBarHelpers';
 import { Link } from 'react-router-dom';
 import { Avatar } from '@hilla/react-components/Avatar.js';
 import { Icon } from '@hilla/react-components/Icon.js';
@@ -11,11 +11,11 @@ import { TDate, format } from 'timeago.js';
 import { UserProfileEndpoint, UserProfilePostEndpoint } from 'Frontend/generated/endpoints';
 import { DateTime } from 'luxon';
 import { useAuth } from 'Frontend/util/auth';
+import { MenuBar } from '@hilla/react-components/MenuBar.js';
 
 export default function Post({userProfilePost}: {userProfilePost: UserProfilePost | undefined}) {
     const assetsFolder = import.meta.env.VITE_ASSETS_FOLDER;
     const { state } = useAuth();
-    const [currentUser, setCurrentUser] = useState<User>();
     const [userProfile, setUserProfile] = useState<UserProfile | undefined>();
     const [likeCount, setLikeCount] = useState(0);
     const [heartCount, setHeartCount] = useState(0);
@@ -28,13 +28,13 @@ export default function Post({userProfilePost}: {userProfilePost: UserProfilePos
         setLikeCount(userProfilePost?.userProfileLikeIds?.length ?? 0);
         setHeartCount(userProfilePost?.userProfileHeartIds?.length ?? 0);
         setCommentCount(userProfilePost?.userProfilePostCommentIds?.length ?? 0);
-        setIsLiked(userProfilePost?.userProfileLikeIds?.includes(currentUser?.userProfileId!) ?? false);
-        setIsHearted(userProfilePost?.userProfileHeartIds?.includes(currentUser?.userProfileId!) ?? false);
-    }, [currentUser, userProfilePost]);
+        setIsLiked(userProfilePost?.userProfileLikeIds?.includes(state.user?.userProfileId!) ?? false);
+        setIsHearted(userProfilePost?.userProfileHeartIds?.includes(state.user?.userProfileId!) ?? false);
+    }, [state, userProfilePost]);
 
     const reactionHandler = async (reactionType: ReactionType) => {
         try {
-            const result = await UserProfilePostEndpoint.likeDislikePost(userProfilePost?.id!, currentUser?.userProfileId!, reactionType);
+            const result = await UserProfilePostEndpoint.likeDislikePost(userProfilePost?.id!, state.user?.userProfileId!, reactionType);
 
             console.log(result);
 
@@ -70,31 +70,25 @@ export default function Post({userProfilePost}: {userProfilePost: UserProfilePos
 
     useEffect(() => {
         (async () => {
-            if (!state.initializing) {
-                setCurrentUser(state?.user);
-            }
-
-            const userProfile = await UserProfileEndpoint.getUserProfileById(userProfilePost?.userProfileId!);
+            const userProfile = await UserProfileEndpoint.getUserProfileByUserProfileId(userProfilePost?.userProfileId!);
             setUserProfile(userProfile);
 
             const creationDateLocal = DateTime.fromISO(userProfilePost?.creationDateUtc as string, { zone: 'utc' }).setZone('local').toISO() as string;
             setCreationDateLocal(creationDateLocal);
         })();
-    }, [state, currentUser, userProfilePost]);
+    }, [state, userProfilePost]);
 
     return (
         <div className='post'>
             <div className='post-wrapper'>
                 <div className='post-top'>
                     <div className='post-top-left'>
-                        <Link className='post-top-left-image-link' to={'/profile/' + userProfile?.profileDisplayId}>
+                        <Link className='post-top-left-link' to={'/profile/' + userProfile?.profileDisplayId}>
                             <Avatar
                                 theme='xsmall'
-                                className='post-top-left-image'
+                                className='post-top-left-avatar'
                                 img={userProfile?.profilePicturePath ? assetsFolder + userProfile?.profilePicturePath : 'images/no-profile-picture.png'}
                                 name='friend-avatar' />
-                        </Link>
-                        <Link className='post-top-left-name-link' to={'/profile/' + userProfile?.profileDisplayId}>
                             <span className='post-top-left-name'>{userProfile?.fullName}</span>
                         </Link>
                         <span className='post-top-left-date'>{format(creationDateLocal as TDate)}</span>

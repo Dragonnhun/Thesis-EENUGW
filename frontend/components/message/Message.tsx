@@ -15,7 +15,7 @@ export default function Message({privateMessage, own}: {privateMessage: PrivateM
     useEffect(() => {
         (async () => {
             try {
-                const senderUserProfile = await UserProfileEndpoint.getUserProfileById(privateMessage?.senderUserProfileId!);
+                const senderUserProfile = await UserProfileEndpoint.getUserProfileByUserProfileId(privateMessage?.senderUserProfileId!);
                 setSenderUserProfile(senderUserProfile);
             } catch (error) {
                 console.error(error);

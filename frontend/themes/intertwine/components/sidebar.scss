@@ -15,6 +15,7 @@
         list-style: none;
         padding: 0;
         margin: 0;
+        color: $black-color;
 
         &-item {
             display: flex;
@@ -25,11 +26,19 @@
             &:hover {
                 color: $primary-color;
             }
-        }
-    }
 
-    &-icon {
-        margin-right: 15px;
+            &-icon {
+                margin-right: 15px;
+            }
+        }
+
+        > a {
+            color: inherit;
+            
+            &:hover {
+                text-decoration: none;
+            }
+        }
     }
 
     &-button {
@@ -49,11 +58,13 @@
         padding: 0;
         margin: 0;
         list-style: none;
+        color: $black-color;
 
         &-item {
             display: flex;
             align-items: center;
             margin-bottom: 15px;
+            cursor: pointer;
 
             &-avatar {
                 width: 32px;
@@ -61,6 +72,21 @@
                 border-radius: 50%;
                 object-fit: cover;
                 margin-right: 10px;
+                cursor: pointer;
+            }
+
+            &:hover {
+                .sidebar-friend-list-item-name {
+                    color: $primary-color;
+                }
+            }
+        }
+
+        > a {
+            color: inherit;
+            
+            &:hover {
+                text-decoration: none;
             }
         }
     }

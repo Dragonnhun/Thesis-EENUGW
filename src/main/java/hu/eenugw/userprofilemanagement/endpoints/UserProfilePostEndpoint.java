@@ -1,5 +1,7 @@
 package hu.eenugw.userprofilemanagement.endpoints;
 
+import static hu.eenugw.core.extensions.StringExtensions.isNullOrEmptyOrBlank;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -20,23 +22,23 @@ public class UserProfilePostEndpoint {
         _userProfilePostService = userProfilePostService;
     }
 
-    public Optional<UserProfilePost> getById(String id) {
+    public Optional<UserProfilePost> getUserProfilePostByUserProfilePostId(String userProfilePostId) {
         return _userProfilePostService
-            .getById(id)
+            .getUserProfilePostByUserProfilePostId(userProfilePostId)
             .map(_userProfilePostService::convertUserProfilePostEntityToModel);
     }
 
-    public List<UserProfilePost> getAllByUserProfileId(String userProfileId) {
+    public List<UserProfilePost> getAllUserProfilePostsByUserProfileId(String userProfileId) {
         return _userProfilePostService
-            .getAllByUserProfileId(userProfileId)
+            .getAllUserProfilePostsByUserProfileId(userProfileId)
             .stream()
             .map(_userProfilePostService::convertUserProfilePostEntityToModel)
             .toList();
     }
 
-    public List<UserProfilePost> getAllByUserProfileDisplayId(String profileDisplayId) {
+    public List<UserProfilePost> getAllUserProfilePostsByProfileDisplayId(String profileDisplayId) {
         return _userProfilePostService
-            .getAllByUserProfileDisplayId(profileDisplayId)
+            .getAllUserProfilePostsByProfileDisplayId(profileDisplayId)
             .stream()
             .map(_userProfilePostService::convertUserProfilePostEntityToModel)
             .toList();
@@ -54,7 +56,7 @@ public class UserProfilePostEndpoint {
         return _userProfilePostService.likeDislikePost(userProfilePostId, userProfileId, reactionType);
     }
 
-    public UserProfilePost createPost(UserProfilePost userProfilePost) {
+    public UserProfilePost createUserProfilePost(UserProfilePost userProfilePost) {
         if (userProfilePost == null) {
             Optional.empty();
         }

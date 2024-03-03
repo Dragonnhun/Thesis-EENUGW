@@ -1,5 +1,7 @@
 package hu.eenugw.userprofilemanagement.services;
 
+import static hu.eenugw.core.extensions.StringExtensions.isNullOrEmptyOrBlank;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,24 +38,24 @@ public class UserProfilePostService {
         _userProfilePostCommentRepository = userProfilePostCommentRepository;
     }
 
-    public Optional<UserProfilePostEntity> getById(String id) {
-        if (id == null) {
+    public Optional<UserProfilePostEntity> getUserProfilePostByUserProfilePostId(String userProfilePostId) {
+        if (isNullOrEmptyOrBlank(userProfilePostId)) {
             return Optional.empty();
         }
 
-        return _userProfilePostRepository.findById(id);
+        return _userProfilePostRepository.findById(userProfilePostId);
     }
 
-    public List<UserProfilePostEntity> getAllByUserProfileId(String userProfileId) {
-        if (userProfileId == null) {
+    public List<UserProfilePostEntity> getAllUserProfilePostsByUserProfileId(String userProfileId) {
+        if (isNullOrEmptyOrBlank(userProfileId)) {
             return new ArrayList<UserProfilePostEntity>();
         }
 
         return _userProfilePostRepository.findAllByUserProfileId(userProfileId);
     }
 
-    public List<UserProfilePostEntity> getAllByUserProfileDisplayId(String profileDisplayId) {
-        if (profileDisplayId == null) {
+    public List<UserProfilePostEntity> getAllUserProfilePostsByProfileDisplayId(String profileDisplayId) {
+        if (isNullOrEmptyOrBlank(profileDisplayId)) {
             return new ArrayList<UserProfilePostEntity>();
         }
 
@@ -69,7 +71,7 @@ public class UserProfilePostService {
     }
 
     public List<UserProfilePostEntity> getTimelineByUserProfileId(String userProfileId) {
-        if (userProfileId == null) {
+        if (isNullOrEmptyOrBlank(userProfileId)) {
             return new ArrayList<UserProfilePostEntity>();
         }
 
@@ -102,7 +104,7 @@ public class UserProfilePostService {
 
     @Transactional
     public Pair<Boolean, String> likeDislikePost(String userProfilePostId, String userProfileId, ReactionType reactionType) {
-        if (userProfilePostId == null || userProfileId == null) {
+        if (isNullOrEmptyOrBlank(userProfilePostId) || isNullOrEmptyOrBlank(userProfileId)) {
             return Pair.of(false, "Post ID or User ID is not provided.");
         }
 

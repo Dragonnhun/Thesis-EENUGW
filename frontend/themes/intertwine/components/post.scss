@@ -19,39 +19,47 @@
             display: flex;
             align-items: center;
 
-            &-image {
+            &-link {
+                display: flex;
+                align-items: inherit;
+            }
+
+            &-avatar {
                 width: 32px;
                 height: 32px;
                 border-radius: 50%;
                 object-fit: cover;
                 cursor: pointer;
-
-                &-link {
-                    height: 32px;
-                }
             }
 
             &-name {
                 font-size: 15px;
-                font-weight: 600;
+                font-weight: bold;
                 margin: 0 10px;
                 cursor: pointer;
-
-                &-link {
-                    &:hover {
-                        text-decoration: none;
-                    }
-                }
             }
 
             &-date {
                 margin-top: 3px;
                 font-size: 12px;
             }
+
+            > a {
+                color: inherit;
+
+                &:hover {
+                    text-decoration: none;
+
+                    .post-top-left-name {
+                        color: $primary-color;
+                    }
+                }
+            }
         }
 
         &-right {
             &-icon {
+                color: $black-color;
                 cursor: pointer;
             }
         }

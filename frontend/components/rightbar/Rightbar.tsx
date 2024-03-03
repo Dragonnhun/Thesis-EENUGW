@@ -8,9 +8,9 @@ import ProfileFriend from '../profile-friend/ProfileFriend';
 import { useAuth } from 'Frontend/util/auth';
 import { Button } from '@hilla/react-components/Button.js';
 import { Icon } from '@hilla/react-components/Icon.js';
+import { Notification } from '@hilla/react-components/Notification.js';
 
 export default function Rightbar({userProfile}: {userProfile?: UserProfile}) {
-
     const HomeRightbar = () => {
         return (
             <>
@@ -36,7 +36,7 @@ export default function Rightbar({userProfile}: {userProfile?: UserProfile}) {
 
         useEffect(() => {
             (async () => {
-                const userProfileFollowers = await UserProfileEndpoint.getUserProfileFollowersById(userProfile?.id!);
+                const userProfileFollowers = await UserProfileEndpoint.getUserProfileFollowersByUserProfileId(userProfile?.id!);
                 setUserProfileFollowers(userProfileFollowers);
             })();
         }, [userProfile, followed]);
@@ -55,11 +55,13 @@ export default function Rightbar({userProfile}: {userProfile?: UserProfile}) {
             try {
                 const result = await UserProfileEndpoint.followUnfollowUserProfile(state.user?.userProfileId!, userProfile?.id!);
 
-                if (result) {
+                if (result.first as boolean) {
                     setFollowed(!followed);
+                } else {
+                    Notification.show(result.second as string, { theme: 'error', duration: 5000});
                 }
             } catch (error) {
-                console.error(error);
+                Notification.show(error as string, { theme: 'error', duration: 5000});
             }
         };
 
@@ -88,8 +90,8 @@ export default function Rightbar({userProfile}: {userProfile?: UserProfile}) {
                 </div>
                 <h4 className='rightbar-user-friends-title'>User Friends</h4>
                 <div className='rightbar-user-friends-followings'>
-                    {userProfileFollowers?.map((follower) => (
-                        <ProfileFriend key={follower?.id} userProfile={follower} />
+                    {userProfileFollowers?.sort(() => Math.random() - 0.5).slice(0, 15).map((followerUserProfile) => (
+                        <ProfileFriend key={followerUserProfile?.id} userProfile={followerUserProfile} />
                     ))}
                 </div>
             </>

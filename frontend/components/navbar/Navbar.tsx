@@ -5,7 +5,7 @@ import { Icon } from '@hilla/react-components/Icon.js';
 import { Avatar } from '@hilla/react-components/Avatar.js';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from 'Frontend/util/auth';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SiteEndpoint, UserProfileEndpoint } from 'Frontend/generated/endpoints';
 import { MenuBar, } from '@hilla/react-components/MenuBar.js';
 
@@ -23,7 +23,7 @@ export default function Navbar() {
             const siteName = await SiteEndpoint.getSiteName();
             setSiteName(siteName);
 
-            const userProfile = await UserProfileEndpoint.getUserProfileById(state.user?.userProfileId!);
+            const userProfile = await UserProfileEndpoint.getUserProfileByUserProfileId(state.user?.userProfileId!);
             setUserProfile(userProfile);
         })();
     }, [state.user]);

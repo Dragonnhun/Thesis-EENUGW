@@ -19,47 +19,35 @@ public class UserProfileEndpoint {
         _userProfileService = userProfileService;
     }
 
-    public Optional<UserProfile> getUserProfileById(String userProfileId) {
-        if (userProfileId == null) {
-            return Optional.empty();
-        }
-
+    public Optional<UserProfile> getUserProfileByUserProfileId(String userProfileId) {
         return _userProfileService
-            .getUserProfileById(userProfileId)
+            .getUserProfileByUserProfileId(userProfileId)
             .map(_userProfileService::convertUserProfileEntityToModel);
     }
 
     public Optional<UserProfile> getUserProfileByUserId(String userId) {
-        if (userId == null) {
-            return Optional.empty();
-        }
-
         return _userProfileService
             .getUserProfileByUserId(userId)
             .map(_userProfileService::convertUserProfileEntityToModel);
     }
 
     public Optional<UserProfile> getUserProfileByProfileDisplayId(String profileDisplayId) {
-        if (profileDisplayId == null) {
-            return Optional.empty();
-        }
-
         return _userProfileService
             .getUserProfileByProfileDisplayId(profileDisplayId)
             .map(_userProfileService::convertUserProfileEntityToModel);
     }
 
-    public List<UserProfile> getUserProfileFollowersById(String id) {
+    public List<UserProfile> getUserProfileFollowersByUserProfileId(String userProfileId) {
         return _userProfileService
-            .getUserProfileFollowersById(id)
+            .getUserProfileFollowersByUserProfileId(userProfileId)
             .stream()
             .map(_userProfileService::convertUserProfileEntityToModel)
             .toList();
     }
 
-    public List<UserProfile> getUserProfileFollowingsById(String id) {
+    public List<UserProfile> getUserProfileFollowingsByUserProfileId(String userProfileId) {
         return _userProfileService
-            .getUserProfileFollowingsById(id)
+            .getUserProfileFollowingsByUserProfileId(userProfileId)
             .stream()
             .map(_userProfileService::convertUserProfileEntityToModel)
             .toList();

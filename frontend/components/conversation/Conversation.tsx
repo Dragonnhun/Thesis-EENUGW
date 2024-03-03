@@ -13,7 +13,7 @@ export default function Conversation({userProfile, privateConversation}: {userPr
         (async () => {
             try {
                 const friendUserProfileId = privateConversation.memberUserProfileIds?.find((userProfileId: string) => userProfileId !== userProfile.id);
-                const friendUserProfile = await UserProfileEndpoint.getUserProfileById(friendUserProfileId!);
+                const friendUserProfile = await UserProfileEndpoint.getUserProfileByUserProfileId(friendUserProfileId!);
                 setFriendUserProfile(friendUserProfile);
             } catch (error) {
                 console.error(error);

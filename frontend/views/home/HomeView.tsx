@@ -6,7 +6,7 @@ import Rightbar from 'Frontend/components/rightbar/Rightbar';
 export default function HomeView() {
     return (
         <>
-            <div className="home-container">
+            <div className='home-container'>
                 <Sidebar />
                 <Feed />
                 <Rightbar />

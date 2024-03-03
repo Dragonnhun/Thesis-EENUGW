@@ -1,5 +1,7 @@
 package hu.eenugw.userprofilemanagement.services;
 
+import static hu.eenugw.core.extensions.StringExtensions.isNullOrEmptyOrBlank;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,16 +41,16 @@ public class UserProfileService {
         _userProfilePostCommentRepository = userProfilePostCommentRepository;
     }
 
-    public Optional<UserProfileEntity> getUserProfileById(String id) {
-        if (id == null) {
+    public Optional<UserProfileEntity> getUserProfileByUserProfileId(String userProfileId) {
+        if (isNullOrEmptyOrBlank(userProfileId)) {
             return Optional.empty();
         }
 
-        return _userProfileRepository.findById(id);
+        return _userProfileRepository.findById(userProfileId);
     }
 
     public Optional<UserProfileEntity> getUserProfileByUserId(String userId) {
-        if (userId == null) {
+        if (isNullOrEmptyOrBlank(userId)) {
             return Optional.empty();
         }
 
@@ -56,19 +58,19 @@ public class UserProfileService {
     }
 
     public Optional<UserProfileEntity> getUserProfileByProfileDisplayId(String profileDisplayId) {
-        if (profileDisplayId == null) {
+        if (isNullOrEmptyOrBlank(profileDisplayId)) {
             return Optional.empty();
         }
 
         return _userProfileRepository.findByProfileDisplayId(profileDisplayId);
     }
 
-    public List<UserProfileEntity> getUserProfileFollowersById(String id) {
-        if (id == null) {
+    public List<UserProfileEntity> getUserProfileFollowersByUserProfileId(String userProfileId) {
+        if (isNullOrEmptyOrBlank(userProfileId)) {
             return List.of();
         }
 
-        var userProfileEntity = _userProfileRepository.findById(id);
+        var userProfileEntity = _userProfileRepository.findById(userProfileId);
 
         if (userProfileEntity.isEmpty()) {
             return List.of();
@@ -77,12 +79,12 @@ public class UserProfileService {
         return userProfileEntity.get().getFollowers();
     }
 
-    public List<UserProfileEntity> getUserProfileFollowingsById(String id) {
-        if (id == null) {
+    public List<UserProfileEntity> getUserProfileFollowingsByUserProfileId(String userProfileId) {
+        if (isNullOrEmptyOrBlank(userProfileId)) {
             return List.of();
         }
 
-        var userProfileEntity = _userProfileRepository.findById(id);
+        var userProfileEntity = _userProfileRepository.findById(userProfileId);
 
         if (userProfileEntity.isEmpty()) {
             return List.of();
@@ -93,7 +95,7 @@ public class UserProfileService {
 
     @Transactional
     public Pair<Boolean, String> followUnfollowUserProfile(String followerUserProfileId, String followedUserProfileId) {
-        if (followerUserProfileId == null || followerUserProfileId.isBlank() || followedUserProfileId == null || followedUserProfileId.isBlank()) {
+        if (isNullOrEmptyOrBlank(followerUserProfileId) || isNullOrEmptyOrBlank(followedUserProfileId)) {
             return Pair.of(false, "Follower User ID or Followed User ID is not provided.");
         }
 

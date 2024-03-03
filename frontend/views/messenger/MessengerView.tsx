@@ -64,7 +64,7 @@ export default function MessengerView() {
     useEffect(() => {
         (async () => {
             try {
-                const userProfile = await UserProfileEndpoint.getUserProfileById(state.user?.userProfileId!);
+                const userProfile = await UserProfileEndpoint.getUserProfileByUserProfileId(state.user?.userProfileId!);
                 setUserProfile(userProfile);   
             } catch (error) {
                 console.error(error);
@@ -102,7 +102,7 @@ export default function MessengerView() {
     useEffect(() => {
         (async () => {
             try {
-                const followings = await UserProfileEndpoint.getUserProfileFollowingsById(userProfile?.id!);
+                const followings = await UserProfileEndpoint.getUserProfileFollowingsByUserProfileId(userProfile?.id!);
                 setFollowings(followings);
             } catch (error) {
                 console.error(error)
