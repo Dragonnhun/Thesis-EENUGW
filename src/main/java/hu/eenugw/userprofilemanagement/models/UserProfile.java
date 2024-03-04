@@ -29,6 +29,8 @@ public class UserProfile {
 
     private String lastName;
 
+    private String fullName;
+
     private String profilePicturePath;
     
     private String coverPicturePath;
@@ -64,8 +66,4 @@ public class UserProfile {
     private List<String> likedUserProfilePostIds;
 
     private List<String> heartedUserProfilePostIds;
-
-    public String getFullName() {
-        return this.firstName + " " + this.lastName;
-    }
 }

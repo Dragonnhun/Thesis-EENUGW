@@ -11,5 +11,5 @@ import hu.eenugw.userprofilemanagement.entities.UserProfileEntity;
 public interface UserProfileRepository extends JpaRepository<UserProfileEntity, String>, JpaSpecificationExecutor<UserProfileEntity> {
     Optional<UserProfileEntity> findByUserId(String userId);
     Optional<UserProfileEntity> findByProfileDisplayId(String profileDisplayId);
-    List<UserProfileEntity> findByFirstNameOrLastNameContainingIgnoreCase(String firstName, String lastName);
+    List<UserProfileEntity> findByFirstNameOrLastNameOrFullNameContainingIgnoreCase(String firstName, String lastName, String fullName);
 }

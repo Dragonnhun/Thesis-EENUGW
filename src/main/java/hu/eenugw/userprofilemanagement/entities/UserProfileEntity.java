@@ -13,6 +13,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import jakarta.validation.constraints.Size;
@@ -54,6 +55,8 @@ public class UserProfileEntity {
     private String firstName;
 
     private String lastName;
+
+    private String fullName;
 
     private String profilePicturePath;
 
@@ -142,4 +145,9 @@ public class UserProfileEntity {
         fetch = FetchType.LAZY,
         cascade = CascadeType.ALL)
     private List<PrivateMessageEntity> privateMessages;
+
+    @PrePersist
+    protected void prePersist() {
+        fullName = firstName + " " + lastName;
+    }
 }

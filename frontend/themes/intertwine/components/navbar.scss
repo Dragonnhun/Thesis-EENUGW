@@ -27,6 +27,10 @@ vaadin-dialog-overlay {
     }
 }
 
+vaadin-menu-bar-overlay {
+    z-index: 999;
+}
+
 .navbar {
     &-left {
         flex: 3;

@@ -137,7 +137,7 @@ public class UserProfileService {
             return List.of();
         }
 
-        return _userProfileRepository.findByFirstNameOrLastNameContainingIgnoreCase(name, name);
+        return _userProfileRepository.findByFirstNameOrLastNameOrFullNameContainingIgnoreCase(name, name, name);
     }
 
     public List<UserProfileEntity> getUserProfileFollowingsWithBirthday(String userProfileId) {
@@ -193,6 +193,7 @@ public class UserProfileService {
             userProfileEntity.getProfileDisplayId(),
             userProfileEntity.getFirstName(),
             userProfileEntity.getLastName(),
+            userProfileEntity.getFullName(),
             userProfileEntity.getProfilePicturePath(),
             userProfileEntity.getCoverPicturePath(),
             userProfileEntity.getDescription(),
@@ -217,6 +218,7 @@ public class UserProfileService {
             .profileDisplayId(userProfile.getProfileDisplayId())
             .firstName(userProfile.getFirstName())
             .lastName(userProfile.getLastName())
+            .fullName(userProfile.getFullName())
             .profilePicturePath(userProfile.getProfilePicturePath())
             .coverPicturePath(userProfile.getCoverPicturePath())
             .description(userProfile.getDescription())
