@@ -130,3 +130,16 @@ vaadin-dialog-overlay {
         }
     }
 }
+
+.search-dialog {
+    &-close-button {
+        cursor: pointer;
+    }
+
+    &-close-icon {
+        cursor: pointer;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+    }
+}

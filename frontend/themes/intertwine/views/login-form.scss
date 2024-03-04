@@ -62,4 +62,11 @@
     &-forgotten-password-button {
         margin-bottom: $spacing-size-normal * 1.2;
     }
+
+    &-icon {
+        width: 15px;
+        height: 15px;
+        margin-right: 5px;
+        margin-bottom: 5px;
+    }
 }

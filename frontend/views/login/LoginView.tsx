@@ -70,7 +70,7 @@ export default function LoginView() {
                     onClick={async () => {
                         setUrl(await RouteEndpoint.getRegisterUrl());
                     }}>
-                    <Icon slot='prefix' className='fa fa-user-plus' />
+                    <Icon slot='prefix' className={`${ blockName }-icon fa fa-user-plus`} />
                     Register
                 </Button>
                 <Button
@@ -79,7 +79,7 @@ export default function LoginView() {
                     onClick={async () => {
                         setUrl(await RouteEndpoint.getForgottenPasswordUrl());
                     }}>
-                    <Icon slot='prefix' className='fa fa-rotate-left' />
+                    <Icon slot='prefix' className={`${ blockName }-icon fa fa-rotate-left`} />
                     Forgotten Password
                 </Button>
             </section>

@@ -95,7 +95,7 @@ export default function Navbar() {
                     <Icon className='searchbar-icon' icon='vaadin:search' />
                     <input
                         ref={searchValueRef}
-                        placeholder='Search for friend, post or video'
+                        placeholder='Search for a friend'
                         className='searchbar-input'
                         onKeyDown={(event) => {
                             if (event.key === 'Enter') {
@@ -153,27 +153,16 @@ export default function Navbar() {
                 opened={isSearchDialogOpened}
                 onOpenedChanged={(event) => {
                     setIsSearchDialogOpened(event.detail.value);
-                }}>
+                }}
+                footerRenderer={() =>
+                    <Button className='search-dialog-close-button' onClick={closeSearchDialog} theme='primary'>Close</Button>
+                }>
                 <VerticalLayout className='search-dialog-main-layout' style={{ alignItems: 'stretch', minWidth: '50vh', maxWidth: '100vh' }}>
+                    <Icon icon='vaadin:close-small' className='search-dialog-close-icon' onClick={closeSearchDialog} />
                     <VerticalLayout style={{ alignItems: 'stretch' }}>
-                        {searchResult.map((searchResultUserProfile) => (
+                        {searchResult.length > 0 ? searchResult.map((searchResultUserProfile) => (
                             <ProfileSearchResult key={searchResultUserProfile.id} userProfile={searchResultUserProfile} closeSearchDialog={closeSearchDialog} />
-                        ))}
-                                                {searchResult.map((searchResultUserProfile) => (
-                            <ProfileSearchResult key={searchResultUserProfile.id} userProfile={searchResultUserProfile} closeSearchDialog={closeSearchDialog} />
-                        ))}
-                                                {searchResult.map((searchResultUserProfile) => (
-                            <ProfileSearchResult key={searchResultUserProfile.id} userProfile={searchResultUserProfile} closeSearchDialog={closeSearchDialog} />
-                        ))}
-                                                {searchResult.map((searchResultUserProfile) => (
-                            <ProfileSearchResult key={searchResultUserProfile.id} userProfile={searchResultUserProfile} closeSearchDialog={closeSearchDialog} />
-                        ))}
-                                                {searchResult.map((searchResultUserProfile) => (
-                            <ProfileSearchResult key={searchResultUserProfile.id} userProfile={searchResultUserProfile} closeSearchDialog={closeSearchDialog} />
-                        ))}
-                                                {searchResult.map((searchResultUserProfile) => (
-                            <ProfileSearchResult key={searchResultUserProfile.id} userProfile={searchResultUserProfile} closeSearchDialog={closeSearchDialog} />
-                        ))}
+                        )) : <span>No profiles found</span>}
                     </VerticalLayout>
                 </VerticalLayout>
             </Dialog>

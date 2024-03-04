@@ -11,6 +11,8 @@ import { Icon } from '@hilla/react-components/Icon.js';
 import { Notification } from '@hilla/react-components/Notification.js';
 
 export default function Rightbar({userProfile}: {userProfile?: UserProfile}) {
+    const { state } = useAuth();
+
     const HomeRightbar = () => {
         return (
             <>
@@ -30,7 +32,6 @@ export default function Rightbar({userProfile}: {userProfile?: UserProfile}) {
     };
 
     const ProfileRightbar = () => {
-        const { state } = useAuth();
         const [userProfileFollowers, setUserProfileFollowers] = useState<UserProfile[]>();
         const [followed, setFollowed] = useState<boolean>(false);
 
