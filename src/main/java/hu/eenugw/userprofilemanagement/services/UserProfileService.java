@@ -2,6 +2,8 @@ package hu.eenugw.userprofilemanagement.services;
 
 import static hu.eenugw.core.extensions.StringExtensions.isNullOrEmptyOrBlank;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
+import hu.eenugw.core.helpers.InstantHelpers;
 import hu.eenugw.core.helpers.UUIDHelpers;
 import hu.eenugw.usermanagement.repositories.UserRepository;
 import hu.eenugw.userprofilemanagement.entities.UserProfileEntity;
@@ -137,6 +140,28 @@ public class UserProfileService {
         return _userProfileRepository.findByFirstNameOrLastNameContainingIgnoreCase(name, name);
     }
 
+    public List<UserProfileEntity> getUserProfileFollowingsWithBirthday(String userProfileId) {
+        if (isNullOrEmptyOrBlank(userProfileId)) {
+            return List.of();
+        }
+
+        var userProfileFollowings = getUserProfileFollowingsByUserProfileId(userProfileId);
+
+        if (userProfileFollowings.isEmpty()) {
+            return List.of();
+        }
+
+        var utcNow = ZonedDateTime.ofInstant(InstantHelpers.utcNow(), ZoneId.of("UTC"));
+
+        return userProfileFollowings
+            .stream()
+            .filter(following ->
+                following.getBirthDateUtc().isPresent()
+                && ZonedDateTime.ofInstant(following.getBirthDateUtc().get(), ZoneId.of("UTC")).getMonth() == utcNow.getMonth()
+                && ZonedDateTime.ofInstant(following.getBirthDateUtc().get(), ZoneId.of("UTC")).getDayOfMonth() == utcNow.getDayOfMonth())
+            .toList();
+    }
+
     public UserProfile convertUserProfileEntityToModel(UserProfileEntity userProfileEntity) {
         var followerUserProfileIds = Optional.ofNullable(userProfileEntity.getFollowers()).isEmpty()
             ? new ArrayList<String>()
@@ -174,6 +199,7 @@ public class UserProfileService {
             userProfileEntity.getCity(),
             userProfileEntity.getHometown(),
             userProfileEntity.getRelationshipStatus(),
+            userProfileEntity.getBirthDateUtc(),
             followerUserProfileIds,
             followingUserProfileIds,
             userProfileEntity.getUser() == null ? UUIDHelpers.DEFAULT_UUID : userProfileEntity.getUser().getId(),
@@ -197,6 +223,7 @@ public class UserProfileService {
             .city(userProfile.getCity())
             .hometown(userProfile.getHometown())
             .relationshipStatus(userProfile.getRelationshipStatus())
+            .birthDateUtc(userProfile.getBirthDateUtc())
             .followers(userProfile.getFollowerIds().stream().map(followerId -> _userProfileRepository.findById(followerId).orElse(null)).filter(profile -> profile != null).toList())
             .followings(userProfile.getFollowingIds().stream().map(followingId -> _userProfileRepository.findById(followingId).orElse(null)).filter(profile -> profile != null).toList())
             .user(_userRepository.findById(userProfile.getUserId()).orElse(null))

@@ -64,4 +64,12 @@ public class UserProfileEndpoint {
             .map(_userProfileService::convertUserProfileEntityToModel)
             .toList();
     }
+
+    public List<UserProfile> getUserProfileFollowingsWithBirthday(String userProfileId) {
+        return _userProfileService
+            .getUserProfileFollowingsWithBirthday(userProfileId)
+            .stream()
+            .map(_userProfileService::convertUserProfileEntityToModel)
+            .toList();
+    }
 }

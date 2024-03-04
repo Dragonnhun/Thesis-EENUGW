@@ -11,6 +11,20 @@
         &-container {
             display: flex;
             align-items: center;
+
+            &.active {
+                cursor: pointer;
+
+                &:hover {
+                    .rightbar-birthday-image {
+                        transform: scale(1.1);
+                    }
+    
+                    .rightbar-birthday-text {
+                        color: $primary-color;
+                    }
+                }
+            }
         }
 
         &-image {
@@ -98,5 +112,18 @@
                 outline: none;
             }
         }
+    }
+}
+
+.birthday-dialog {
+    &-close-button {
+        cursor: pointer;
+    }
+
+    &-close-icon {
+        cursor: pointer;
+        position: absolute;
+        top: 20px;
+        right: 20px;
     }
 }

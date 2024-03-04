@@ -2,31 +2,91 @@ import 'themes/intertwine/components/rightbar.scss';
 import OnlineFriend from 'Frontend/components/online-friend/OnlineFriend'
 import UserProfile from 'Frontend/generated/hu/eenugw/userprofilemanagement/models/UserProfile';
 import StringHelpers from 'Frontend/helpers/stringHelpers';
+import ProfileFriend from '../profile-friend/ProfileFriend';
+import ProfileSearchResult from '../profile-search-result/ProfileSearchResult';
 import { useEffect, useState } from 'react';
 import { UserProfileEndpoint } from 'Frontend/generated/endpoints';
-import ProfileFriend from '../profile-friend/ProfileFriend';
 import { useAuth } from 'Frontend/util/auth';
 import { Button } from '@hilla/react-components/Button.js';
 import { Icon } from '@hilla/react-components/Icon.js';
 import { Notification } from '@hilla/react-components/Notification.js';
+import { Dialog } from '@hilla/react-components/Dialog.js';
+import { VerticalLayout } from '@hilla/react-components/VerticalLayout.js';
 
 export default function Rightbar({userProfile}: {userProfile?: UserProfile}) {
     const { state } = useAuth();
 
     const HomeRightbar = () => {
+        const [userProfileFollowingsWithBirthday, setUserProfileFollowingsWithBirthday] = useState<UserProfile[]>();
+        const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
+        const [otherFriendsCount, setOtherFriendsCount] = useState<number>(0);
+        const [isBirthdayDialogOpened, setIsBirthdayDialogOpened] = useState(false);
+
+        const openBirthdayDialog = () => {
+            setIsBirthdayDialogOpened(true);
+        };
+      
+        const closeBirthdayDialog = () => {
+            setIsBirthdayDialogOpened(false);
+        };
+
+        useEffect(() => {
+            (async () => {
+                const userProfileFollowingsWithBirthday = await UserProfileEndpoint.getUserProfileFollowingsWithBirthday(state.user?.userProfileId!);
+                setUserProfileFollowingsWithBirthday(userProfileFollowingsWithBirthday);
+                if (userProfileFollowingsWithBirthday && userProfileFollowingsWithBirthday.length > 0) {
+                    const shuffledFollowings = [...userProfileFollowingsWithBirthday].sort(() => Math.random() - 0.5);
+    
+                    const selectedUser = shuffledFollowings[0];
+                    setSelectedUser(selectedUser);
+    
+                    const otherFriendsCount = shuffledFollowings.length > 1 ? shuffledFollowings.length - 1 : 0;
+                    setOtherFriendsCount(otherFriendsCount);
+                }
+            })();
+        }, [state]);
+
         return (
             <>
-                <div className='rightbar-birthday-container'>
+                <div 
+                    className={`rightbar-birthday-container ${userProfileFollowingsWithBirthday && userProfileFollowingsWithBirthday?.length > 0 ? 'active' : ''}`}
+                    onClick={userProfileFollowingsWithBirthday && userProfileFollowingsWithBirthday.length > 0 ? openBirthdayDialog : undefined}>
                     <img className='rightbar-birthday-image' src='images/gift.png' alt='birthday-cake' />
-                    <span className='rightbar-birthday-text'><b>Hipster Guy</b> and <b>3 other friends</b> have a birthday today.</span>
+                    <span className='rightbar-birthday-text'>
+                        {selectedUser ? (
+                            <>
+                                <b>{selectedUser.fullName}</b> and {otherFriendsCount} other friends have a birthday today.
+                            </>
+                        ) : <span>No friends have a birthday today.</span>}
+                    </span>
                 </div>
-                <img className='rightbar-advert' src='images/Lombiq-logo.png' alt='advert' />
                 <h4 className='rightbar-title'>Online Friends</h4>
                 <ul className='rightbar-friend-list'>
                     {/* {Users.map((u) => (
-                        <OnlineFriend key={u.id} user={u} />
+                    <OnlineFriend key={u.id} user={u} />
                     ))} */}
                 </ul>
+                <Dialog
+                    headerTitle={'Birthdays today'}
+                    className='birthday-dialog'
+                    draggable={false}
+                    modeless={false}
+                    opened={isBirthdayDialogOpened}
+                    onOpenedChanged={(event) => {
+                        setIsBirthdayDialogOpened(event.detail.value);
+                    }}
+                    footerRenderer={() =>
+                        <Button className='birthday-dialog-close-button' onClick={closeBirthdayDialog} theme='primary'>Close</Button>
+                    }>
+                    <VerticalLayout className='birthday-dialog-main-layout' style={{ alignItems: 'stretch', minWidth: '50vh', maxWidth: '100vh' }}>
+                        <Icon icon='vaadin:close-small' className='birthday-dialog-close-icon' onClick={closeBirthdayDialog} />
+                        <VerticalLayout style={{ alignItems: 'stretch' }}>
+                            {userProfileFollowingsWithBirthday && userProfileFollowingsWithBirthday.length > 0 ? userProfileFollowingsWithBirthday.map((userProfileFollowingWithBirthday) => (
+                                <ProfileSearchResult key={userProfileFollowingWithBirthday.id} userProfile={userProfileFollowingWithBirthday} closeSearchDialog={closeBirthdayDialog} />
+                            )) : <span>No friends have a birthday today.</span>}
+                        </VerticalLayout>
+                    </VerticalLayout>
+                </Dialog>
             </>
         )
     };

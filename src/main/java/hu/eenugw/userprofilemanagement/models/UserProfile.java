@@ -1,6 +1,8 @@
 package hu.eenugw.userprofilemanagement.models;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 import dev.hilla.Nullable;
 import hu.eenugw.userprofilemanagement.constants.RelationshipStatus;
@@ -45,6 +47,9 @@ public class UserProfile {
 
     @Nullable
     private RelationshipStatus relationshipStatus;
+
+    @Nullable
+    private Optional<Instant> birthDateUtc;
 
     private List<String> followerIds;
 

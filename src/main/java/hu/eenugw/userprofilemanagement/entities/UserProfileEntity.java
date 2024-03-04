@@ -2,6 +2,7 @@ package hu.eenugw.userprofilemanagement.entities;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -22,8 +23,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
+import hu.eenugw.core.helpers.InstantOptionalConverter;
 import hu.eenugw.privatemessaging.entities.PrivateConversationEntity;
 import hu.eenugw.privatemessaging.entities.PrivateMessageEntity;
 import hu.eenugw.usermanagement.entities.UserEntity;
@@ -65,6 +69,9 @@ public class UserProfileEntity {
     private String hometown;
 
     private RelationshipStatus relationshipStatus;
+
+    @Convert(converter = InstantOptionalConverter.class)
+    private Optional<Instant> birthDateUtc;
 
     @Nullable
     @ManyToMany(
