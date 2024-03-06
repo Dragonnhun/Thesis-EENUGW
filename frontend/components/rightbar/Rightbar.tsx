@@ -17,7 +17,7 @@ export default function Rightbar({userProfile}: {userProfile?: UserProfile}) {
     const { state } = useAuth();
 
     const HomeRightbar = () => {
-        const [userProfileFollowingsWithBirthday, setUserProfileFollowingsWithBirthday] = useState<UserProfile[]>();
+        const [userProfileFollowingsWithBirthday, setUserProfileFollowingsWithBirthday] = useState<UserProfile[]>([]);
         const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
         const [otherFriendsCount, setOtherFriendsCount] = useState<number>(0);
         const [isBirthdayDialogOpened, setIsBirthdayDialogOpened] = useState(false);
@@ -49,13 +49,13 @@ export default function Rightbar({userProfile}: {userProfile?: UserProfile}) {
         return (
             <>
                 <div 
-                    className={`rightbar-birthday-container ${userProfileFollowingsWithBirthday && userProfileFollowingsWithBirthday?.length > 0 ? 'active' : ''}`}
+                    className={`rightbar-birthday-container ${userProfileFollowingsWithBirthday?.length > 0 ? 'active' : ''}`}
                     onClick={userProfileFollowingsWithBirthday && userProfileFollowingsWithBirthday.length > 0 ? openBirthdayDialog : undefined}>
                     <img className='rightbar-birthday-image' src='images/gift.png' alt='birthday-cake' />
                     <span className='rightbar-birthday-text'>
                         {selectedUser ? (
                             <>
-                                <b>{selectedUser.fullName}</b> and {otherFriendsCount} other friends have a birthday today.
+                                <b>{selectedUser.fullName}</b> {userProfileFollowingsWithBirthday?.length === 1 ? ' has' : ` and ${otherFriendsCount} other ${otherFriendsCount === 1 ? 'friend has' : 'friends have'}`} a birthday today.
                             </>
                         ) : <span>No friends have a birthday today.</span>}
                     </span>

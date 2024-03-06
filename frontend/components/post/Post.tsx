@@ -3,6 +3,7 @@ import UserProfile from 'Frontend/generated/hu/eenugw/userprofilemanagement/mode
 import UserProfilePost from 'Frontend/generated/hu/eenugw/userprofilemanagement/models/UserProfilePost';
 import ReactionType from 'Frontend/generated/hu/eenugw/userprofilemanagement/constants/ReactionType';
 import MenuBarHelpers from 'Frontend/helpers/menuBarHelpers';
+import Comments from 'Frontend/components/comments/Comments';
 import { Link } from 'react-router-dom';
 import { Avatar } from '@hilla/react-components/Avatar.js';
 import { Icon } from '@hilla/react-components/Icon.js';
@@ -12,9 +13,11 @@ import { UserProfileEndpoint, UserProfilePostEndpoint } from 'Frontend/generated
 import { DateTime } from 'luxon';
 import { useAuth } from 'Frontend/util/auth';
 import { MenuBar } from '@hilla/react-components/MenuBar.js';
+import { Notification } from '@hilla/react-components/Notification.js';
 
 export default function Post({userProfilePost, deletePostHandler}: {userProfilePost?: UserProfilePost, deletePostHandler: (userProfilePostId: string) => void}) {
     const assetsFolder = import.meta.env.VITE_ASSETS_FOLDER;
+
     const { state } = useAuth();
     const [userProfile, setUserProfile] = useState<UserProfile | undefined>();
     const [likeCount, setLikeCount] = useState(0);
@@ -23,20 +26,52 @@ export default function Post({userProfilePost, deletePostHandler}: {userProfileP
     const [isLiked, setIsLiked] = useState(false);
     const [isHearted, setIsHearted] = useState(false);
     const [creationDateLocal, setCreationDateLocal] = useState(DateTime.local().toISO() as string);
+    const [isPostCommentsOpen, setPostCommentsOpen] = useState(false);
+    const [didPostComment, setDidPostComment] = useState(false);
+    const [didDeleteComment, setDidDeleteComment] = useState(false);
 
     useEffect(() => {
-        setLikeCount(userProfilePost?.userProfileLikeIds?.length ?? 0);
-        setHeartCount(userProfilePost?.userProfileHeartIds?.length ?? 0);
-        setCommentCount(userProfilePost?.userProfilePostCommentIds?.length ?? 0);
-        setIsLiked(userProfilePost?.userProfileLikeIds?.includes(state.user?.userProfileId!) ?? false);
-        setIsHearted(userProfilePost?.userProfileHeartIds?.includes(state.user?.userProfileId!) ?? false);
+        (async () => {
+            const userProfile = await UserProfileEndpoint.getUserProfileByUserProfileId(userProfilePost?.userProfileId!);
+            setUserProfile(userProfile);
+    
+            const creationDateLocal = DateTime.fromISO(userProfilePost?.creationDateUtc as string, { zone: 'utc' }).setZone('local').toISO() as string;
+            setCreationDateLocal(creationDateLocal);
+    
+            setLikeCount(userProfilePost?.userProfileLikeIds?.length ?? 0);
+            setHeartCount(userProfilePost?.userProfileHeartIds?.length ?? 0);
+            setCommentCount(userProfilePost?.userProfilePostCommentIds?.length ?? 0);
+            setIsLiked(userProfilePost?.userProfileLikeIds?.includes(state.user?.userProfileId!) ?? false);
+            setIsHearted(userProfilePost?.userProfileHeartIds?.includes(state.user?.userProfileId!) ?? false);
+        })();
     }, [state, userProfilePost]);
+
+    useEffect(() => {
+        (async () => {
+            if (didPostComment) {
+                setCommentCount(commentCount + 1);
+            } else if (didDeleteComment) {
+                setCommentCount(commentCount - 1);
+            }
+
+            setDidPostComment(false);
+            setDidDeleteComment(false);
+        })();
+    }, [didPostComment, didDeleteComment]);
 
     const reactionHandler = async (reactionType: ReactionType) => {
         try {
             const result = await UserProfilePostEndpoint.likeDislikePost(userProfilePost?.id!, state.user?.userProfileId!, reactionType);
 
-            console.log(result);
+            if (!(result.first as boolean)) {
+                Notification.show('Reaction could not be created!', {
+                    position: 'top-center',
+                    duration: 2000,
+                    theme: 'error',
+                });
+
+                return;
+            }
 
             if (reactionType === ReactionType.LIKE) {
                 if (isHearted) {
@@ -67,16 +102,6 @@ export default function Post({userProfilePost, deletePostHandler}: {userProfileP
             console.error(error);
         }
     }
-
-    useEffect(() => {
-        (async () => {
-            const userProfile = await UserProfileEndpoint.getUserProfileByUserProfileId(userProfilePost?.userProfileId!);
-            setUserProfile(userProfile);
-
-            const creationDateLocal = DateTime.fromISO(userProfilePost?.creationDateUtc as string, { zone: 'utc' }).setZone('local').toISO() as string;
-            setCreationDateLocal(creationDateLocal);
-        })();
-    }, [state, userProfilePost]);
 
     return (
         <div className='post'>
@@ -113,10 +138,8 @@ export default function Post({userProfilePost, deletePostHandler}: {userProfileP
                                 }
                                 theme='tertiary'
                                 onItemSelected={(event) => {
-                                    console.log("ASD");
                                     if (event.detail.value.text === 'Delete') {
                                         deletePostHandler(userProfilePost?.id!);
-                                        console.log("clicked");
                                     }
                                 }} />
                         )}
@@ -128,12 +151,6 @@ export default function Post({userProfilePost, deletePostHandler}: {userProfileP
                 </div>
                 <div className='post-bottom'>
                     <div className='post-bottom-left'>
-                        {/* {likeCount >= heartCount
-                            ? <img className='post-bottom-left-like-icon' src='images/like.png' onClick={() => reactionHandler(ReactionType.LIKE)} />
-                            : <img className='post-bottom-left-heart-icon' src='images/heart.png' onClick={() => reactionHandler(ReactionType.HEART)} />}
-                        {likeCount >= heartCount
-                            ? <img className='post-bottom-left-heart-icon' src='images/heart.png' onClick={() => reactionHandler(ReactionType.HEART)} />
-                            : <img className='post-bottom-left-like-icon' src='images/like.png' onClick={() => reactionHandler(ReactionType.LIKE)} />} */}
                         {likeCount >= heartCount ? (
                             <img
                                 className={isLiked ? 'post-bottom-left-like-icon active' : 'post-bottom-left-like-icon'}
@@ -163,9 +180,16 @@ export default function Post({userProfilePost, deletePostHandler}: {userProfileP
                         <span className='post-bottom-left-like-counter'>{likeCount + heartCount} {likeCount + heartCount <= 1 ? 'person likes it' : 'people like it'}</span>
                     </div>
                     <div className='post-bottom-right'>
-                        <span className="post-bottom-right-comment-text">{commentCount} {commentCount <= 1 ? 'comment' : 'comments'}</span>
+                        <span className='post-bottom-right-comment-text' onClick={() => setPostCommentsOpen(!isPostCommentsOpen)}>{commentCount} {commentCount <= 1 ? 'comment' : 'comments'}</span>
                     </div>
                 </div>
+                {isPostCommentsOpen && (
+                    <Comments
+                        userProfilePost={userProfilePost}
+                        isPostCommentsOpen={isPostCommentsOpen}
+                        setDidPostComment={(value) => setDidPostComment(value)}
+                        setDidDeleteComment={(value) => setDidDeleteComment(value)} />
+                )}
             </div>
         </div>
     )

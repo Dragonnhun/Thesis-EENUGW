@@ -38,9 +38,9 @@ export default function Feed({profileDisplayId}: {profileDisplayId?: string}) {
 
     const deletePostHandler = async (userProfilePostId: string) => {
         const result = await UserProfilePostEndpoint.deleteUserProfilePostByUserProfilePostId(userProfilePostId);
-        console.log("handled");
-        console.log(result);
-        if (result) setUserProfilePosts(userProfilePosts.filter((post) => post.id !== userProfilePostId));
+        if (result) {
+            setUserProfilePosts(userProfilePosts.filter((post) => post.id !== userProfilePostId));
+        }
     }
 
     return (

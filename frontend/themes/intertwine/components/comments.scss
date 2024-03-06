@@ -1,0 +1,43 @@
+@import "../variables/variables.scss";
+
+.comments {
+    padding: 20px 20px;
+    overflow-y: scroll;
+    max-height: 30vh;
+    min-height: 15vh;
+
+    &-line {
+        background-color: $primary-color;
+        margin: 10px 0;
+    }
+
+    &-add-comment {
+        padding-bottom: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        &-input {
+            width: 80%;
+            height: 90px;
+            padding: 10px;
+            resize: none;
+            border: 1px solid #16F385;
+            border-radius: 10px;
+            margin: 0 10px;
+
+            &:focus {
+                outline: none;
+            }
+        }
+
+        &-avatar {
+            width: 32px;
+            height: 32px;
+        }
+    }
+
+    &-send-button {
+        cursor: pointer;
+    }
+}
