@@ -214,9 +214,9 @@ public class UserProfilePostService {
             .photoPath(userProfilePost.getPhotoPath())
             .creationDateUtc(userProfilePost.getCreationDateUtc())
             .userProfile(_userProfileRepository.findById(userProfilePost.getUserProfileId()).orElse(null))
-            .userProfilePostComments(userProfilePost.getUserProfilePostCommentIds().stream().map(postCommentId -> _userProfilePostCommentRepository.findById(postCommentId).orElse(null)).filter(comment -> comment != null).toList())
-            .userProfileLikes(userProfilePost.getUserProfileLikeIds().stream().map(profileId -> _userProfileRepository.findById(profileId).orElse(null)).filter(profile -> profile != null).toList())
-            .userProfileHearts(userProfilePost.getUserProfileHeartIds().stream().map(profileId -> _userProfileRepository.findById(profileId).orElse(null)).filter(profile -> profile != null).toList())
+            .userProfilePostComments(_userProfilePostCommentRepository.findAllById(userProfilePost.getUserProfilePostCommentIds()))
+            .userProfileLikes(_userProfileRepository.findAllById(userProfilePost.getUserProfileLikeIds()))
+            .userProfileHearts(_userProfileRepository.findAllById(userProfilePost.getUserProfileHeartIds())) 
             .build();
     }
 }

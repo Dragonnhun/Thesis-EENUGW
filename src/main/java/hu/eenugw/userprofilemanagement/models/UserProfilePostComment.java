@@ -1,6 +1,8 @@
 package hu.eenugw.userprofilemanagement.models;
 
 import java.time.Instant;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -21,11 +23,11 @@ public class UserProfilePostComment {
 
     private Instant creationDateUtc;
 
-    private Integer likeCount;
-    
-    private Integer heartCount;
-
     private String userProfileId;
 
     private String userProfilePostId;
+
+    private List<String> userProfileLikeIds;
+
+    private List<String> userProfileHeartIds;
 }

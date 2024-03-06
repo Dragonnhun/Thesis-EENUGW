@@ -6,15 +6,15 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.util.Pair;
-import com.vaadin.flow.server.auth.AnonymousAllowed;
 
 import dev.hilla.Endpoint;
 import hu.eenugw.userprofilemanagement.constants.ReactionType;
 import hu.eenugw.userprofilemanagement.models.UserProfilePost;
 import hu.eenugw.userprofilemanagement.services.UserProfilePostService;
+import jakarta.annotation.security.RolesAllowed;
 
 @Endpoint
-@AnonymousAllowed
+@RolesAllowed("ROLE_USER")
 public class UserProfilePostEndpoint {
     private final UserProfilePostService _userProfilePostService;
 
@@ -63,7 +63,9 @@ public class UserProfilePostEndpoint {
 
         var userProfilePostEntity = _userProfilePostService.convertUserProfilePostModelToEntity(userProfilePost);
         
-        return Optional.of(_userProfilePostService.createPost(userProfilePostEntity)).map(_userProfilePostService::convertUserProfilePostEntityToModel).orElse(null);
+        return Optional.of(_userProfilePostService.createPost(userProfilePostEntity))
+            .map(_userProfilePostService::convertUserProfilePostEntityToModel)
+            .orElse(null);
     }
 
     public boolean deleteUserProfilePostByUserProfilePostId(String userProfilePostId) {

@@ -1,6 +1,8 @@
 package hu.eenugw.userprofilemanagement.entities;
 
 import java.time.Instant;
+import java.util.List;
+
 import hu.eenugw.core.helpers.InstantConverter;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Convert;
@@ -10,11 +12,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -38,18 +41,34 @@ public class UserProfilePostCommentEntity {
     @Version
     private int version;
 
-    @Lob
+    @Size(max = 1000)
     private String comment;
 
     @Convert(converter = InstantConverter.class)
     public Instant creationDateUtc;
 
-    public Integer likeCount;
-
-    public Integer heartCount;
+    @Nullable
+    @ManyToMany(
+        targetEntity = UserProfileEntity.class,
+        fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "user_profile_comment_likes",
+        joinColumns = @JoinColumn(name = "user_profile_comment_id"),
+        inverseJoinColumns = @JoinColumn(name = "user_profile_id"))
+    private List<UserProfileEntity> userProfileLikes;
 
     @Nullable
-    @OneToOne(
+    @ManyToMany(
+        targetEntity = UserProfileEntity.class,
+        fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "user_profile_comment_hearts",
+        joinColumns = @JoinColumn(name = "user_profile_comment_id"),
+        inverseJoinColumns = @JoinColumn(name = "user_profile_id"))
+    private List<UserProfileEntity> userProfileHearts;
+
+    @Nullable
+    @ManyToOne(
         targetEntity = UserProfileEntity.class,
         fetch = FetchType.LAZY)
     @JoinColumn(name = "user_profile_id")
