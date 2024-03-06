@@ -35,17 +35,17 @@ INSERT INTO user_roles (user_id, roles) VALUES
 ("87da0537-3383-46c3-a001-c7105d6a4385", 'USER');
 
 
-INSERT INTO user_profiles (version, id, profile_display_id, first_name, last_name, user_id, profile_picture_path, cover_picture_path) VALUES 
-(1, "6069af20-0bab-442a-a76f-072e15020853", UUID(), 'Safak', 'Kocaoglu', "a74580d7-0378-440a-a563-0ae65ca42be3", 'images/profile-pictures/3.jpg', 'images/cover-pictures/3.jpg'),
-(1, "7c1f40bf-660e-4359-b413-a18c8e4f76fe", UUID(), 'Janell', 'Shrum', "931a201f-c368-4b27-ba93-8edb489892b6", 'images/profile-pictures/4.jpg', 'images/cover-pictures/4.jpg'),
-(1, "ca3aadaf-f9fb-41a8-ab4c-4dc981d615f8", UUID(), 'Alex', 'Durden', "2f13786e-db29-4d06-b9ea-b0af3f784686", 'images/profile-pictures/5.jpg', 'images/cover-pictures/5.jpg'),
-(1, "4cfc19e7-f633-44f9-9373-2d6a06b5e03b", UUID(), 'Dora', 'Hawks', "6b4d53a5-18e8-48bf-8915-eebbc337e8f3", 'images/profile-pictures/6.jpg', 'images/cover-pictures/6.jpg'),
-(1, "d5a05f8c-199d-4588-a2d3-9a248b5c0928", UUID(), 'Thomas', 'Holden', "5311e1f7-ff22-4d1c-846c-ae74bcb6324a", 'images/profile-pictures/7.jpg', 'images/cover-pictures/7.jpg'),
-(1, "dceecce0-f6d2-4c8c-8c84-3408bbb46224", UUID(), 'Shirley', 'Beauchamp', "fd3a759d-34bd-4d84-a182-0cd060141678", 'images/profile-pictures/8.jpg', 'images/cover-pictures/8.jpg'),
-(1, "ebe6c797-ba0c-433c-af18-fb7dbdc10884", UUID(), 'Travis', 'Bennett', "c99cc54d-8e0d-4573-a408-125eebe29c67", 'images/profile-pictures/9.jpg', 'images/cover-pictures/9.jpg'),
-(1, "d92c4174-2f41-4e06-859c-dbe5d91d337a", UUID(), 'Kristen', 'Thomas', "d513503f-ce00-4c8f-b1c9-5168a9658a8e", 'images/profile-pictures/10.jpg', 'images/cover-pictures/10.jpg'),
-(1, "99eb7897-6da4-4607-bc5c-5a65b783690b", UUID(), 'Gary', 'Duty', "6d19f9e9-a7b2-440b-9a4a-77f9d911aca7", 'images/profile-pictures/11.jpg', 'images/cover-pictures/11.jpg'),
-(1, "e70e1427-9d44-4d6c-9941-3dd6710e51bd", UUID(), 'Susan', 'Simmons', "87da0537-3383-46c3-a001-c7105d6a4385", 'images/profile-pictures/12.jpg', 'images/cover-pictures/12.jpg');
+INSERT INTO user_profiles (version, id, profile_display_id, first_name, full_name, last_name, user_id, profile_picture_path, cover_picture_path) VALUES 
+(1, "6069af20-0bab-442a-a76f-072e15020853", UUID(), 'Safak', 'Safak Kocaoglu', 'Kocaoglu', "a74580d7-0378-440a-a563-0ae65ca42be3", 'images/profile-pictures/3.jpg', 'images/cover-pictures/3.jpg'),
+(1, "7c1f40bf-660e-4359-b413-a18c8e4f76fe", UUID(), 'Janell', 'Janell Shrum', 'Shrum', "931a201f-c368-4b27-ba93-8edb489892b6", 'images/profile-pictures/4.jpg', 'images/cover-pictures/4.jpg'),
+(1, "ca3aadaf-f9fb-41a8-ab4c-4dc981d615f8", UUID(), 'Alex', 'Alex Durden', 'Durden', "2f13786e-db29-4d06-b9ea-b0af3f784686", 'images/profile-pictures/5.jpg', 'images/cover-pictures/5.jpg'),
+(1, "4cfc19e7-f633-44f9-9373-2d6a06b5e03b", UUID(), 'Dora', 'Dora Hawks', 'Hawks', "6b4d53a5-18e8-48bf-8915-eebbc337e8f3", 'images/profile-pictures/6.jpg', 'images/cover-pictures/6.jpg'),
+(1, "d5a05f8c-199d-4588-a2d3-9a248b5c0928", UUID(), 'Thomas', 'Thomas Holden', 'Holden', "5311e1f7-ff22-4d1c-846c-ae74bcb6324a", 'images/profile-pictures/7.jpg', 'images/cover-pictures/7.jpg'),
+(1, "dceecce0-f6d2-4c8c-8c84-3408bbb46224", UUID(), 'Shirley', 'Shirley Beauchamp', 'Beauchamp', "fd3a759d-34bd-4d84-a182-0cd060141678", 'images/profile-pictures/8.jpg', 'images/cover-pictures/8.jpg'),
+(1, "ebe6c797-ba0c-433c-af18-fb7dbdc10884", UUID(), 'Travis', 'Travis Bennett', 'Bennett', "c99cc54d-8e0d-4573-a408-125eebe29c67", 'images/profile-pictures/9.jpg', 'images/cover-pictures/9.jpg'),
+(1, "d92c4174-2f41-4e06-859c-dbe5d91d337a", UUID(), 'Kristen', 'Kristen Thomas', 'Thomas', "d513503f-ce00-4c8f-b1c9-5168a9658a8e", 'images/profile-pictures/10.jpg', 'images/cover-pictures/10.jpg'),
+(1, "99eb7897-6da4-4607-bc5c-5a65b783690b", UUID(), 'Gary', 'Gary Duty', 'Duty', "6d19f9e9-a7b2-440b-9a4a-77f9d911aca7", 'images/profile-pictures/11.jpg', 'images/cover-pictures/11.jpg'),
+(1, "e70e1427-9d44-4d6c-9941-3dd6710e51bd", UUID(), 'Susan', 'Susan Simmons', 'Simmons', "87da0537-3383-46c3-a001-c7105d6a4385", 'images/profile-pictures/12.jpg', 'images/cover-pictures/12.jpg');
 
 -- Inserting Dummy User Profile Posts
 INSERT INTO user_profile_posts (version, id, description, photo_path, creation_date_utc, user_profile_id) VALUES
