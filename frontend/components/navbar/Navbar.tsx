@@ -75,9 +75,9 @@ export default function Navbar() {
                 {
                     text: 'Settings',
                 },
-                {
-                    text: 'Help',
-                },
+                // {
+                //     text: 'Help',
+                // },
                 {
                     text: 'Log out',
                 },
@@ -119,20 +119,22 @@ export default function Navbar() {
                 </div>
                 <span className='navbar-text'>Welcome {userProfile?.firstName}!</span>
                 <div className='navbar-icons'>
-                    <div className='navbar-icon-item'>
-                        <Icon icon='vaadin:home' />
-                        <span className='navbar-icon-badge'>1</span>
-                    </div>
+                    <Link to='/'>
+                        <div className='navbar-icon-item'>
+                            <Icon icon='vaadin:home' />
+                            {/* <span className='navbar-icon-badge'>1</span> */}
+                        </div>
+                    </Link>
                     <Link to='/messenger'>
                         <div className='navbar-icon-item'>
                             <Icon icon='vaadin:chat' />
-                            <span className='navbar-icon-badge'>2</span>
+                            {/* <span className='navbar-icon-badge'>2</span> */}
                         </div>
                     </Link>
-                    <div className='navbar-icon-item'>
+                    {/* <div className='navbar-icon-item'>
                         <Icon icon='vaadin:bell' />
                         <span className='navbar-icon-badge'>1</span>
-                    </div>
+                    </div> */}
                 </div>
                 <MenuBar
                     className='navbar-menu-bar'

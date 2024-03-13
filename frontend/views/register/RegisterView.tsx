@@ -1,6 +1,7 @@
 import 'themes/intertwine/views/register-form.scss';
 import '@vaadin/icons';
 import UserModel from 'Frontend/generated/hu/eenugw/usermanagement/models/UserModel';
+import User from 'Frontend/generated/hu/eenugw/usermanagement/models/User';
 import { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useForm } from '@hilla/react-form';
@@ -11,7 +12,6 @@ import { Notification } from '@hilla/react-components/Notification.js';
 import { Icon } from '@hilla/react-components/Icon.js';
 import { RouteEndpoint, SiteEndpoint, UserEndpoint } from 'Frontend/generated/endpoints';
 import { useAuth } from 'Frontend/util/auth';
-import UUIDHelpers from 'Frontend/helpers/uuidHelpers';
 
 export default function RegisterView() {
     const blockName = 'register-form';
@@ -99,7 +99,7 @@ export default function RegisterView() {
 
     const RegisterView = () => {
         const { model, field, read, submit } = useForm(UserModel, {
-            onSubmit: async (userModel) => {
+            onSubmit: async (userModel: User) => {
                 try {
                     let user = await UserEndpoint.getUserByUsername(userModel.username);
         
@@ -190,7 +190,11 @@ export default function RegisterView() {
                             theme='primary contained submit'
                             title='Register'
                             className={`${ blockName }-register-button`}
-                            onClick={submit}>
+                            onClick={(event) => {
+                                event.stopPropagation();
+                                
+                                submit();
+                            }}>
                             <Icon slot='prefix' icon='vaadin:paperplane' />
                             Register
                         </Button>
