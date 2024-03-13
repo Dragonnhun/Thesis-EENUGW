@@ -13,6 +13,10 @@ COPY mvnw.cmd .
 COPY .mvn .mvn
 COPY package.json .
 COPY package-lock.json .
+COPY tsconfig.json .
+COPY types.d.ts .
+COPY vite.config.ts .
+COPY lombok.config .
 
 ADD frontend frontend
 ADD src src

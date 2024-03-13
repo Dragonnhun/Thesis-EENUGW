@@ -12,5 +12,3 @@ config/secrets/
 
 # Logging does not need to be in the repository.
 logs/
-
-frontend/assets/

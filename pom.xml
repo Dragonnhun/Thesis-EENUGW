@@ -4,8 +4,8 @@
     <modelVersion>4.0.0</modelVersion>
     <!-- Project from https://start.vaadin.com/project/42578f3c-951c-49fc-a6d3-fce568867d4c -->
     <groupId>hu.eenugw</groupId>
-    <artifactId>thesis-eenugw</artifactId>
-    <name>thesis-eenugw</name>
+    <artifactId>intertwine</artifactId>
+    <name>intertwine</name>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 

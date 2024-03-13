@@ -20,10 +20,10 @@ import org.springframework.context.annotation.Bean;
 
 @org.springframework.context.annotation.Configuration
 public class SocketIOConfiguration {
-    @Value("${socket.io.ip.address}")
+    @Value("${SOCKET_IO_IP_ADDRESS}")
     private String socketIOIpAddress;
 
-    @Value("${socket.io.port}")
+    @Value("${SOCKET_IO_PORT}")
     private String socketIOPort;
 
     private static final Logger logger = LoggerFactory.getLogger(SocketIOConfiguration.class);
