@@ -4,7 +4,7 @@ import UserProfile from 'Frontend/generated/hu/eenugw/userprofilemanagement/mode
 import StringHelpers from 'Frontend/helpers/stringHelpers';
 import ProfileFriend from '../profile-friend/ProfileFriend';
 import ProfileSearchResult from '../profile-search-result/ProfileSearchResult';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { UserProfileEndpoint } from 'Frontend/generated/endpoints';
 import { useAuth } from 'Frontend/util/auth';
 import { Button } from '@hilla/react-components/Button.js';
@@ -12,6 +12,7 @@ import { Icon } from '@hilla/react-components/Icon.js';
 import { Notification } from '@hilla/react-components/Notification.js';
 import { Dialog } from '@hilla/react-components/Dialog.js';
 import { VerticalLayout } from '@hilla/react-components/VerticalLayout.js';
+import { Socket, io } from 'socket.io-client';
 
 export default function Rightbar({userProfile}: {userProfile?: UserProfile}) {
     const { state } = useAuth();
@@ -21,6 +22,50 @@ export default function Rightbar({userProfile}: {userProfile?: UserProfile}) {
         const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
         const [otherFriendsCount, setOtherFriendsCount] = useState<number>(0);
         const [isBirthdayDialogOpened, setIsBirthdayDialogOpened] = useState(false);
+        const [onlineUsers, setOnlineUsers] = useState({});
+        const [followings, setFollowings] = useState<UserProfile[]>([]);
+        const [onlineFriends, setOnlineFriends] = useState<UserProfile[]>([]);
+
+        const socket = useRef<Socket>();
+
+        useEffect(() => {
+            (async () => {
+                socket.current = io('ws://localhost:8089');
+            })();
+        }, []);
+
+        useEffect(() => {
+            (async () => {
+                socket.current?.emit('getConnectedUsersForClient', state.user?.userProfileId!);
+    
+                socket.current?.on('getConnectedUsersForClient', (users) => {
+                    //setOnlineUsers((Object.values(users).filter((userProfleId: string) => userProfile?.followingIds.includes(userProfleId))) ?? {});
+                    setOnlineUsers(users);
+                });
+            })();
+        }, [state]);
+
+        useEffect(() => {
+            (async () => {
+                try {
+                    const followings = await UserProfileEndpoint.getUserProfileFollowingsByUserProfileId(state.user?.userProfileId!);
+                    setFollowings(followings);
+                } catch (error) {
+                    console.error(error);
+                }
+            })();
+        }, [state]);
+
+        useEffect(() => {
+            (async () => {
+                try {
+                    const onlineFriends = followings.filter(following => Object.values(onlineUsers ?? {}).includes(following?.id));
+                    setOnlineFriends(onlineFriends);
+                } catch (error) {
+                    console.error(error)
+                }
+            })();
+        }, [followings, onlineUsers]);
 
         const openBirthdayDialog = () => {
             setIsBirthdayDialogOpened(true);
@@ -32,16 +77,20 @@ export default function Rightbar({userProfile}: {userProfile?: UserProfile}) {
 
         useEffect(() => {
             (async () => {
-                const userProfileFollowingsWithBirthday = await UserProfileEndpoint.getUserProfileFollowingsWithBirthday(state.user?.userProfileId!);
-                setUserProfileFollowingsWithBirthday(userProfileFollowingsWithBirthday);
-                if (userProfileFollowingsWithBirthday && userProfileFollowingsWithBirthday.length > 0) {
-                    const shuffledFollowings = [...userProfileFollowingsWithBirthday].sort(() => Math.random() - 0.5);
-    
-                    const selectedUser = shuffledFollowings[0];
-                    setSelectedUser(selectedUser);
-    
-                    const otherFriendsCount = shuffledFollowings.length > 1 ? shuffledFollowings.length - 1 : 0;
-                    setOtherFriendsCount(otherFriendsCount);
+                try {
+                    const userProfileFollowingsWithBirthday = await UserProfileEndpoint.getUserProfileFollowingsWithBirthday(state.user?.userProfileId!);
+                    setUserProfileFollowingsWithBirthday(userProfileFollowingsWithBirthday);
+                    if (userProfileFollowingsWithBirthday.length > 0) {
+                        const shuffledFollowings = [...userProfileFollowingsWithBirthday].sort(() => Math.random() - 0.5);
+        
+                        const selectedUser = shuffledFollowings[0];
+                        setSelectedUser(selectedUser);
+        
+                        const otherFriendsCount = shuffledFollowings.length > 1 ? shuffledFollowings.length - 1 : 0;
+                        setOtherFriendsCount(otherFriendsCount);
+                    }
+                } catch (error) {
+                    console.error(error);
                 }
             })();
         }, [state]);
@@ -62,9 +111,9 @@ export default function Rightbar({userProfile}: {userProfile?: UserProfile}) {
                 </div>
                 <h4 className='rightbar-title'>Online Friends</h4>
                 <ul className='rightbar-friend-list'>
-                    {/* {Users.map((u) => (
-                    <OnlineFriend key={u.id} user={u} />
-                    ))} */}
+                    {onlineFriends.map((following) => (
+                        <OnlineFriend key={following.id} userProfile={following} />
+                    ))}
                 </ul>
                 <Dialog
                     headerTitle={'Birthdays today'}
