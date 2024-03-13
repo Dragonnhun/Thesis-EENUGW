@@ -64,11 +64,15 @@ public class UserEntity {
     private Boolean enabled;
 
     @Nullable
+    private Boolean isFirstLogin;
+
+    @Nullable
     private String registrationToken;
 
     @Nullable
     private String forgottenPasswordToken;
 
+    @Nullable
     @Convert(converter = InstantOptionalConverter.class)
     private Optional<Instant> forgottenPasswordTokenExpirationDateUtc;
 

@@ -35,6 +35,8 @@ public class User {
 
     private Boolean enabled;
 
+    private Boolean isFirstLogin;
+
     private String registrationToken;
 
     private String forgottenPasswordToken;

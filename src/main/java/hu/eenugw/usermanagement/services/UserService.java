@@ -85,18 +85,21 @@ public class UserService {
         userEntity.setEnabled(false);
         userEntity.setForgottenPasswordToken(null);
         userEntity.setRoles(new java.util.HashSet<>(java.util.Arrays.asList(hu.eenugw.usermanagement.constants.Role.USER)));
-         
+        userEntity.setIsFirstLogin(true);
+
         var registrationToken = UUID.randomUUID().toString();
         userEntity.setRegistrationToken(registrationToken);
-        
+
+        userEntity = _userRepository.save(userEntity);
+
         var userProfileEntity = new UserProfileEntity();
         userProfileEntity.setProfileDisplayId(UUID.randomUUID().toString());
-
-        userEntity.setUserProfile(userProfileEntity);
         userProfileEntity.setUser(userEntity);
 
-        _userRepository.save(userEntity);
         _userProfileRepository.save(userProfileEntity);
+
+        userEntity.setUserProfile(userProfileEntity);
+        _userRepository.save(userEntity);
 
         _emailService.sendEmail(verificationEmail(userEntity, _siteService));
 
@@ -182,6 +185,11 @@ public class UserService {
         return Pair.of(true, "Password has been successfully reset!");
     }
 
+    @Transactional
+    public UserEntity updateUserEntity(UserEntity userEntity) {
+        return _userRepository.save(userEntity);
+    }
+
     public Boolean hasForgottenPasswordResetAlreadyBeenRequestedForEmail(String email) {
         if (email == null || email.isEmpty()) return false;
 
@@ -239,6 +247,7 @@ public class UserService {
             userEntity.getEmail(),
             userEntity.getPassword(),
             userEntity.getEnabled(),
+            userEntity.getIsFirstLogin(),
             userEntity.getRegistrationToken(),
             userEntity.getForgottenPasswordToken(),
             userEntity.getForgottenPasswordTokenExpirationDateUtc(),
@@ -255,6 +264,7 @@ public class UserService {
             .email(user.getEmail())
             .password(user.getPassword())
             .enabled(user.getEnabled())
+            .isFirstLogin(user.getIsFirstLogin())
             .registrationToken(user.getRegistrationToken())
             .forgottenPasswordToken(user.getForgottenPasswordToken())
             .forgottenPasswordTokenExpirationDateUtc(user.getForgottenPasswordTokenExpirationDateUtc())

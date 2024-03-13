@@ -62,7 +62,7 @@ public class UserEndpoint {
 
         var userEntity = _userService.convertUserModelToEntity(user);
 
-        return Optional.of(_userService.registerUserEntity(userEntity)).map(_userService::convertUserEntityToModel);
+        return Optional.ofNullable(_userService.registerUserEntity(userEntity)).map(_userService::convertUserEntityToModel);
     }
 
     @Transactional
@@ -78,6 +78,17 @@ public class UserEndpoint {
     @Transactional
     public Pair<String, String> resetForgottenPassword(String forgottenPasswordToken, String newPassword) throws UnsupportedEncodingException, MessagingException {
         return ServiceResult(_userService.resetForgottenPassword(forgottenPasswordToken, newPassword));
+    }
+
+    @Transactional
+    public Optional<User> updateUser(User user) {
+        if (user == null) {
+            return null;
+        }
+
+        var userEntity = _userService.convertUserModelToEntity(user);
+
+        return Optional.ofNullable(_userService.updateUserEntity(userEntity)).map(_userService::convertUserEntityToModel);
     }
 
     public Boolean hasForgottenPasswordResetAlreadyBeenRequestedForEmail(String email) {
