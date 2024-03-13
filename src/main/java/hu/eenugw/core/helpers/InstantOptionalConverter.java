@@ -12,11 +12,11 @@ public class InstantOptionalConverter implements AttributeConverter<Optional<Ins
 
     @Override
     public Timestamp convertToDatabaseColumn(Optional<Instant> attribute) {
-        return attribute.map(Timestamp::from).orElse(null);
+        return attribute != null ? attribute.map(Timestamp::from).orElse(null) : null;
     }
 
     @Override
     public Optional<Instant> convertToEntityAttribute(Timestamp dbData) {
-        return Optional.ofNullable(dbData).map(Timestamp::toInstant);
+        return dbData != null ? Optional.ofNullable(dbData).map(Timestamp::toInstant) : null;
     }
 }

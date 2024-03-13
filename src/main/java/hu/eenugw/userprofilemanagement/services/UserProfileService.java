@@ -2,6 +2,7 @@ package hu.eenugw.userprofilemanagement.services;
 
 import static hu.eenugw.core.extensions.StringExtensions.isNullOrEmptyOrBlank;
 
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import hu.eenugw.core.helpers.InstantHelpers;
 import hu.eenugw.core.helpers.UUIDHelpers;
 import hu.eenugw.usermanagement.repositories.UserRepository;
+import hu.eenugw.userprofilemanagement.constants.RelationshipStatus;
 import hu.eenugw.userprofilemanagement.entities.UserProfileEntity;
 import hu.eenugw.userprofilemanagement.models.UserProfile;
 import hu.eenugw.userprofilemanagement.repositories.UserProfilePostCommentRepository;
@@ -156,10 +158,19 @@ public class UserProfileService {
         return userProfileFollowings
             .stream()
             .filter(following ->
-                following.getBirthDateUtc().isPresent()
+                following.getBirthDateUtc() != null 
+                && following.getBirthDateUtc().isPresent()
                 && ZonedDateTime.ofInstant(following.getBirthDateUtc().get(), ZoneId.of("UTC")).getMonth() == utcNow.getMonth()
                 && ZonedDateTime.ofInstant(following.getBirthDateUtc().get(), ZoneId.of("UTC")).getDayOfMonth() == utcNow.getDayOfMonth())
             .toList();
+    }
+
+    public UserProfileEntity updateUserProfileEntity(UserProfileEntity userProfileEntity) {
+        if (userProfileEntity == null) {
+            return null;
+        }
+
+        return _userProfileRepository.save(userProfileEntity);
     }
 
     public UserProfile convertUserProfileEntityToModel(UserProfileEntity userProfileEntity) {
@@ -191,16 +202,16 @@ public class UserProfileService {
             userProfileEntity.getId(),
             userProfileEntity.getVersion(),
             userProfileEntity.getProfileDisplayId(),
-            userProfileEntity.getFirstName(),
-            userProfileEntity.getLastName(),
-            userProfileEntity.getFullName(),
-            userProfileEntity.getProfilePicturePath(),
-            userProfileEntity.getCoverPicturePath(),
-            userProfileEntity.getDescription(),
-            userProfileEntity.getCity(),
-            userProfileEntity.getHometown(),
-            userProfileEntity.getRelationshipStatus(),
-            userProfileEntity.getBirthDateUtc(),
+            userProfileEntity.getFirstName() != null ? userProfileEntity.getFirstName() : "",
+            userProfileEntity.getLastName() != null ? userProfileEntity.getLastName() : "",
+            userProfileEntity.getFullName() != null ? userProfileEntity.getFullName() : "",
+            userProfileEntity.getProfilePicturePath() != null ? userProfileEntity.getProfilePicturePath() : "",
+            userProfileEntity.getCoverPicturePath() != null ? userProfileEntity.getCoverPicturePath() : "",
+            userProfileEntity.getDescription() != null ? userProfileEntity.getDescription() : "",
+            userProfileEntity.getCity() != null ? userProfileEntity.getCity() : "",
+            userProfileEntity.getHometown() != null ? userProfileEntity.getHometown() : "",
+            userProfileEntity.getRelationshipStatus() != null ? userProfileEntity.getRelationshipStatus() : RelationshipStatus.NOT_SET,
+            userProfileEntity.getBirthDateUtc() != null ? userProfileEntity.getBirthDateUtc() : Optional.ofNullable(Instant.EPOCH),
             followerUserProfileIds,
             followingUserProfileIds,
             userProfileEntity.getUser() == null ? UUIDHelpers.DEFAULT_UUID : userProfileEntity.getUser().getId(),

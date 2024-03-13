@@ -72,7 +72,7 @@ export default function MessengerView() {
                 console.error(error);
             }
         })();
-    }, [state.user]);
+    }, [state]);
 
     useEffect(() => {
         (async () => {
@@ -117,7 +117,7 @@ export default function MessengerView() {
                 const followings = await UserProfileEndpoint.getUserProfileFollowingsByUserProfileId(userProfile?.id!);
                 setFollowings(followings);
             } catch (error) {
-                console.error(error)
+                console.error(error);
             }
         })();
     }, [userProfile]);
@@ -128,7 +128,7 @@ export default function MessengerView() {
                 const onlineFriends = followings.filter(following => Object.values(onlineUsers ?? {}).includes(following?.id));
                 setOnlineFriends(onlineFriends);
             } catch (error) {
-                console.error(error)
+                console.error(error);
             }
         })();
     }, [followings, onlineUsers]);

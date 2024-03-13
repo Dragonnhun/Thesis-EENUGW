@@ -72,4 +72,18 @@ public class UserProfileEndpoint {
             .map(_userProfileService::convertUserProfileEntityToModel)
             .toList();
     }
+
+    public Optional<UserProfile> updateUserProfile(UserProfile userProfile) {
+        if (userProfile == null) {
+            return null;
+        }
+
+        userProfile.setFullName(userProfile.getFirstName() + " " + userProfile.getLastName());
+
+        var userProfileEntity = _userProfileService.convertUserProfileModelToEntity(userProfile);
+
+        return Optional
+            .ofNullable(_userProfileService.updateUserProfileEntity(userProfileEntity))
+            .map(_userProfileService::convertUserProfileEntityToModel);
+    }
 }
