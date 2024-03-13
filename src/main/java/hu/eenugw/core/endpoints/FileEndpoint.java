@@ -20,4 +20,8 @@ public class FileEndpoint {
     public Pair<Boolean, String> uploadImage(Image image, ImageType imageType) {
         return _fileService.uploadImage(image, imageType);
     }
+
+    public Pair<Boolean, String> deleteImage(String imageName, ImageType imageType) {
+        return _fileService.deleteImage(imageName, imageType);
+    }
 }
