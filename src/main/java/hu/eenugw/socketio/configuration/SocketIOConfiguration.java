@@ -38,6 +38,14 @@ public class SocketIOConfiguration {
         // A list of user profile IDs and their session IDs.
         var userProfiles = new HashMap<String, String>();
 
+        // When users want to get their connected friends.
+        server.addEventListener("getConnectedUsersForClient", String.class, new DataListener<String>() {
+            @Override
+            public void onData(SocketIOClient client, String userProfileId, AckRequest ackRequest) {
+                sendConnectedUsersToClient(server, client, userProfiles);
+            }
+        });
+
         // When disconnecting by closing the browser or refreshing the page.
         server.addDisconnectListener(client -> {
             var clientSessionId = client.getSessionId().toString();
@@ -129,6 +137,10 @@ public class SocketIOConfiguration {
         });
 
         return server;
+    }
+
+    private void sendConnectedUsersToClient(SocketIOServer server, SocketIOClient connectedClient, HashMap<String, String> userProfiles) {
+        connectedClient.sendEvent("getConnectedUsersForClient", userProfiles);
     }
 
     private void sendConnectedUsersToAllClients(SocketIOServer server, HashMap<String, String> userProfiles) {
