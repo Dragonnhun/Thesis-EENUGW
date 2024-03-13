@@ -2,12 +2,12 @@
 INSERT INTO users (version, id, username, email, enabled, password) VALUES (1, "a366c022-1f68-42c9-9730-2f959e7e67dd", 'admin', 'admin@eenugw.com', TRUE, '$2a$10$jpLNVNeA7Ar/ZQ2DKbKCm.MuT2ESe.Qop96jipKMq7RaUgCoQedV.');
 INSERT INTO user_roles (user_id, roles) VALUES ("a366c022-1f68-42c9-9730-2f959e7e67dd", 'USER');
 INSERT INTO user_roles (user_id, roles) VALUES ("a366c022-1f68-42c9-9730-2f959e7e67dd", 'ADMIN');
-INSERT INTO user_profiles (version, id, profile_display_id, first_name, last_name, user_id, profile_picture_path, cover_picture_path) VALUES (1, "2bb10c7f-33e1-4a32-971a-aa80cfb72059", UUID(), 'Admin', 'Admin', "a366c022-1f68-42c9-9730-2f959e7e67dd", 'images/profile-pictures/1.jpg', 'images/cover-pictures/1.jpg');
+INSERT INTO user_profiles (version, id, profile_display_id, first_name, full_name, last_name, user_id, profile_picture_path, cover_picture_path) VALUES (1, "2bb10c7f-33e1-4a32-971a-aa80cfb72059", UUID(), 'Intertwine', 'Intertwine Admin', 'Admin', "a366c022-1f68-42c9-9730-2f959e7e67dd", 'images/profile-pictures/1.jpg', 'images/cover-pictures/1.jpg');
 
 -- Inserting Simple User and User Profile
 INSERT INTO users (version, id, username, email, enabled, password) VALUES (1, "f73f256d-2c90-4eec-b049-7282c0a5e11b", 'user', 'user@eenugw.com', TRUE, '$2a$10$xdbKoM48VySZqVSU/cSlVeJn0Z04XCZ7KZBjUBC00eKo5uLswyOpe');
 INSERT INTO user_roles (user_id, roles) VALUES ("f73f256d-2c90-4eec-b049-7282c0a5e11b", 'USER');
-INSERT INTO user_profiles (version, id, profile_display_id, first_name, last_name, user_id, profile_picture_path, cover_picture_path) VALUES (1, "7470937e-c439-4f4d-ade7-2c6b3c71b870", UUID(), 'User', 'User', "f73f256d-2c90-4eec-b049-7282c0a5e11b", 'images/profile-pictures/2.jpg', 'images/cover-pictures/2.jpg');
+INSERT INTO user_profiles (version, id, profile_display_id, first_name, full_name, last_name, user_id, profile_picture_path, cover_picture_path) VALUES (1, "7470937e-c439-4f4d-ade7-2c6b3c71b870", UUID(), 'Intertwine', 'Intertwine User', 'User', "f73f256d-2c90-4eec-b049-7282c0a5e11b", 'images/profile-pictures/2.jpg', 'images/cover-pictures/2.jpg');
 
 -- Inserting Dummy Users, User Profiles and Posts
 INSERT INTO users (version, id, username, email, enabled, password) VALUES 
