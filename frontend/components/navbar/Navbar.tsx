@@ -2,6 +2,7 @@ import 'themes/intertwine/components/navbar.scss';
 import MenuBarHelpers from 'Frontend/helpers/menuBarHelpers';
 import UserProfile from 'Frontend/generated/hu/eenugw/userprofilemanagement/models/UserProfile';
 import ProfileSearchResult from '../profile-search-result/ProfileSearchResult';
+import ProfileSettingsDialog from '../profile-settings-dialog/ProfileSettingsDialog';
 import { Icon } from '@hilla/react-components/Icon.js';
 import { Avatar } from '@hilla/react-components/Avatar.js';
 import { Link, useNavigate } from 'react-router-dom';
@@ -21,6 +22,7 @@ export default function Navbar() {
     const [userProfile, setUserProfile] = useState<UserProfile | undefined>();
     const [isSearchDialogOpened, setIsSearchDialogOpened] = useState(false);
     const [searchResult, setSearchResult] = useState<UserProfile[]>([]);
+    const [isProfileSettingsDialogOpen, setIsProfileSettingsDialogOpen] = useState<boolean>(false);
 
     const searchValueRef = useRef<HTMLInputElement>(undefined!);
 
@@ -142,6 +144,8 @@ export default function Navbar() {
                         }
                         else if (event.detail.value.text === 'Profile') {
                             navigate(new URL(`profile/${userProfile?.profileDisplayId}`, document.baseURI).pathname);
+                        } else if (event.detail.value.text === 'Settings') {
+                            setIsProfileSettingsDialogOpen(true);
                         }
                     }} />
             </div>
@@ -166,6 +170,10 @@ export default function Navbar() {
                     </VerticalLayout>
                 </VerticalLayout>
             </Dialog>
+            <ProfileSettingsDialog
+                isDialogOpen={isProfileSettingsDialogOpen}
+                setIsDialogOpen={setIsProfileSettingsDialogOpen}
+                isLoginDialog={false} />
         </>
     )
 }

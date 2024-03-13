@@ -1,6 +1,7 @@
 import 'themes/intertwine/views/login-form.scss';
+import ProfileSettingsDialog from 'Frontend/components/profile-settings-dialog/ProfileSettingsDialog';
 import { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { LoginI18n, LoginForm } from '@hilla/react-components/LoginForm.js';
 import { Button } from '@hilla/react-components/Button.js';
 import { Icon } from '@hilla/react-components/Icon.js';
@@ -30,6 +31,10 @@ export default function LoginView() {
     const [url, setUrl] = useState<string>('');
     const [hasError, setError] = useState<boolean>(false);
     const [siteName, setSiteName] = useState<string>('');
+    const [isProfileSettingsDialogOpen, setIsProfileSettingsDialogOpen] = useState<boolean>(false);
+    const [canLoginUser, setCanLoginUser] = useState<boolean>(false);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         (async () => {
@@ -37,7 +42,19 @@ export default function LoginView() {
         })();
     }, []);
 
-    if (url || state.user) return <Navigate to={ new URL(url ?? '/', document.baseURI).pathname } />;
+    useEffect(() => {
+        (async () => {
+            if (state.user?.isFirstLogin) {
+                setIsProfileSettingsDialogOpen(true);
+            } else if (url && state.user) {
+                setCanLoginUser(true);
+            }
+        })();
+    }, [state.user, url]);
+
+    if (canLoginUser) {
+        return <Navigate to={ new URL(url ?? '/', document.baseURI).pathname } />;
+    }
 
     return (
         <div className={`${ blockName }-container`}>
@@ -68,7 +85,7 @@ export default function LoginView() {
                     className={`${ blockName }-register-button`}
                     title='Register'
                     onClick={async () => {
-                        setUrl(await RouteEndpoint.getRegisterUrl());
+                        navigate(new URL(await RouteEndpoint.getRegisterUrl(), document.baseURI).pathname);
                     }}>
                     <Icon slot='prefix' className={`${ blockName }-icon fa fa-user-plus`} />
                     Register
@@ -77,11 +94,15 @@ export default function LoginView() {
                     className={`${ blockName }-forgotten-password-button`}
                     title='Forgotten Password'
                     onClick={async () => {
-                        setUrl(await RouteEndpoint.getForgottenPasswordUrl());
+                        navigate(new URL(await RouteEndpoint.getForgottenPasswordUrl(), document.baseURI).pathname);
                     }}>
                     <Icon slot='prefix' className={`${ blockName }-icon fa fa-rotate-left`} />
                     Forgotten Password
                 </Button>
+                <ProfileSettingsDialog
+                    isDialogOpen={isProfileSettingsDialogOpen}
+                    setIsDialogOpen={setIsProfileSettingsDialogOpen}
+                    isLoginDialog={true} />
             </section>
         </div>
     );

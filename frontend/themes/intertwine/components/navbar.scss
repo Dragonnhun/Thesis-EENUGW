@@ -27,6 +27,20 @@ vaadin-dialog-overlay {
     }
 }
 
+vaadin-dialog-overlay {
+    [slot="confirm-button"] {
+        cursor: pointer;
+    }
+
+    [slot="cancel-button"] {
+        cursor: pointer;
+    }
+
+    &::part(overlay) {
+        position: relative;
+    }
+}
+
 vaadin-menu-bar-overlay {
     z-index: 999;
 }
