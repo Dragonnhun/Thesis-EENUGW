@@ -1,0 +1,24 @@
+<configuration>
+    <conversionRule conversionWord="pid" converterClass="hu.eenugw.core.helpers.ProcessIdConverter" />
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %pid --- [%t] %-40.40logger{39} : %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="hu.eenugw.socketio.configuration.SocketIOConfiguration" level="INFO">
+        <appender-ref ref="SOCKET-IO"/>
+    </logger>
+
+    <appender name="SOCKET-IO" class="ch.qos.logback.core.FileAppender">
+        <file>logs/socket-io.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %pid --- [%t] %-40.40logger{39} : %m%n</pattern>
+        </encoder>
+    </appender>
+</configuration>

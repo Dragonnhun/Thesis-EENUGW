@@ -1,12 +1,11 @@
 package hu.eenugw.usermanagement.endpoints;
 
 import hu.eenugw.core.security.AuthenticatedUser;
-import hu.eenugw.usermanagement.entities.User;
+import hu.eenugw.usermanagement.models.User;
 import hu.eenugw.usermanagement.services.UserService;
 import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 
-import com.sanctionco.jmail.JMail;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import dev.hilla.Endpoint;
 import dev.hilla.Nonnull;
@@ -14,7 +13,6 @@ import dev.hilla.Nonnull;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.security.core.Authentication;
@@ -32,86 +30,81 @@ public class UserEndpoint {
         _userService = userService;
     }
 
-    public @Nonnull List<User> listAll() { 
-        return _userService.listAll();
+    public Optional<User> getUserById(String id) {
+        return _userService.getUserEntityById(id).map(_userService::convertUserEntityToModel);
     }
 
-    public Optional<User> getByUsername(String username) {
-        return _userService.getByUsername(username);
+    public Optional<User> getUserByUsername(String username) {
+        return _userService.getUserEntityByUsername(username).map(_userService::convertUserEntityToModel);
     }
     
-    public Optional<User> getByEmail(String email) {
-        return _userService.getByEmail(email);
+    public Optional<User> getUserByEmail(String email) {
+        return _userService.getUserEntityByEmail(email).map(_userService::convertUserEntityToModel);
     }
 
-    public Optional<User> getByUsernameOrEmail(String username, String email) {
-        return _userService.getByUsernameOrEmail(username, email);
+    public Optional<User> getUserByUsernameOrEmail(String username, String email) {
+        return _userService.getUserEntityByUsernameOrEmail(username, email).map(_userService::convertUserEntityToModel);
     }
 
-    public Optional<User> getByRegistrationToken(String registrationToken) {
-        return _userService.getByRegistrationToken(registrationToken);
+    public Optional<User> getUserByRegistrationToken(String registrationToken) {
+        return _userService.getUserEntityByRegistrationToken(registrationToken).map(_userService::convertUserEntityToModel);
     }
 
-    public Optional<User> getByForgottenPasswordToken(String forgottenPasswordToken) {
-        return _userService.getByForgottenPasswordToken(forgottenPasswordToken);
+    public Optional<User> getUserByForgottenPasswordToken(String forgottenPasswordToken) {
+        return _userService.getUserEntityByForgottenPasswordToken(forgottenPasswordToken).map(_userService::convertUserEntityToModel);
     }
     
     @Transactional
-    public User register(User user) throws UnsupportedEncodingException, MessagingException {
-        return _userService.register(user);
+    public Optional<User> registerUser(User user) throws UnsupportedEncodingException, MessagingException {
+        if (user == null) {
+            return null;
+        }
+
+        var userEntity = _userService.convertUserModelToEntity(user);
+
+        return Optional.ofNullable(_userService.registerUserEntity(userEntity)).map(_userService::convertUserEntityToModel);
     }
 
     @Transactional
     public Pair<String, String> verifyRegistration(String registrationToken) {
-        if (registrationToken == null || registrationToken.isEmpty()) {
-            return Pair.of("Error", "Registration token is not provided.");
-        }
-
         return ServiceResult(_userService.verifyRegistration(registrationToken));
     }
 
     @Transactional
     public Pair<String, String> requestResettingForgottenPassword(String email) throws UnsupportedEncodingException, MessagingException {
-        if (email == null || email.isEmpty()) {
-            return Pair.of("Error", "E-mail Address is not provided.");
-        }
-
-        if (JMail.isValid(email)) {
-            return ServiceResult(_userService.requestResettingForgottenPassword(email));
-        } else {
-            return Pair.of("Error", "The provided E-mail Address is not valid.");
-        }
+        return ServiceResult(_userService.requestResettingForgottenPassword(email));
     }
 
     @Transactional
     public Pair<String, String> resetForgottenPassword(String forgottenPasswordToken, String newPassword) throws UnsupportedEncodingException, MessagingException {
-        if (forgottenPasswordToken == null || forgottenPasswordToken.isEmpty()) {
-            return Pair.of("Error", "Forgotten password token is not provided.");
-        }
-
         return ServiceResult(_userService.resetForgottenPassword(forgottenPasswordToken, newPassword));
     }
 
-    public Boolean hasForgottenPasswordResetAlreadyBeenRequestedForEmail(String email) {
-        if (email == null || email.isEmpty()) return false;
+    @Transactional
+    public Optional<User> updateUser(User user) {
+        if (user == null) {
+            return null;
+        }
 
+        var userEntity = _userService.convertUserModelToEntity(user);
+
+        return Optional.ofNullable(_userService.updateUserEntity(userEntity)).map(_userService::convertUserEntityToModel);
+    }
+
+    public Boolean hasForgottenPasswordResetAlreadyBeenRequestedForEmail(String email) {
         return _userService.hasForgottenPasswordResetAlreadyBeenRequestedForEmail(email);
     }
 
     public Boolean hasForgottenPasswordTokenExpiredForEmail(String email) {
-        if (email == null || email.isEmpty()) return false;
-
         return _userService.hasForgottenPasswordTokenExpiredForEmail(email);
     }
 
+    public @Nonnull List<User> listAll() { 
+        return _userService.listAll().stream().map(_userService::convertUserEntityToModel).toList();
+    }
+
     public Optional<User> getAuthenticatedUser() {
-        var authenticatedUserDetails = authenticatedUser.get();
-
-        if (!authenticatedUserDetails.isPresent()) {
-            return Optional.empty();
-        }
-
-        return _userService.getByUsername(authenticatedUserDetails.get().getUsername());
+        return authenticatedUser.get();
     }
 
     @AnonymousAllowed

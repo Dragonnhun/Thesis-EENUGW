@@ -1,0 +1,52 @@
+@import "../variables/variables.scss";
+
+.rightbar {
+    &-friend-list {
+        > a {
+            color: inherit;
+            
+            &:hover {
+                text-decoration: none;
+            }
+        }
+
+        &-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            cursor: pointer;
+
+            &:hover {
+                color: $primary-color;
+            }
+            
+            &-avatar-container {
+                margin-right: 10px;
+                position: relative;
+            }
+
+            &-avatar {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                object-fit: cover;
+                cursor: pointer;
+            }
+
+            &-online {
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                background-color: $primary-color;
+                position: absolute;
+                top: -2px;
+                right: -2px;
+                border: 2px solid $secondary-color;
+            }
+
+            &-text {
+                font-weight: bold;
+            }
+        }
+    }
+}

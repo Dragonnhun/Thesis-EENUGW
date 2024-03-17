@@ -3,7 +3,6 @@ package hu.eenugw.core.security;
 import com.vaadin.flow.spring.security.VaadinWebSecurity;
 
 import hu.eenugw.core.constants.RouteUrls;
-
 import java.util.Base64;
 import javax.crypto.spec.SecretKeySpec;
 import javax.sql.DataSource;
@@ -24,11 +23,11 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 @Configuration
 public class SecurityConfiguration extends VaadinWebSecurity {
-    @Value("${hu.eenugw.auth.secret}")
+    @Value("${AUTH_SECRET}")
     private String authSecret;
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    protected PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -36,11 +35,12 @@ public class SecurityConfiguration extends VaadinWebSecurity {
     private DataSource dataSource;
 
     @Autowired
-    public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-        auth
+    public void configAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+        authenticationManagerBuilder
             .jdbcAuthentication()
             .passwordEncoder(new BCryptPasswordEncoder())
             .dataSource(dataSource)
+            .rolePrefix("ROLE_")
             .usersByUsernameQuery("SELECT username, password, enabled FROM users WHERE username = ?")
             .authoritiesByUsernameQuery("SELECT username, roles FROM users INNER JOIN user_roles ON users.id = user_roles.user_id WHERE username = ?");
     }
@@ -57,9 +57,8 @@ public class SecurityConfiguration extends VaadinWebSecurity {
         super.configure(http);
 
         http.sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        setLoginView(http, RouteUrls.LOGIN, RouteUrls.HOME);
+        setLoginView(http, RouteUrls.LOGIN, RouteUrls.LOGIN);
         setStatelessAuthentication(
             http, new SecretKeySpec(Base64.getDecoder().decode(authSecret), JwsAlgorithms.HS256), "hu.eenugw");
     }
-
 }

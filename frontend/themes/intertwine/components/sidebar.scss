@@ -1,0 +1,105 @@
+@import "../variables/variables.scss";
+
+.sidebar {
+    flex:3;
+    height: calc(100vh - 56px);
+    overflow-y: scroll;
+    position: sticky;
+    top: 0;
+
+    &-wrapper {
+        padding: 20px;
+    }
+
+    &-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        color: $black-color;
+
+        &-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+
+            &:hover {
+                color: $primary-color;
+            }
+
+            &-icon {
+                margin-right: 15px;
+            }
+        }
+
+        > a {
+            color: inherit;
+            
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
+
+    &-button {
+        width: 150px;
+        color: $white-color;
+        background-color: $primary-color;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    &-line {
+        margin: 20px 0;
+        background-color: $secondary-color;
+    }
+
+    &-friend-list {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        color: $black-color;
+
+        &-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            cursor: pointer;
+
+            &-avatar {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                object-fit: cover;
+                margin-right: 10px;
+                cursor: pointer;
+            }
+
+            &:hover {
+                .sidebar-friend-list-item-name {
+                    color: $primary-color;
+                }
+            }
+        }
+
+        > a {
+            color: inherit;
+            
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: $secondary-color;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--lumo-primary-color);
+}

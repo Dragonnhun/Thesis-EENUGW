@@ -1,0 +1,114 @@
+@import "../variables/variables.scss";
+
+.post {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: var(--lumo-box-shadow-s);
+    margin: 30px 0;
+
+    &-wrapper {
+        padding: 10px;
+    }
+
+    &-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        &-left {
+            display: flex;
+            align-items: center;
+
+            &-link {
+                display: flex;
+                align-items: inherit;
+            }
+
+            &-avatar {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                object-fit: cover;
+                cursor: pointer;
+            }
+
+            &-name {
+                font-size: 15px;
+                font-weight: bold;
+                margin: 0 10px;
+                cursor: pointer;
+            }
+
+            &-date {
+                margin-top: 3px;
+                font-size: 12px;
+            }
+
+            > a {
+                color: inherit;
+
+                &:hover {
+                    text-decoration: none;
+
+                    .post-top-left-name {
+                        color: $primary-color;
+                    }
+                }
+            }
+        }
+
+        &-right {
+            &-icon {
+                color: $black-color;
+                cursor: pointer;
+            }
+        }
+    }
+
+    &-center {
+        margin: 20px 0;
+
+        &-image {
+            width: 100%;
+            max-height: 500px;
+            object-fit: contain;
+        }
+    }
+
+    &-bottom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        &-left {
+            display: flex;
+            align-items: center;
+
+            &-like-icon, &-heart-icon {
+                width: 24px;
+                height: 24px;
+                margin-right: 5px;
+                cursor: pointer;
+                
+                &:focus {
+                    outline: none;
+                }
+
+                &.active {
+                    border-radius: 50%;
+                    border: 3px solid $primary-color;
+                }
+            }
+
+            &-like-counter {
+                font-size: 15px;
+            }
+        }
+
+        &-right {
+            &-comment-text {
+                cursor: pointer;
+            }
+        }
+    }
+}

@@ -1,0 +1,95 @@
+@import "../variables/variables.scss";
+
+.comment {
+    display: flex;
+    margin: 30px 0px;
+
+    &-link {
+        height: 32px;
+        width: 32px;
+
+        &:hover {
+            + .comment-details .comment-details-name {
+                color: $primary-color;
+            }
+        }
+    }
+
+    &-avatar {
+        width: 32px;
+        height: 32px;
+        cursor: pointer;
+    }
+
+    &-line {
+        background-color: $primary-color;
+        margin: 10px 0;
+    }
+
+    &-details {
+        display: flex;
+        flex-direction: column;
+        flex:5;
+        margin-left: 20px;
+
+        &-menu-bar {
+            align-self: center;
+
+            &-icon {
+                color: $black-color;
+                cursor: pointer;
+            }
+        }
+
+        &-name {
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        &-comment {
+            font-size: 14px;
+        }
+
+        > a {
+            color: inherit;
+
+            &:hover {
+                text-decoration: none;
+
+                .comment-details-name {
+                    color: $primary-color;
+                }
+            }
+        }
+    }
+
+    &-date {
+        align-self: center;
+        font-size: 12px;
+    }
+
+    &-reaction {
+        display: flex;
+        align-items: center;
+
+        &-like-icon, &-heart-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 5px;
+            cursor: pointer;
+            
+            &:focus {
+                outline: none;
+            }
+
+            &.active {
+                border-radius: 50%;
+                border: 3px solid $primary-color;
+            }
+        }
+
+        &-like-counter {
+            font-size: 15px;
+        }
+    }
+}

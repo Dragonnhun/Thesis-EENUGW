@@ -2,4 +2,12 @@
 $spacing-size-normal: 20px;
 
 // Colors
+$primary-color: #16F385;
+$secondary-color: #deecfa;
+$white-color: #FFFFFF;
+$black-color: #000000;
+$red-color: #FF0000;
 $primary-transparent-button-hover-background-color: hsl(150, 90%, 45%, 0.1);
+
+// Shadows
+$feed-box-shadow: 0 2px 4px -1px var(--lumo-shade-20pct), 0 3px 12px -1px var(--lumo-shade-30pct);

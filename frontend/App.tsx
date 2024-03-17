@@ -1,12 +1,26 @@
 import router from 'Frontend/routes.js';
-import { AuthContext, useAuth } from 'Frontend/useAuth.js';
+import React from 'react';
+import { AuthProvider } from 'Frontend/util/auth.js';
 import { RouterProvider } from 'react-router-dom';
 
 export default function App() {
-  const auth = useAuth();
-  return (
-    <AuthContext.Provider value={auth}>
-      <RouterProvider router={router} />
-    </AuthContext.Provider>
-  );
+    const environment = import.meta.env.VITE_SITE_ENVIRONMENT as string;
+
+    return (
+        <>
+            {
+                environment === 'DEVELOPMENT'
+                    ?
+                        <React.StrictMode>
+                            <AuthProvider>
+                                <RouterProvider router={router} />
+                            </AuthProvider>
+                        </React.StrictMode>
+                    :
+                        <AuthProvider>
+                            <RouterProvider router={router} />
+                        </AuthProvider>
+            }
+        </>
+    );
 }

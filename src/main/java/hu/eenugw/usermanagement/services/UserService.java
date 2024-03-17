@@ -4,6 +4,7 @@ import static hu.eenugw.core.helpers.InstantHelpers.utcNow;
 
 import java.io.UnsupportedEncodingException;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -16,9 +17,16 @@ import org.springframework.data.util.Pair;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.sanctionco.jmail.JMail;
+
+import hu.eenugw.core.helpers.UUIDHelpers;
 import hu.eenugw.core.services.EmailService;
 import hu.eenugw.core.services.SiteService;
-import hu.eenugw.usermanagement.entities.User;
+import hu.eenugw.usermanagement.entities.UserEntity;
+import hu.eenugw.usermanagement.models.User;
+import hu.eenugw.usermanagement.repositories.UserRepository;
+import hu.eenugw.userprofilemanagement.entities.UserProfileEntity;
+import hu.eenugw.userprofilemanagement.repositories.UserProfileRepository;
 import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 
@@ -28,53 +36,74 @@ import static hu.eenugw.usermanagement.extensions.EmailExtensions.passwordChange
 
 @Service
 public class UserService {
-    private final SiteService _siteService;
-    private final EmailService _emailService;
     @Autowired
     private final UserRepository _userRepository;
+    @Autowired
+    private final UserProfileRepository _userProfileRepository;
 
-    public UserService(UserRepository userRepository, EmailService emailService, SiteService siteService) {
+    private final SiteService _siteService;
+    private final EmailService _emailService;
+
+    public UserService(
+        UserRepository userRepository,
+        UserProfileRepository userProfileRepository,
+        EmailService emailService,
+        SiteService siteService) {
+        _siteService = siteService;
         _emailService = emailService;
         _userRepository = userRepository;
-        _siteService = siteService;
+        _userProfileRepository = userProfileRepository;
     }
 
-    public Optional<User> getById(Long id) {
+    public Optional<UserEntity> getUserEntityById(String id) {
         return _userRepository.findById(id);
     }
 
-    public Optional<User> getByUsername(String username) {
+    public Optional<UserEntity> getUserEntityByUsername(String username) {
         return _userRepository.findByUsername(username);
     }
 
-    public Optional<User> getByEmail(String email) {
+    public Optional<UserEntity> getUserEntityByEmail(String email) {
         return _userRepository.findByEmail(email);
     }
 
-    public Optional<User> getByUsernameOrEmail(String username, String email) {
+    public Optional<UserEntity> getUserEntityByUsernameOrEmail(String username, String email) {
         return _userRepository.findByUsernameOrEmail(username, email);
     }
 
-    public Optional<User> getByRegistrationToken(String registrationToken) {
+    public Optional<UserEntity> getUserEntityByRegistrationToken(String registrationToken) {
         return _userRepository.findByRegistrationToken(registrationToken);
     }
 
-    public Optional<User> getByForgottenPasswordToken(String forgottenPasswordToken) {
+    public Optional<UserEntity> getUserEntityByForgottenPasswordToken(String forgottenPasswordToken) {
         return _userRepository.findByForgottenPasswordToken(forgottenPasswordToken);
     }
 
     @Transactional
-    public User register(User user) throws UnsupportedEncodingException, MessagingException {
-        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        user.setEnabled(false);
-        user.setRoles(new java.util.HashSet<>(java.util.Arrays.asList(hu.eenugw.usermanagement.constants.Role.USER)));
-         
-        var token = UUID.randomUUID().toString();
-        user.setRegistrationToken(token);
-         
-        _emailService.sendEmail(verificationEmail(user, _siteService));
+    public UserEntity registerUserEntity(UserEntity userEntity) throws UnsupportedEncodingException, MessagingException {
+        userEntity.setPassword(new BCryptPasswordEncoder().encode(userEntity.getPassword()));
+        userEntity.setEnabled(false);
+        userEntity.setForgottenPasswordToken(null);
+        userEntity.setRoles(new java.util.HashSet<>(java.util.Arrays.asList(hu.eenugw.usermanagement.constants.Role.USER)));
+        userEntity.setIsFirstLogin(true);
 
-        return _userRepository.save(user);
+        var registrationToken = UUID.randomUUID().toString();
+        userEntity.setRegistrationToken(registrationToken);
+
+        userEntity = _userRepository.save(userEntity);
+
+        var userProfileEntity = new UserProfileEntity();
+        userProfileEntity.setProfileDisplayId(UUID.randomUUID().toString());
+        userProfileEntity.setUser(userEntity);
+
+        _userProfileRepository.save(userProfileEntity);
+
+        userEntity.setUserProfile(userProfileEntity);
+        _userRepository.save(userEntity);
+
+        _emailService.sendEmail(verificationEmail(userEntity, _siteService));
+
+        return userEntity;
     }
 
     public Pair<Boolean, String> verifyRegistration(String registrationToken) {
@@ -82,109 +111,165 @@ public class UserService {
             return Pair.of(false, "Registration token is not provided.");
         }
 
-        var optionalUser = _userRepository.findByRegistrationToken(registrationToken);
+        var optionalUserEntity = _userRepository.findByRegistrationToken(registrationToken);
          
-        if (optionalUser.isEmpty()) return Pair.of(false, "User could not be found based on the provided registration token!");
+        if (optionalUserEntity.isEmpty()) return Pair.of(false, "User could not be found based on the provided registration token!");
 
-        var user = optionalUser.get();
+        var userEntity = optionalUserEntity.get();
          
-        user.setEnabled(true);
-        user.setRegistrationToken(null);
+        userEntity.setEnabled(true);
+        userEntity.setRegistrationToken(null);
          
-        _userRepository.save(user);
+        _userRepository.save(userEntity);
          
         return Pair.of(true, "User has been successfully verified and enabled!");
     }
 
     @Transactional
     public Pair<Boolean, String> requestResettingForgottenPassword(String email) throws UnsupportedEncodingException, MessagingException {
-        var optionalUser = _userRepository.findByEmail(email);
+        if (email == null || email.isEmpty()) {
+            return Pair.of(false, "E-mail Address is not provided.");
+        }
 
-        if (optionalUser.isEmpty()) return Pair.of(false, "User could not be found based on the provided E-mail Address!");
+        if (JMail.isInvalid(email)) {
+            return Pair.of(false, "The provided E-mail Address is not valid.");
+        }
 
-        var user = optionalUser.get();
+        var optionalUserEntity = _userRepository.findByEmail(email);
 
-        user.setEnabled(false);
-        var token = UUID.randomUUID().toString();
-        user.setForgottenPasswordToken(token);
-        user.setForgottenPasswordTokenExpirationDate(Optional.of(utcNow().plusSeconds(86400)));
+        if (optionalUserEntity.isEmpty()) return Pair.of(false, "User could not be found based on the provided E-mail Address!");
 
-        _userRepository.save(user);
+        var userEntity = optionalUserEntity.get();
 
-        _emailService.sendEmail(forgottenPasswordEmail(user, _siteService));
+        userEntity.setEnabled(false);
+        var forgottenPasswordToken = UUID.randomUUID().toString();
+        userEntity.setForgottenPasswordToken(forgottenPasswordToken);
+        // Adding a day in seconds.
+        userEntity.setForgottenPasswordTokenExpirationDateUtc(Optional.of(utcNow().plusSeconds(86400)));
+
+        _userRepository.save(userEntity);
+
+        _emailService.sendEmail(forgottenPasswordEmail(userEntity, _siteService));
 
         return Pair.of(true, "E-mail has been successfully sent!");
     }
 
     public Pair<Boolean, String> resetForgottenPassword(String forgottenPasswordToken, String newPassword) throws UnsupportedEncodingException, MessagingException {
-        var optionalUser = _userRepository.findByForgottenPasswordToken(forgottenPasswordToken);
+        if (forgottenPasswordToken == null || forgottenPasswordToken.isEmpty()) {
+            return Pair.of(false, "Forgotten password token is not provided.");
+        }
 
-        if (optionalUser.isEmpty())
+        if (newPassword == null || newPassword.isEmpty()) {
+            return Pair.of(false, "New password is not provided.");
+        }
+        
+        var optionalUserEntity = _userRepository.findByForgottenPasswordToken(forgottenPasswordToken);
+
+        if (optionalUserEntity.isEmpty())
             return Pair.of(false, "User could not be found based on the provided forgotten password token!");
 
-        var user = optionalUser.get();
+        var userEntity = optionalUserEntity.get();
 
-        if (utcNow().isAfter(user.getForgottenPasswordTokenExpirationDate().orElse(Instant.EPOCH)))
-            return Pair.of(false, "The request to reset forgotten password has expired! Please request a new one. if you would like to change your password!");
+        if (utcNow().isAfter(userEntity.getForgottenPasswordTokenExpirationDateUtc().orElse(Instant.EPOCH)))
+            return Pair.of(false, "The request to reset forgotten password has expired! Please request a new one, if you would like to change your password!");
 
-        user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
-        user.setForgottenPasswordToken(null);
-        user.setForgottenPasswordTokenExpirationDate(Optional.ofNullable(null));
-        user.setEnabled(true);
+        userEntity.setPassword(new BCryptPasswordEncoder().encode(newPassword));
+        userEntity.setForgottenPasswordToken(null);
+        userEntity.setForgottenPasswordTokenExpirationDateUtc(Optional.ofNullable(null));
+        userEntity.setEnabled(true);
 
-        _userRepository.save(user);
+        _userRepository.save(userEntity);
 
-        _emailService.sendEmail(passwordChangedEmail(user, _siteService));
+        _emailService.sendEmail(passwordChangedEmail(userEntity, _siteService));
 
         return Pair.of(true, "Password has been successfully reset!");
     }
 
+    @Transactional
+    public UserEntity updateUserEntity(UserEntity userEntity) {
+        return _userRepository.save(userEntity);
+    }
+
     public Boolean hasForgottenPasswordResetAlreadyBeenRequestedForEmail(String email) {
-        var optionalUser = _userRepository.findByEmail(email);
+        if (email == null || email.isEmpty()) return false;
 
-        if (optionalUser.isEmpty()) return false;
+        if (JMail.isInvalid(email)) return false;
 
-        var user = optionalUser.get();
+        var optionalUserEntity = _userRepository.findByEmail(email);
 
-        if (user.getForgottenPasswordToken() == null || user.getForgottenPasswordToken().isEmpty())
-            return false;
+        if (optionalUserEntity.isEmpty()) return false;
 
-        return true;
+        var userEntity = optionalUserEntity.get();
+
+        return !(userEntity.getForgottenPasswordToken() == null || userEntity.getForgottenPasswordToken().isEmpty());
     }
 
     public Boolean hasForgottenPasswordTokenExpiredForEmail(String email) {
-        var optionalUser = _userRepository.findByEmail(email);
+        if (email == null || email.isEmpty()) return false;
 
-        if (optionalUser.isEmpty()) return false;
+        if (JMail.isInvalid(email)) return false;
 
-        var user = optionalUser.get();
+        var optionalUserEntity = _userRepository.findByEmail(email);
 
-        if (user.getForgottenPasswordToken() == null || user.getForgottenPasswordToken().isEmpty())
-            return false;
+        if (optionalUserEntity.isEmpty()) return false;
 
-        if (utcNow().isBefore(user.getForgottenPasswordTokenExpirationDate().orElse(Instant.EPOCH)))
-            return false;
+        var userEntity = optionalUserEntity.get();
 
-        return true;
+        return !(userEntity.getForgottenPasswordToken() == null || userEntity.getForgottenPasswordToken().isEmpty())
+            && utcNow().isAfter(userEntity.getForgottenPasswordTokenExpirationDateUtc().orElse(Instant.EPOCH));
     }
 
-    public void delete(Long id) {
+    public void delete(String id) {
         _userRepository.deleteById(id);
     }
 
-    public List<User> listAll() {
+    public List<UserEntity> listAll() {
         return _userRepository.findAll();
     }
 
-    public Page<User> list(Pageable pageable) {
+    public Page<UserEntity> list(Pageable pageable) {
         return _userRepository.findAll(pageable);
     }
 
-    public Page<User> list(Pageable pageable, Specification<User> filter) {
+    public Page<UserEntity> list(Pageable pageable, Specification<UserEntity> filter) {
         return _userRepository.findAll(filter, pageable);
     }
 
     public int count() {
         return (int) _userRepository.count();
+    }
+
+    public User convertUserEntityToModel(UserEntity userEntity) {
+        return new User (
+            userEntity.getId(),
+            userEntity.getVersion(),
+            userEntity.getUsername(),
+            userEntity.getEmail(),
+            userEntity.getPassword(),
+            userEntity.getEnabled(),
+            userEntity.getIsFirstLogin(),
+            userEntity.getRegistrationToken(),
+            userEntity.getForgottenPasswordToken(),
+            userEntity.getForgottenPasswordTokenExpirationDateUtc(),
+            new HashSet<>(userEntity.getRoles()),
+            userEntity.getUserProfile() == null ? UUIDHelpers.DEFAULT_UUID : userEntity.getUserProfile().getId()
+        );
+    }
+
+    public UserEntity convertUserModelToEntity(User user) {
+        return UserEntity.builder()
+            .id(user.getId())
+            .version(user.getVersion())
+            .username(user.getUsername())
+            .email(user.getEmail())
+            .password(user.getPassword())
+            .enabled(user.getEnabled())
+            .isFirstLogin(user.getIsFirstLogin())
+            .registrationToken(user.getRegistrationToken())
+            .forgottenPasswordToken(user.getForgottenPasswordToken())
+            .forgottenPasswordTokenExpirationDateUtc(user.getForgottenPasswordTokenExpirationDateUtc())
+            .roles(new HashSet<>(user.getRoles()))
+            .userProfile(_userProfileRepository.findById(user.getUserProfileId()).orElse(null))
+            .build();
     }
 }

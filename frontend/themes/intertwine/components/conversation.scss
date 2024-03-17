@@ -1,0 +1,26 @@
+@import "../variables/variables.scss";
+
+.conversation {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    margin-top: 20px;
+
+    &:hover {
+        background-color: $secondary-color;
+    }
+
+    &-image {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 20px;
+        cursor: pointer;
+    }
+
+    &-name {
+        font-weight: bold;
+    }
+}
