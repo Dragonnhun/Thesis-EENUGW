@@ -2,11 +2,24 @@
 
 .rightbar {
     &-friend-list {
+        > a {
+            color: inherit;
+            
+            &:hover {
+                text-decoration: none;
+            }
+        }
+
         &-item {
             display: flex;
             align-items: center;
             margin-bottom: 15px;
+            cursor: pointer;
 
+            &:hover {
+                color: $primary-color;
+            }
+            
             &-avatar-container {
                 margin-right: 10px;
                 position: relative;
@@ -17,6 +30,7 @@
                 height: 40px;
                 border-radius: 50%;
                 object-fit: cover;
+                cursor: pointer;
             }
 
             &-online {
