@@ -1,27 +1,19 @@
-.rightbar {
-    &-user {
-        &-friends {
-            &-followings {
-                &-following {
-                    display: flex;
-                    flex-direction: column;
-                    margin-bottom: 20px;
-                    cursor: pointer;
+.profile-friend {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    cursor: pointer;
 
-                    &-image {
-                        width: 100px;
-                        height: 100px;
-                        object-fit: cover;
-                        border-radius: 5px;
-                    }
+    &-image {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
 
-                    &-link {
-                        &:hover {
-                            text-decoration: none;
-                        }
-                    }
-                }
-            }
+    &-link {
+        &:hover {
+            text-decoration: none;
         }
     }
 }

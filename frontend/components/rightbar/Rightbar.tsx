@@ -4,8 +4,9 @@ import UserProfile from 'Frontend/generated/hu/eenugw/userprofilemanagement/mode
 import StringHelpers from 'Frontend/helpers/stringHelpers';
 import ProfileFriend from '../profile-friend/ProfileFriend';
 import ProfileSearchResult from '../profile-search-result/ProfileSearchResult';
+import LogType from 'Frontend/generated/hu/eenugw/core/constants/LogType';
 import { useEffect, useRef, useState } from 'react';
-import { UserProfileEndpoint } from 'Frontend/generated/endpoints';
+import { LoggerEndpoint, UserProfileEndpoint } from 'Frontend/generated/endpoints';
 import { useAuth } from 'Frontend/util/auth';
 import { Button } from '@hilla/react-components/Button.js';
 import { Icon } from '@hilla/react-components/Icon.js';
@@ -15,9 +16,13 @@ import { VerticalLayout } from '@hilla/react-components/VerticalLayout.js';
 import { Socket, io } from 'socket.io-client';
 
 export default function Rightbar({userProfile}: {userProfile?: UserProfile}) {
+    const blockName = 'rightbar';
+    
     const { state } = useAuth();
 
     const HomeRightbar = () => {
+        const birthdayDialogBlockName = 'birthday-dialog';
+
         const [userProfileFollowingsWithBirthday, setUserProfileFollowingsWithBirthday] = useState<UserProfile[]>([]);
         const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
         const [otherFriendsCount, setOtherFriendsCount] = useState<number>(0);
@@ -27,6 +32,14 @@ export default function Rightbar({userProfile}: {userProfile?: UserProfile}) {
         const [onlineFriends, setOnlineFriends] = useState<UserProfile[]>([]);
 
         const socket = useRef<Socket>();
+
+        const openBirthdayDialog = () => {
+            setIsBirthdayDialogOpened(true);
+        };
+      
+        const closeBirthdayDialog = () => {
+            setIsBirthdayDialogOpened(false);
+        };
 
         useEffect(() => {
             (async () => {
@@ -52,6 +65,7 @@ export default function Rightbar({userProfile}: {userProfile?: UserProfile}) {
                     setFollowings(followings);
                 } catch (error) {
                     console.error(error);
+                    await LoggerEndpoint.log((error as Error).stack!, LogType.ERROR);
                 }
             })();
         }, [state]);
@@ -62,18 +76,11 @@ export default function Rightbar({userProfile}: {userProfile?: UserProfile}) {
                     const onlineFriends = followings.filter(following => Object.values(onlineUsers ?? {}).includes(following?.id));
                     setOnlineFriends(onlineFriends);
                 } catch (error) {
-                    console.error(error)
+                    console.error(error);
+                    await LoggerEndpoint.log((error as Error).stack!, LogType.ERROR);
                 }
             })();
         }, [followings, onlineUsers]);
-
-        const openBirthdayDialog = () => {
-            setIsBirthdayDialogOpened(true);
-        };
-      
-        const closeBirthdayDialog = () => {
-            setIsBirthdayDialogOpened(false);
-        };
 
         useEffect(() => {
             (async () => {
@@ -91,6 +98,7 @@ export default function Rightbar({userProfile}: {userProfile?: UserProfile}) {
                     }
                 } catch (error) {
                     console.error(error);
+                    await LoggerEndpoint.log((error as Error).stack!, LogType.ERROR);
                 }
             })();
         }, [state]);
@@ -98,10 +106,10 @@ export default function Rightbar({userProfile}: {userProfile?: UserProfile}) {
         return (
             <>
                 <div 
-                    className={`rightbar-birthday-container ${userProfileFollowingsWithBirthday?.length > 0 ? 'active' : ''}`}
+                    className={`${blockName}-birthday-container ${userProfileFollowingsWithBirthday?.length > 0 ? 'active' : ''}`}
                     onClick={userProfileFollowingsWithBirthday && userProfileFollowingsWithBirthday.length > 0 ? openBirthdayDialog : undefined}>
-                    <img className='rightbar-birthday-image' src='images/gift.png' alt='birthday-cake' />
-                    <span className='rightbar-birthday-text'>
+                    <img className={`${blockName}-birthday-image`} src='images/gift.png' alt='birthday-cake' />
+                    <span className={`${blockName}-birthday-text`}>
                         {selectedUser ? (
                             <>
                                 <b>{selectedUser.fullName}</b> {userProfileFollowingsWithBirthday?.length === 1 ? ' has' : ` and ${otherFriendsCount} other ${otherFriendsCount === 1 ? 'friend has' : 'friends have'}`} a birthday today.
@@ -109,15 +117,15 @@ export default function Rightbar({userProfile}: {userProfile?: UserProfile}) {
                         ) : <span>No friends have a birthday today.</span>}
                     </span>
                 </div>
-                <h4 className='rightbar-title'>Online Friends</h4>
-                <ul className='rightbar-friend-list'>
+                <h4 className={`${blockName}-tile`}>Online Friends</h4>
+                <ul className={`${blockName}-friend-list`}>
                     {onlineFriends.map((following) => (
                         <OnlineFriend key={following.id} userProfile={following} />
                     ))}
                 </ul>
                 <Dialog
                     headerTitle={'Birthdays today'}
-                    className='birthday-dialog'
+                    className={birthdayDialogBlockName}
                     draggable={false}
                     modeless={false}
                     opened={isBirthdayDialogOpened}
@@ -125,10 +133,10 @@ export default function Rightbar({userProfile}: {userProfile?: UserProfile}) {
                         setIsBirthdayDialogOpened(event.detail.value);
                     }}
                     footerRenderer={() =>
-                        <Button className='birthday-dialog-close-button' onClick={closeBirthdayDialog} theme='primary'>Close</Button>
+                        <Button className={`${birthdayDialogBlockName}-close-button`} onClick={closeBirthdayDialog} theme='primary'>Close</Button>
                     }>
-                    <VerticalLayout className='birthday-dialog-main-layout' style={{ alignItems: 'stretch', minWidth: '50vh', maxWidth: '100vh' }}>
-                        <Icon icon='vaadin:close-small' className='birthday-dialog-close-icon' onClick={closeBirthdayDialog} />
+                    <VerticalLayout className={`${birthdayDialogBlockName}-main-layout`} style={{ alignItems: 'stretch', minWidth: '50vh', maxWidth: '100vh' }}>
+                        <Icon icon='vaadin:close-small' className={`${birthdayDialogBlockName}-close-icon`} onClick={closeBirthdayDialog} />
                         <VerticalLayout style={{ alignItems: 'stretch' }}>
                             {userProfileFollowingsWithBirthday && userProfileFollowingsWithBirthday.length > 0 ? userProfileFollowingsWithBirthday.map((userProfileFollowingWithBirthday) => (
                                 <ProfileSearchResult key={userProfileFollowingWithBirthday.id} userProfile={userProfileFollowingWithBirthday} closeSearchDialog={closeBirthdayDialog} />
@@ -178,28 +186,28 @@ export default function Rightbar({userProfile}: {userProfile?: UserProfile}) {
         return (
             <>
                 {state.user?.id != userProfile?.userId && (
-                    <Button theme='primary' className='rightbar-follow-button' onClick={followHandler}>
-                        <Icon className='rightbar-follow-icon' slot='suffix' icon={followed ? 'vaadin:minus' : 'vaadin:plus'} />
+                    <Button theme='primary' className={`${blockName}-follow-button`} onClick={followHandler}>
+                        <Icon className={`${blockName}-follow-icon`} slot='suffix' icon={followed ? 'vaadin:minus' : 'vaadin:plus'} />
                         {followed ? 'Unfollow' : 'Follow'}
                     </Button>
                 )}
-                <h4 className='rightbar-user-information-title'>User Information</h4>
-                <div className='rightbar-user-information-information'>
-                    <div className='rightbar-user-information-information-item'>
-                        <span className='rightbar-user-information-information-item-key'>City:</span>
-                        <span className='rightbar-user-information-information-item-value'>{userProfile?.city}</span>
+                <h4 className={`${blockName}-user-information-title`}>User Information</h4>
+                <div className={`${blockName}-user-information-information`}>
+                    <div className={`${blockName}-user-information-information-item`}>
+                        <span className={`${blockName}-user-information-information-item-key`}>City:</span>
+                        <span className={`${blockName}-user-information-information-item-value`}>{userProfile?.city}</span>
                     </div>
-                    <div className='rightbar-user-information-information-item'>
-                        <span className='rightbar-user-information-information-item-key'>Hometown:</span>
-                        <span className='rightbar-user-information-information-item-value'>{userProfile?.hometown}</span>
+                    <div className={`${blockName}-user-information-information-item`}>
+                        <span className={`${blockName}-user-information-information-item-key`}>Hometown:</span>
+                        <span className={`${blockName}-user-information-information-item-value`}>{userProfile?.hometown}</span>
                     </div>
-                    <div className='rightbar-user-information-information-item'>
-                        <span className='rightbar-user-information-information-item-key'>Relationship:</span>
-                        <span className='rightbar-user-information-information-item-value'>{StringHelpers.removeUnderscoresAndCapitalizeFirst(userProfile?.relationshipStatus)}</span>
+                    <div className={`${blockName}-user-information-information-item`}>
+                        <span className={`${blockName}-user-information-information-item-key`}>Relationship:</span>
+                        <span className={`${blockName}-user-information-information-item-value`}>{StringHelpers.removeUnderscoresAndCapitalizeFirst(userProfile?.relationshipStatus)}</span>
                     </div>
                 </div>
-                <h4 className='rightbar-user-friends-title'>User Friends</h4>
-                <div className='rightbar-user-friends-followings'>
+                <h4 className={`${blockName}-user-friends-title`}>User Friends</h4>
+                <div className={`${blockName}-user-friends-followings`}>
                     {userProfileFollowers?.sort(() => Math.random() - 0.5).slice(0, 15).map((followerUserProfile) => (
                         <ProfileFriend key={followerUserProfile?.id} userProfile={followerUserProfile} />
                     ))}
@@ -209,8 +217,8 @@ export default function Rightbar({userProfile}: {userProfile?: UserProfile}) {
     };
 
     return (
-        <div className='rightbar'>
-            <div className='rightbar-wrapper'>
+        <div className={blockName}>
+            <div className={`${blockName}-wrapper`}>
                 {userProfile ? <ProfileRightbar /> : <HomeRightbar />}
             </div>
         </div>

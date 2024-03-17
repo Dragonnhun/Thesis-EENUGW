@@ -3,8 +3,9 @@ import Share from 'Frontend/components/share/Share';
 import Post from 'Frontend/components/post/Post';
 import UserProfilePost from 'Frontend/generated/hu/eenugw/userprofilemanagement/models/UserProfilePost';
 import UserProfile from 'Frontend/generated/hu/eenugw/userprofilemanagement/models/UserProfile';
+import LogType from 'Frontend/generated/hu/eenugw/core/constants/LogType';
 import { useEffect, useState } from 'react';
-import { UserProfileEndpoint, UserProfilePostEndpoint } from 'Frontend/generated/endpoints';
+import { UserProfileEndpoint, UserProfilePostEndpoint, LoggerEndpoint } from 'Frontend/generated/endpoints';
 import { useAuth } from 'Frontend/util/auth';
 
 export default function Feed({profileDisplayId}: {profileDisplayId?: string}) {
@@ -37,9 +38,14 @@ export default function Feed({profileDisplayId}: {profileDisplayId?: string}) {
     }, [currentUserProfile, profileDisplayId, posted]);
 
     const deletePostHandler = async (userProfilePostId: string) => {
-        const result = await UserProfilePostEndpoint.deleteUserProfilePostByUserProfilePostId(userProfilePostId);
-        if (result) {
-            setUserProfilePosts(userProfilePosts.filter((post) => post.id !== userProfilePostId));
+        try {
+            const result = await UserProfilePostEndpoint.deleteUserProfilePostByUserProfilePostId(userProfilePostId);
+            if (result) {
+                setUserProfilePosts(userProfilePosts.filter((post) => post.id !== userProfilePostId));
+            }
+        } catch (error) {
+            console.error(error);
+            await LoggerEndpoint.log((error as Error).stack!, LogType.ERROR);
         }
     }
 

@@ -1,7 +1,7 @@
 import 'themes/intertwine/views/register-form.scss';
-import '@vaadin/icons';
 import UserModel from 'Frontend/generated/hu/eenugw/usermanagement/models/UserModel';
 import User from 'Frontend/generated/hu/eenugw/usermanagement/models/User';
+import LogType from 'Frontend/generated/hu/eenugw/core/constants/LogType';
 import { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useForm } from '@hilla/react-form';
@@ -10,7 +10,7 @@ import { TextField } from '@hilla/react-components/TextField.js';
 import { PasswordField } from '@hilla/react-components/PasswordField.js';
 import { Notification } from '@hilla/react-components/Notification.js';
 import { Icon } from '@hilla/react-components/Icon.js';
-import { RouteEndpoint, SiteEndpoint, UserEndpoint } from 'Frontend/generated/endpoints';
+import { LoggerEndpoint, RouteEndpoint, SiteEndpoint, UserEndpoint } from 'Frontend/generated/endpoints';
 import { useAuth } from 'Frontend/util/auth';
 
 export default function RegisterView() {
@@ -64,6 +64,7 @@ export default function RegisterView() {
                     }
                 } catch (error) {
                     console.error(error);
+                    await LoggerEndpoint.log((error as Error).stack!, LogType.ERROR);
                     
                     setVerificationResult({
                         status: 'Error',
@@ -74,17 +75,17 @@ export default function RegisterView() {
         }, []);
 
         return (
-            <div className={`${ blockName }-container`}>
-                <section className={`${ blockName }-section`}>
-                    <div className={`${ blockName }-header`}>
-                        <h1 className={`${ blockName }-header-title`}>{siteName}</h1>
+            <div className={`${blockName}-container`}>
+                <section className={`${blockName}-section`}>
+                    <div className={`${blockName}-header`}>
+                        <h1 className={`${blockName}-header-title`}>{siteName}</h1>
                     </div>
-                    <section className={`${ blockName }`}>
-                        <h2 className={`${ blockName }-title`}>{verificationResult.status}</h2>
-                        <h3 className={`${ blockName }-title`}>{verificationResult.message}</h3>
+                    <section className={`${blockName}`}>
+                        <h2 className={`${blockName}-title`}>{verificationResult.status}</h2>
+                        <h3 className={`${blockName}-title`}>{verificationResult.message}</h3>
                     </section>
                     <Button
-                        className={`${ blockName }-login-button`}
+                        className={`${blockName}-login-button`}
                         title='Login'
                         onClick={async () => {
                             setUrl(await RouteEndpoint.getLoginUrl());
@@ -146,6 +147,7 @@ export default function RegisterView() {
                     }
                 } catch (error) {
                     console.error(error);
+                    await LoggerEndpoint.log((error as Error).stack!, LogType.ERROR);
     
                     Notification.show('An error occurred during registration.', {
                         position: 'top-center',
@@ -157,14 +159,14 @@ export default function RegisterView() {
         });
 
         return (
-            <div className={`${ blockName }-container`}>
-                <section className={`${ blockName }-section`}>
-                    <div className={`${ blockName }-header`}>
-                        <h1 className={`${ blockName }-header-title`}>{siteName}</h1>
-                        <p className={`${ blockName }-header-description`}>Please register below and join our community.</p>
+            <div className={`${blockName}-container`}>
+                <section className={`${blockName}-section`}>
+                    <div className={`${blockName}-header`}>
+                        <h1 className={`${blockName}-header-title`}>{siteName}</h1>
+                        <p className={`${blockName}-header-description`}>Please register below and join our community.</p>
                     </div>
-                    <section className={`${ blockName }`}>
-                        <h2 className={`${ blockName }-title`}>Register</h2>
+                    <section className={`${blockName}`}>
+                        <h2 className={`${blockName}-title`}>Register</h2>
                         <TextField
                             label='Username'
                             helperText='Please specify the username you would like to use.'
@@ -189,7 +191,7 @@ export default function RegisterView() {
                         <Button 
                             theme='primary contained submit'
                             title='Register'
-                            className={`${ blockName }-register-button`}
+                            className={`${blockName}-register-button`}
                             onClick={(event) => {
                                 event.stopPropagation();
                                 
@@ -200,7 +202,7 @@ export default function RegisterView() {
                         </Button>
                     </section>
                     <Button
-                        className={`${ blockName }-login-button`}
+                        className={`${blockName}-login-button`}
                         title='Login'
                         onClick={async () => {
                             setUrl(await RouteEndpoint.getLoginUrl());
@@ -215,7 +217,7 @@ export default function RegisterView() {
 
     return (
         <>
-            { registrationToken ? <VerifyView /> : <RegisterView /> }
+            {registrationToken ? <VerifyView /> : <RegisterView />}
         </>
     )
 }

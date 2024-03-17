@@ -1,35 +1,38 @@
 import 'themes/intertwine/components/chat-online-friend.scss';
 import UserProfile from 'Frontend/generated/hu/eenugw/userprofilemanagement/models/UserProfile';
 import PrivateConversation from 'Frontend/generated/hu/eenugw/privatemessaging/models/PrivateConversation';
+import LogType from 'Frontend/generated/hu/eenugw/core/constants/LogType';
 import { Avatar } from '@hilla/react-components/Avatar.js';
-import { PrivateConversationEndpoint } from 'Frontend/generated/endpoints';
+import { LoggerEndpoint, PrivateConversationEndpoint } from 'Frontend/generated/endpoints';
 
 export default function ChatOnlineFriend(
     {currentUserProfile, friendUserProfile, setCurrentPrivateConversation}:
-        {currentUserProfile?: UserProfile, friendUserProfile?: UserProfile, setCurrentPrivateConversation: (conversation: PrivateConversation | undefined) => void}) {
+        {currentUserProfile?: UserProfile, friendUserProfile?: UserProfile, setCurrentPrivateConversation: (conversation?: PrivateConversation) => void}) {
     const assetsFolder = import.meta.env.VITE_ASSETS_FOLDER;
+    const blockName = 'chat-online-friend';
 
-    const handleClick = async (event: React.MouseEvent<HTMLDivElement>) => {
+    const clickHandler = async () => {
         try {
             const result = await PrivateConversationEndpoint.getOrCreatePrivateConversationEntityByUserProfileIds(currentUserProfile?.id!, friendUserProfile?.id!);
-            setCurrentPrivateConversation(result!);
+            setCurrentPrivateConversation(result);
         } catch (error) {
             console.error(error);
+            await LoggerEndpoint.log((error as Error).stack!, LogType.ERROR);
         }
     }
 
     return (
-        <div className='chat-online-friend' onClick={handleClick}>
-            <div className='chat-online-friend-item'>
-                <div className='chat-online-friend-image-container'>
+        <div className={blockName} onClick={clickHandler}>
+            <div className={`${blockName}-item`}>
+                <div className={`${blockName}-image-container`}>
                     <Avatar
-                        className='chat-online-friend-image'
+                        className={`${blockName}-image`}
                         theme='xsmall'
                         img={friendUserProfile?.profilePicturePath ? assetsFolder + friendUserProfile?.profilePicturePath : 'images/no-profile-picture.png'}
                         name={friendUserProfile?.fullName} />
-                    <div className='chat-online-friend-online-dot'></div>
+                    <div className={`${blockName}-online-dot`}></div>
                 </div>
-                <span className='chat-online-friend-name'>{friendUserProfile?.fullName}</span>
+                <span className={`${blockName}-name`}>{friendUserProfile?.fullName}</span>
             </div>
         </div>
     )

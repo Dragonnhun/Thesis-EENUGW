@@ -5,10 +5,11 @@ import UserProfilePostCommentModel from 'Frontend/generated/hu/eenugw/userprofil
 import Pair from 'Frontend/generated/org/springframework/data/util/Pair';
 import Comment from 'Frontend/components/comment/Comment';
 import UserProfilePost from 'Frontend/generated/hu/eenugw/userprofilemanagement/models/UserProfilePost';
+import LogType from 'Frontend/generated/hu/eenugw/core/constants/LogType';
 import { Avatar } from '@hilla/react-components/Avatar.js';
 import { Button } from '@hilla/react-components/Button.js';
 import { Notification } from '@hilla/react-components/Notification.js';
-import { UserProfileEndpoint, UserProfilePostCommentEndpoint } from 'Frontend/generated/endpoints';
+import { LoggerEndpoint, UserProfileEndpoint, UserProfilePostCommentEndpoint } from 'Frontend/generated/endpoints';
 import { useAuth } from 'Frontend/util/auth';
 import { useEffect, useRef, useState } from 'react';
 
@@ -33,42 +34,19 @@ export default function Comments(
         })();
     }, [state]);
 
-    // const orderComments = (commentA: { second: UserProfilePostComment; }, commentB: { second: UserProfilePostComment; }) => {
-    //     const totalLikesAndHeartsA = (commentA.second as UserProfilePostComment).userProfileLikeIds.length + (commentA.second as UserProfilePostComment).userProfileHeartIds.length;
-    //     const totalLikesAndHeartsB = (commentB.second as UserProfilePostComment).userProfileLikeIds.length + (commentB.second as UserProfilePostComment).userProfileHeartIds.length;
-
-    //     const likesAndHeartsDiff = totalLikesAndHeartsB - totalLikesAndHeartsA;
-
-    //     if (likesAndHeartsDiff !== 0) {
-    //         return likesAndHeartsDiff; // If likes and hearts count is different, return the comparison result.
-    //     } else {
-    //         // If likes and hearts count is the same, sort by creation date.
-    //         return new Date((commentB.second as UserProfilePostComment).creationDateUtc).getTime() - new Date((commentA.second as UserProfilePostComment).creationDateUtc).getTime();
-    //     }
-    // };
-
     useEffect(() => {
         (async () => {
             const userProfilesAndPostComments = await UserProfilePostCommentEndpoint.getUserProfilesAndUserProfilePostCommentsByUserProfilePostId(userProfilePost?.id!);
             setUserProfilesAndPostComments(userProfilesAndPostComments
                 .sort((commentA, commentB) => {
-                    // // Check if commentA is the user's own comment
-                    // if ((commentA.second as UserProfilePostComment).userProfileId === state.user?.userProfileId!) {
-                    //     return -1 + orderComments(commentA, commentB); // Move user's own comment to the top
-                    // }
-                    // // Check if commentB is the user's own comment
-                    // if ((commentB.second as UserProfilePostComment).userProfileId === state.user?.userProfileId!) {
-                    //     return 1 - orderComments(commentA, commentB); // Move user's own comment to the top
-                    // }
-
                     const userId = state.user?.userProfileId;
                 
                     const isCurrentUserCommentA = (commentA.second as UserProfilePostComment).userProfileId === userId;
                     const isCurrentUserCommentB = (commentB.second as UserProfilePostComment).userProfileId === userId;
                 
-                    // Check if both comments are from the current user
+                    // Check if both comments are from the current user.
                     if (isCurrentUserCommentA && isCurrentUserCommentB) {
-                        // Sort by likes count if both comments are from the current user
+                        // Sort by likes count if both comments are from the current user.
                         const totalLikesAndHeartsA = (commentA.second as UserProfilePostComment).userProfileLikeIds.length + (commentA.second as UserProfilePostComment).userProfileHeartIds.length;
                         const totalLikesAndHeartsB = (commentB.second as UserProfilePostComment).userProfileLikeIds.length + (commentB.second as UserProfilePostComment).userProfileHeartIds.length;
                         const likesAndHeartsDiff = totalLikesAndHeartsB - totalLikesAndHeartsA;
@@ -76,17 +54,17 @@ export default function Comments(
                         if (likesAndHeartsDiff !== 0) {
                             return likesAndHeartsDiff;
                         } else {
-                            // If likes and hearts count is the same, sort by creation date
+                            // If likes and hearts count is the same, sort by creation date.
                             return new Date((commentB.second as UserProfilePostComment).creationDateUtc).getTime() - new Date((commentA.second as UserProfilePostComment).creationDateUtc).getTime();
                         }
                     } else if (isCurrentUserCommentA) {
-                        // Move current user's comment to the top
+                        // Move current user's comment to the top.
                         return -1;
                     } else if (isCurrentUserCommentB) {
-                        // Move current user's comment to the top
+                        // Move current user's comment to the top.
                         return 1;
                     } else {
-                        // Sort by likes count if both comments are not from the current user
+                        // Sort by likes count if both comments are not from the current user.
                         const totalLikesAndHeartsA = (commentA.second as UserProfilePostComment).userProfileLikeIds.length + (commentA.second as UserProfilePostComment).userProfileHeartIds.length;
                         const totalLikesAndHeartsB = (commentB.second as UserProfilePostComment).userProfileLikeIds.length + (commentB.second as UserProfilePostComment).userProfileHeartIds.length;
                         const likesAndHeartsDiff = totalLikesAndHeartsB - totalLikesAndHeartsA;
@@ -94,7 +72,7 @@ export default function Comments(
                         if (likesAndHeartsDiff !== 0) {
                             return likesAndHeartsDiff;
                         } else {
-                            // If likes and hearts count is the same, sort by creation date
+                            // If likes and hearts count is the same, sort by creation date.
                             return new Date((commentB.second as UserProfilePostComment).creationDateUtc).getTime() - new Date((commentA.second as UserProfilePostComment).creationDateUtc).getTime();
                         }
                     }
@@ -142,6 +120,7 @@ export default function Comments(
             commentRef.current.value = '';
         } catch (error) {
             console.error(error);
+            await LoggerEndpoint.log((error as Error).stack!, LogType.ERROR);
         }
     }
 

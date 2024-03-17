@@ -5,13 +5,14 @@ import UserProfile from 'Frontend/generated/hu/eenugw/userprofilemanagement/mode
 import UserProfilePost from 'Frontend/generated/hu/eenugw/userprofilemanagement/models/UserProfilePost';
 import UserProfilePostModel from 'Frontend/generated/hu/eenugw/userprofilemanagement/models/UserProfilePostModel';
 import Pair from 'Frontend/generated/org/springframework/data/util/Pair';
+import LogType from 'Frontend/generated/hu/eenugw/core/constants/LogType';
 import { Notification } from '@hilla/react-components/Notification.js';
 import { Avatar } from '@hilla/react-components/Avatar.js';
 import { Icon } from '@hilla/react-components/Icon.js';
 import { Button } from '@hilla/react-components/Button.js';
 import { useAuth } from 'Frontend/util/auth';
 import { useEffect, useRef, useState } from 'react';
-import { FileEndpoint, UserProfileEndpoint, UserProfilePostEndpoint } from 'Frontend/generated/endpoints';
+import { FileEndpoint, LoggerEndpoint, UserProfileEndpoint, UserProfilePostEndpoint } from 'Frontend/generated/endpoints';
 import { readAsDataURL } from 'promise-file-reader';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -57,6 +58,7 @@ export default function Share({posted}: {posted?: () => void}){
             }
         } catch (error) {
             console.error(error);
+            await LoggerEndpoint.log((error as Error).stack!, LogType.ERROR);
         }
     }
 
@@ -87,7 +89,8 @@ export default function Share({posted}: {posted?: () => void}){
                     await createPost(post);
                 }
             } catch (error) {
-                console.error(error);   
+                console.error(error);
+                await LoggerEndpoint.log((error as Error).stack!, LogType.ERROR);
             }
         } else {
             await createPost(post);
@@ -97,19 +100,19 @@ export default function Share({posted}: {posted?: () => void}){
     return (
         <div className={blockName}>
             <div className={`${blockName}-wrapper`}>
-                <div className={`${blockName}-wrapper-top`}>
+                <div className={`${blockName}-top`}>
                     <Avatar
-                        className={`${blockName}-wrapper-top-image`}
+                        className={`${blockName}-top-image`}
                         theme='xsmall'
                         img={userProfile?.profilePicturePath ? assetsFolder + userProfile?.profilePicturePath : 'images/no-profile-picture.png'}
                         name={userProfile?.fullName} />
-                    <textarea ref={description} className={`${blockName}-wrapper-top-input`} placeholder={`What's on your mind ${userProfile?.firstName}?`} />
+                    <textarea ref={description} className={`${blockName}-top-input`} placeholder={`What's on your mind ${userProfile?.firstName}?`} />
                 </div>
-                <hr className={`${blockName}-wrapper-line`} />
+                <hr className={`${blockName}-line`} />
                 {file && (
-                    <div className={`${blockName}-wrapper-bottom-image-container`}>
-                        <img className={`${blockName}-wrapper-bottom-image`} src={URL.createObjectURL(file)} alt='Selected file' />
-                        <Icon icon='vaadin:trash' className={`${blockName}-wrapper-bottom-image-remove-icon`} onClick={() => {
+                    <div className={`${blockName}-bottom-image-container`}>
+                        <img className={`${blockName}-bottom-image`} src={URL.createObjectURL(file)} alt='Selected file' />
+                        <Icon icon='vaadin:trash' className={`${blockName}-bottom-image-remove-icon`} onClick={() => {
                             setFile(null!);
 
                             Notification.show('File has been removed!', {
@@ -119,35 +122,12 @@ export default function Share({posted}: {posted?: () => void}){
                         }} />
                     </div> 
                 )}
-                <div className={`${blockName}-wrapper-bottom`}>
-                    <div className={`${blockName}-wrapper-bottom-options`}>
-                        <label htmlFor='post-file' className={`${blockName}-wrapper-bottom-options-item`}>
-                            <Icon style={{color: 'tomato'}} className={`${blockName}-wrapper-bottom-options-item-icon fa fa-photo-film`} />
-                            <span className={`${blockName}-wrapper-bottom-options-item-text`}>Photo or Video</span>
-                            {/* <Upload id='post-file' accept='image/*' max-files='1' onUploadBefore={(event) => {
-                                if (event.detail.file) {
-                                    setFile(event.detail.file);
-                                }
-                            }} /> */}
-
-                            {/* <Upload nodrop method='PUT' target='/api/fileupload' id='post-file' accept='image/*' max-files='1' maxFileSize={maxFileSizeInBytes}
-                                onUploadResponse={(event) => {
-                                    if (event.detail) {
-                                        Notification.show(event.detail.xhr.response);
-                                    }
-                                }}
-                                headers='{ 'X-API-KEY': '7f4306cb-bb25-4064-9475-1254c4eff6e5' }'
-                                onUploadBefore={(event) => {
-                                    if (event.detail.file) {
-                                        setFile(event.detail.file);
-                                    }
-                                }}
-                                
-                                onFileReject={(event) => {
-                                    Notification.show(event.detail.error);
-                                }}
-                            /> */}
-                            <input className={`${blockName}-wrapper-bottom-options-item-upload`} type='file' id='post-file' accept='.png,.jpeg,.jpg' onChange={(event) => {
+                <div className={`${blockName}-bottom`}>
+                    <div className={`${blockName}-bottom-options`}>
+                        <label htmlFor='post-file' className={`${blockName}-bottom-options-item`}>
+                            <Icon style={{color: 'tomato'}} className={`${blockName}-bottom-options-item-icon fa fa-photo-film`} />
+                            <span className={`${blockName}-bottom-options-item-text`}>Photo or Video</span>
+                            <input className={`${blockName}-bottom-options-item-upload`} type='file' id='post-file' accept='.png,.jpeg,.jpg' onChange={(event) => {
                                 if (event.target.files) {
                                     setFile(event.target.files[0]);
 
@@ -158,20 +138,20 @@ export default function Share({posted}: {posted?: () => void}){
                                 }
                             }} />
                         </label>
-                        <div className={`${blockName}-wrapper-bottom-options-item`}>
-                            <Icon style={{color: 'blue'}} className={`${blockName}-wrapper-bottom-options-item-icon fa fa-user-tag`} />
-                            <span className={`${blockName}-wrapper-bottom-options-item-text`}>Tag - WIP</span>
+                        <div className={`${blockName}-bottom-options-item`}>
+                            <Icon style={{color: 'blue'}} className={`${blockName}-bottom-options-item-icon fa fa-user-tag`} />
+                            <span className={`${blockName}-bottom-options-item-text`}>Tag - WIP</span>
                         </div>
-                        <div className={`${blockName}-wrapper-bottom-options-item`}>
-                            <Icon style={{color: 'green'}} className={`${blockName}-wrapper-bottom-options-item-icon fa fa-location-dot`} />
-                            <span className={`${blockName}-wrapper-bottom-options-item-text`}>Location - WIP</span>
+                        <div className={`${blockName}-bottom-options-item`}>
+                            <Icon style={{color: 'green'}} className={`${blockName}-bottom-options-item-icon fa fa-location-dot`} />
+                            <span className={`${blockName}-bottom-options-item-text`}>Location - WIP</span>
                         </div>
-                        <div className={`${blockName}-wrapper-bottom-options-item`}>
-                            <Icon style={{color: 'goldenrod'}} className={`${blockName}-wrapper-bottom-options-item-icon fa fa-smile`} />
-                            <span className={`${blockName}-wrapper-bottom-options-item-text`}>Feelings - WIP</span>
+                        <div className={`${blockName}-bottom-options-item`}>
+                            <Icon style={{color: 'goldenrod'}} className={`${blockName}-bottom-options-item-icon fa fa-smile`} />
+                            <span className={`${blockName}-bottom-options-item-text`}>Feelings - WIP</span>
                         </div>
                     </div>
-                    <Button theme='primary' onClick={(event) => submitHandler(event)} className={`${blockName}-wrapper-bottom-share-button`}>
+                    <Button theme='primary' onClick={submitHandler} className={`${blockName}-bottom-share-button`}>
                         Share
                     </Button>
                 </div>

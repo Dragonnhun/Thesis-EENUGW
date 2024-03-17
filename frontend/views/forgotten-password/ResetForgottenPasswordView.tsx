@@ -1,5 +1,4 @@
 import 'themes/intertwine/views/reset-forgotten-password-form.scss';
-import '@vaadin/icons';
 import ForgottenPasswordView from 'Frontend/views/forgotten-password/ForgottenPasswordView';
 import Pair from 'Frontend/generated/org/springframework/data/util/Pair';
 import { useEffect, useState } from 'react';

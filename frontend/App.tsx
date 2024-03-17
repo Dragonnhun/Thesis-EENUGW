@@ -8,19 +8,17 @@ export default function App() {
 
     return (
         <>
-            {
-                environment === 'DEVELOPMENT'
-                    ?
-                        <React.StrictMode>
-                            <AuthProvider>
-                                <RouterProvider router={router} />
-                            </AuthProvider>
-                        </React.StrictMode>
-                    :
-                        <AuthProvider>
-                            <RouterProvider router={router} />
-                        </AuthProvider>
-            }
+            {environment === 'DEVELOPMENT' ? (
+                <React.StrictMode>
+                    <AuthProvider>
+                        <RouterProvider router={router} />
+                    </AuthProvider>
+                </React.StrictMode>
+            ) : (
+                <AuthProvider>
+                    <RouterProvider router={router} />
+                </AuthProvider>
+            )}
         </>
     );
 }
