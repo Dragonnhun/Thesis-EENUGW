@@ -8,7 +8,8 @@ frontend/generated/
 vite.generated.ts
 
 # Contains secrets that shouldn’t go into the repository.
-config/secrets/
+# For now it should be commited for testing purposes.
+# config/secrets/
 
 # Logging does not need to be in the repository.
 logs/
