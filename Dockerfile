@@ -27,6 +27,8 @@ FROM eclipse-temurin:21-jdk-jammy
 
 WORKDIR /usr/src/application
 
+COPY frontend/assets /usr/src/application/frontend/assets
+
 COPY --from=build /temp/target/*.jar application.jar
 
 RUN useradd -s /bin/bash spring
