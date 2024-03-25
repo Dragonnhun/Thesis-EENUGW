@@ -149,15 +149,13 @@ export default function ProfileSettingsDialog(
     useEffect(() => {
         (async () => {
             if (state.user) {
-                setTimeout(async () => {
-                    const userProfile = await UserProfileEndpoint.getUserProfileByUserProfileId(state.user?.userProfileId!);
-                    setUserProfile(userProfile);
-                    
-                    read(userProfile);
-                    setDidSubmit(false);
+                const userProfile = await UserProfileEndpoint.getUserProfileByUserProfileId(state.user?.userProfileId!);
+                setUserProfile(userProfile);
+                
+                read(userProfile);
+                setDidSubmit(false);
 
-                    birthDateField.setValue(userProfile?.birthDateUtc?.split('T')[0] ?? '');
-                }, isLoginDialog ? 0 : 2000);
+                birthDateField.setValue(userProfile?.birthDateUtc?.split('T')[0] ?? '');
             }
         })();
     }, [state.user, didSubmit]);

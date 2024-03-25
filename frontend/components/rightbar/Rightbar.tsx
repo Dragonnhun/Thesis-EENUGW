@@ -52,7 +52,6 @@ export default function Rightbar({userProfile}: {userProfile?: UserProfile}) {
                 socket.current?.emit('getConnectedUsersForClient', state.user?.userProfileId!);
     
                 socket.current?.on('getConnectedUsersForClient', (users) => {
-                    //setOnlineUsers((Object.values(users).filter((userProfleId: string) => userProfile?.followingIds.includes(userProfleId))) ?? {});
                     setOnlineUsers(users);
                 });
             })();
@@ -117,7 +116,7 @@ export default function Rightbar({userProfile}: {userProfile?: UserProfile}) {
                         ) : <span>No friends have a birthday today.</span>}
                     </span>
                 </div>
-                <h4 className={`${blockName}-tile`}>Online Friends</h4>
+                <h4 className={`${blockName}-title`}>Online Friends</h4>
                 <ul className={`${blockName}-friend-list`}>
                     {onlineFriends.map((following) => (
                         <OnlineFriend key={following.id} userProfile={following} />

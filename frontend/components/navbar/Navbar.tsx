@@ -125,19 +125,19 @@ export default function Navbar() {
                     <Link to='/'>
                         <div className={`${blockname}-icon-item`}>
                             <Icon icon='vaadin:home' />
-                            {/* <span className='navbar-icon-badge'>1</span> */}
+                            <span className='navbar-icon-badge'>0</span>
                         </div>
                     </Link>
                     <Link to='/messenger'>
                         <div className={`${blockname}-icon-item`}>
                             <Icon icon='vaadin:chat' />
-                            {/* <span className='navbar-icon-badge'>2</span> */}
+                            <span className='navbar-icon-badge'>0</span>
                         </div>
                     </Link>
                     <div className={`${blockname}-icon-item`}>
                         <Icon icon='vaadin:bell' />
                         (WIP)
-                        {/* <span className='navbar-icon-badge'>1</span> */}
+                        <span className='navbar-icon-badge'>0</span>
                     </div>
                 </div>
                 <MenuBar
@@ -154,31 +154,33 @@ export default function Navbar() {
                         }
                     }} />
             </div>
-            <Dialog
-                headerTitle={'Search result'}
-                className={searchDialogBlockName}
-                draggable={false}
-                modeless={false}
-                opened={isSearchDialogOpened}
-                onOpenedChanged={(event) => {
-                    setIsSearchDialogOpened(event.detail.value);
-                }}
-                footerRenderer={() =>
-                    <Button className={`${searchDialogBlockName}-close-button`} onClick={closeSearchDialog} theme='primary'>Close</Button>
-                }>
-                <VerticalLayout className={`${searchDialogBlockName}-main-layout`} style={{ alignItems: 'stretch', minWidth: '50vh', maxWidth: '100vh' }}>
-                    <Icon icon='vaadin:close-small' className={`${searchDialogBlockName}-close-icon`} onClick={closeSearchDialog} />
-                    <VerticalLayout style={{ alignItems: 'stretch' }}>
-                        {searchResult.length > 0 ? searchResult.map((searchResultUserProfile) => (
-                            <ProfileSearchResult key={searchResultUserProfile.id} userProfile={searchResultUserProfile} closeSearchDialog={closeSearchDialog} />
-                        )) : <span>No profiles found</span>}
+            {isSearchDialogOpened &&
+                <Dialog
+                    headerTitle={'Search result'}
+                    className={searchDialogBlockName}
+                    draggable={false}
+                    modeless={false}
+                    opened={isSearchDialogOpened}
+                    onOpenedChanged={(event) => {
+                        setIsSearchDialogOpened(event.detail.value);
+                    }}
+                    footerRenderer={() =>
+                        <Button className={`${searchDialogBlockName}-close-button`} onClick={closeSearchDialog} theme='primary'>Close</Button>
+                    }>
+                    <VerticalLayout className={`${searchDialogBlockName}-main-layout`} style={{ alignItems: 'stretch', minWidth: '50vh', maxWidth: '100vh' }}>
+                        <Icon icon='vaadin:close-small' className={`${searchDialogBlockName}-close-icon`} onClick={closeSearchDialog} />
+                        <VerticalLayout style={{ alignItems: 'stretch' }}>
+                            {searchResult.length > 0 ? searchResult.map((searchResultUserProfile) => (
+                                <ProfileSearchResult key={searchResultUserProfile.id} userProfile={searchResultUserProfile} closeSearchDialog={closeSearchDialog} />
+                            )) : <span>No profiles found</span>}
+                        </VerticalLayout>
                     </VerticalLayout>
-                </VerticalLayout>
-            </Dialog>
-            <ProfileSettingsDialog
-                isDialogOpen={isProfileSettingsDialogOpen}
-                setIsDialogOpen={setIsProfileSettingsDialogOpen}
-                isLoginDialog={false} />
+                </Dialog>}
+            {isProfileSettingsDialogOpen &&
+                <ProfileSettingsDialog
+                    isDialogOpen={isProfileSettingsDialogOpen}
+                    setIsDialogOpen={setIsProfileSettingsDialogOpen}
+                    isLoginDialog={false} />}
         </>
     )
 }

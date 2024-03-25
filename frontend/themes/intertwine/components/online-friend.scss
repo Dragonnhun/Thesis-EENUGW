@@ -2,14 +2,6 @@
 
 .online-friend {
     &-list {
-        > a {
-            color: inherit;
-            
-            &:hover {
-                text-decoration: none;
-            }
-        }
-
         &-item {
             display: flex;
             align-items: center;

@@ -158,7 +158,7 @@ export default function Post(
                     <div className={`${blockName}-bottom-left`}>
                         {likeCount >= heartCount ? (
                             <img
-                                className={isLiked ? `${blockName}-bottom-left-like-icon active` : `${blockName}-botton-left-like-icon`}
+                                className={isLiked ? `${blockName}-bottom-left-like-icon active` : `${blockName}-bottom-left-like-icon`}
                                 src='images/like.png'
                                 onClick={() => reactionHandler(ReactionType.LIKE)} />
                         ) : (

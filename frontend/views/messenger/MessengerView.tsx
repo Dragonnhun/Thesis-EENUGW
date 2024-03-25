@@ -61,7 +61,6 @@ export default function MessengerView() {
             socket.current?.emit('connectUser', userProfile?.id);
 
             socket.current?.on('getConnectedUsers', (users) => {
-                //setOnlineUsers((Object.values(users).filter((userProfleId: string) => userProfile?.followingIds.includes(userProfleId))) ?? {});
                 setOnlineUsers(users);
             });
         })();

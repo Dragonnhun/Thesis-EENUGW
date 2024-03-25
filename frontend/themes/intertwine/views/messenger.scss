@@ -58,6 +58,7 @@
                         padding: 10px;
                         resize: none;
                         border: 1px solid $primary-color;
+                        border-radius: 10px;
 
                         &:focus {
                             outline: none;
@@ -72,6 +73,7 @@
                             height: 40px;
                             border: none;
                             border-radius: 5px;
+                            cursor: pointer;
                         }
                     }
                 }
