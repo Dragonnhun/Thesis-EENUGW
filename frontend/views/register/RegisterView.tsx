@@ -32,8 +32,6 @@ export default function RegisterView() {
         })();
     }, []);
 
-    if (url || state.user) return <Navigate to={ new URL(url ?? '/', document.baseURI).pathname } />;
-
     if (registrationToken) {
         useEffect(() => {
             (async () => {
@@ -71,7 +69,7 @@ export default function RegisterView() {
                     });
                 }
             })();
-        }, [registrationToken]);
+        }, []);
     }
 
     const { model, field, read, submit } = useForm(UserModel, {
@@ -132,6 +130,8 @@ export default function RegisterView() {
             }
         },
     });
+
+    if (url || state.user) return <Navigate to={ new URL(url ?? '/', document.baseURI).pathname } />;
 
     return (
         <>
