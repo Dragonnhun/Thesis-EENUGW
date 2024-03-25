@@ -7,6 +7,7 @@ import { Socket, io } from 'socket.io-client';
 
 export default function LogoutView() {
     const blockName = 'logout';
+    
     const { state, logout } = useAuth();
     const navigate = useNavigate();
     const socket = useRef<Socket>();

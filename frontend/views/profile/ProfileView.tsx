@@ -10,6 +10,7 @@ import { useParams } from 'react-router';
 
 export default function ProfileView() {
     const assetsFolder = import.meta.env.VITE_ASSETS_FOLDER;
+    const blockName = 'profile';
     const params = useParams();
     const [userProfile, setUserProfile] = useState<UserProfile>();
 
@@ -22,26 +23,26 @@ export default function ProfileView() {
 
     return (
         <>
-            <div className='profile-container'>
+            <div className={`${blockName}-container`}>
                 <Sidebar />
-                <div className='profile-right'>
-                    <div className='profile-right-top'>
-                        <div className='profile-right-top-cover'>
+                <div className={`${blockName}-right`}>
+                    <div className={`${blockName}-right-top`}>
+                        <div className={`${blockName}-right-top-cover`}>
                             <img 
-                                className='profile-right-top-cover-image'
+                                className={`${blockName}-right-top-cover-image`}
                                 src={userProfile?.coverPicturePath ? assetsFolder + userProfile?.coverPicturePath : 'images/no-cover-picture.png'}
                                 alt='profile-cover-image' />
                             <Avatar
-                                className='profile-right-top-cover-avatar'
+                                className={`${blockName}-right-top-cover-avatar`}
                                 img={userProfile?.profilePicturePath ? assetsFolder + userProfile?.profilePicturePath : 'images/no-profile-picture.png'}
                                 name='profile-image' />
                         </div>
-                        <div className='profile-right-top-info'>
-                            <h4 className='profile-right-top-info-name'>{userProfile?.fullName}</h4>
-                            <span className='profile-right-top-info-description'>{userProfile?.description}</span>
+                        <div className={`${blockName}-right-top-info`}>
+                            <h4 className={`${blockName}-right-top-info-name`}>{userProfile?.fullName}</h4>
+                            <span className={`${blockName}-right-top-info-description`}>{userProfile?.description}</span>
                         </div>
                     </div>
-                    <div className='profile-right-bottom'>
+                    <div className={`${blockName}-right-bottom`}>
                     {userProfile && (
                         <>
                             <Feed profileDisplayId={userProfile?.profileDisplayId} />

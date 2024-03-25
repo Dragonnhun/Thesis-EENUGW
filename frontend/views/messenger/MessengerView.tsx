@@ -7,13 +7,17 @@ import PrivateConversation from 'Frontend/generated/hu/eenugw/privatemessaging/m
 import PrivateMessage from 'Frontend/generated/hu/eenugw/privatemessaging/models/PrivateMessage';
 import PrivateMessageModel from 'Frontend/generated/hu/eenugw/privatemessaging/models/PrivateMessageModel';
 import UUIDHelpers from 'Frontend/helpers/uuidHelpers';
+import LogType from 'Frontend/generated/hu/eenugw/core/constants/LogType';
 import { Button } from '@hilla/react-components/Button.js';
 import { useAuth } from 'Frontend/util/auth';
 import { useEffect, useRef, useState } from 'react';
-import { PrivateConversationEndpoint, PrivateMessageEndpoint, UserProfileEndpoint } from 'Frontend/generated/endpoints';
+import { LoggerEndpoint, PrivateConversationEndpoint, PrivateMessageEndpoint, UserProfileEndpoint } from 'Frontend/generated/endpoints';
 import { Socket, io } from 'socket.io-client';
 
 export default function MessengerView() {
+    const blockName = 'messenger';
+    const chatBlockName = 'chat';
+
     const { state } = useAuth();
     const [userProfile, setUserProfile] = useState<UserProfile>();
     const [currentPrivateConversation, setCurrentPrivateConversation] = useState<PrivateConversation>();
@@ -57,7 +61,6 @@ export default function MessengerView() {
             socket.current?.emit('connectUser', userProfile?.id);
 
             socket.current?.on('getConnectedUsers', (users) => {
-                //setOnlineUsers((Object.values(users).filter((userProfleId: string) => userProfile?.followingIds.includes(userProfleId))) ?? {});
                 setOnlineUsers(users);
             });
         })();
@@ -70,6 +73,7 @@ export default function MessengerView() {
                 setUserProfile(userProfile);   
             } catch (error) {
                 console.error(error);
+                await LoggerEndpoint.log((error as Error).stack!, LogType.ERROR);
             }
         })();
     }, [state]);
@@ -91,6 +95,7 @@ export default function MessengerView() {
                 setPrivateConversations(privateConversations);
             } catch (error) {
                 console.error(error);
+                await LoggerEndpoint.log((error as Error).stack!, LogType.ERROR);
             }
         })();
     }, [userProfile, searchValue]);
@@ -103,6 +108,7 @@ export default function MessengerView() {
                     .sort((privateMessageA, privateMessageB) => new Date(privateMessageA.creationDateUtc).getTime() - new Date(privateMessageB.creationDateUtc).getTime()));
             } catch (error) {
                 console.error(error);
+                await LoggerEndpoint.log((error as Error).stack!, LogType.ERROR);
             }
         })();
     }, [currentPrivateConversation]);
@@ -118,6 +124,7 @@ export default function MessengerView() {
                 setFollowings(followings);
             } catch (error) {
                 console.error(error);
+                await LoggerEndpoint.log((error as Error).stack!, LogType.ERROR);
             }
         })();
     }, [userProfile]);
@@ -129,11 +136,12 @@ export default function MessengerView() {
                 setOnlineFriends(onlineFriends);
             } catch (error) {
                 console.error(error);
+                await LoggerEndpoint.log((error as Error).stack!, LogType.ERROR);
             }
         })();
     }, [followings, onlineUsers]);
 
-    const handlePrivateMessageSubmit = async (event: { preventDefault: () => void; }) => {
+    const privateMessageSubmitHandler = async (event: { preventDefault: () => void; }) => {
         event.preventDefault();
 
         if (!newPrivateMessage) {
@@ -160,6 +168,7 @@ export default function MessengerView() {
             setNewPrivateMessage('');
         } catch (error) {
             console.error(error);
+            await LoggerEndpoint.log((error as Error).stack!, LogType.ERROR);
         }
     }
 
@@ -168,10 +177,10 @@ export default function MessengerView() {
     }, [typingTimeout]);
 
     return (
-        <div className='messenger'>
-            <div className="chat-menu">
-                <div className="chat-menu-wrapper">
-                    <input type="text" placeholder='Search for friends' className="chat-menu-search" onChange={event => {
+        <div className={blockName}>
+            <div className={`${chatBlockName}-menu`}>
+                <div className={`${chatBlockName}-menu-wrapper`}>
+                    <input type='text' placeholder='Search for friends' className={`${chatBlockName}-menu-search`} onChange={event => {
                         clearTimeout(typingTimeout!);
                         const value = event.target.value;
                         setTypingTimeout(setTimeout(() => setSearchValue(value), 500));
@@ -183,40 +192,37 @@ export default function MessengerView() {
                     )}
                 </div>
             </div>
-            <div className="chat-box">
-                <div className="chat-box-wrapper">
-                    {
-                        currentPrivateConversation ? (
-                            <>
-                                <div className="chat-box-top">
-                                    {currentPrivateMessages.map((privateMessage) =>
-                                        <div ref={scrollRef} key={privateMessage?.id}>
-                                            <Message key={privateMessage?.id} privateMessage={privateMessage} own={privateMessage?.senderUserProfileId == userProfile?.id} />
-                                        </div>
-                                    )}
-                                </div>
-                                <div className="chat-box-bottom">
-                                    <textarea
-                                        className='chat-box-bottom-message-box'
-                                        placeholder='Write something...'
-                                        onChange={(event) => setNewPrivateMessage(event.target.value)}
-                                        value={newPrivateMessage} />
-                                    <Button className='chat-box-bottom-message-send-button' theme='primary' onClick={handlePrivateMessageSubmit}>
-                                        Send
-                                    </Button>
-                                </div>
-                            </>
-                        )
-                        : (
-                            <span className="chat-box-no-private-conversation-selected">
-                                Open a conversation to start private messaging.
-                            </span>
-                        )
-                    }
+            <div className={`${chatBlockName}-box`}>
+                <div className={`${chatBlockName}-box-wrapper`}>
+                    {currentPrivateConversation ? (
+                        <>
+                            <div className={`${chatBlockName}-box-top`}>
+                                {currentPrivateMessages.map((privateMessage) =>
+                                    <div ref={scrollRef} key={privateMessage?.id}>
+                                        <Message key={privateMessage?.id} privateMessage={privateMessage} own={privateMessage?.senderUserProfileId == userProfile?.id} />
+                                    </div>
+                                )}
+                            </div>
+                            <div className={`${chatBlockName}-box-bottom`}>
+                                <textarea
+                                    className={`${chatBlockName}-box-bottom-message-box`}
+                                    placeholder='Write something...'
+                                    onChange={(event) => setNewPrivateMessage(event.target.value)}
+                                    value={newPrivateMessage} />
+                                <Button className={`${chatBlockName}-box-bottom-message-send-button`} theme='primary' onClick={privateMessageSubmitHandler}>
+                                    Send
+                                </Button>
+                            </div>
+                        </>
+                    ) : (
+                        <span className={`${chatBlockName}-box-no-private-conversation-selected`}>
+                            Open a conversation to start private messaging.
+                        </span>
+                    )}
                 </div>
             </div>
-            <div className="chat-online-friends">
-                <div className="chat-online-friends-wrapper">
+            <div className={`${chatBlockName}-online-friends`}>
+                <div className={`${chatBlockName}-online-friends-wrapper`}>
                     {onlineFriends.map((onlineFriend) => 
                         <ChatOnlineFriend key={onlineFriend.id} currentUserProfile={userProfile} friendUserProfile={onlineFriend} setCurrentPrivateConversation={setCurrentPrivateConversation} />
                     )}

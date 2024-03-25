@@ -1,15 +1,7 @@
 @import "../variables/variables.scss";
 
-.rightbar {
-    &-friend-list {
-        > a {
-            color: inherit;
-            
-            &:hover {
-                text-decoration: none;
-            }
-        }
-
+.online-friend {
+    &-list {
         &-item {
             display: flex;
             align-items: center;

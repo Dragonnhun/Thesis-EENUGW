@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 export default function SidebarFriend({userProfile}: {userProfile?: UserProfile}) {
     const assetsFolder = import.meta.env.VITE_ASSETS_FOLDER;
-    const blockName = 'sidebar-friend-list-item';
+    const blockName = 'sidebar-friend';
 
     return (
         <Link to={`/profile/${userProfile?.profileDisplayId}`}>

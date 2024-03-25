@@ -68,7 +68,7 @@ export default function ForgottenPasswordView() {
                 Notification.show(
                     'Your request to reset your password has been successful! ' +
                     'You will not be able to log in to the site until your password is renewed. ' +
-                    'Please, check your inbox and continue with the steps specified in the E-mail!' +
+                    'Please, check your inbox and continue with the steps specified in the E-mail! ' +
                     'You will be redirected to the log in page in 30 seconds.', {
                     position: 'top-center',
                     duration: 30000,

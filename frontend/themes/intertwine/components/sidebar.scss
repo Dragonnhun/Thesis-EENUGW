@@ -60,28 +60,6 @@
         list-style: none;
         color: $black-color;
 
-        &-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            cursor: pointer;
-
-            &-avatar {
-                width: 32px;
-                height: 32px;
-                border-radius: 50%;
-                object-fit: cover;
-                margin-right: 10px;
-                cursor: pointer;
-            }
-
-            &:hover {
-                .sidebar-friend-list-item-name {
-                    color: $primary-color;
-                }
-            }
-        }
-
         > a {
             color: inherit;
             

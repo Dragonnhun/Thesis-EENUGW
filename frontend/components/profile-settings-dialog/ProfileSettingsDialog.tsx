@@ -7,9 +7,10 @@ import ImageType from 'Frontend/generated/hu/eenugw/core/constants/ImageType';
 import Pair from 'Frontend/generated/org/springframework/data/util/Pair';
 import ImageModel from 'Frontend/generated/hu/eenugw/core/models/ImageModel';
 import User from 'Frontend/generated/hu/eenugw/usermanagement/models/User';
+import LogType from 'Frontend/generated/hu/eenugw/core/constants/LogType';
 import { useAuth } from 'Frontend/util/auth';
 import { useEffect, useRef, useState } from 'react';
-import { FileEndpoint, SiteEndpoint, UserEndpoint, UserProfileEndpoint } from 'Frontend/generated/endpoints';
+import { FileEndpoint, LoggerEndpoint, SiteEndpoint, UserEndpoint, UserProfileEndpoint } from 'Frontend/generated/endpoints';
 import { useForm, useFormPart } from '@hilla/react-form';
 import { TextField } from '@hilla/react-components/TextField.js';
 import { Icon } from '@hilla/react-components/Icon.js';
@@ -26,6 +27,8 @@ import { Button } from '@hilla/react-components/Button.js';
 export default function ProfileSettingsDialog(
     {isDialogOpen, setIsDialogOpen, isLoginDialog}:
         {isDialogOpen: boolean, setIsDialogOpen: (value: boolean) => void, isLoginDialog: boolean}) {
+    const blockName = 'profile-settings-dialog';
+
     const { state } = useAuth();
     const [userProfile, setUserProfile] = useState<UserProfile | undefined>();
     const [profileImage, setProfileImage] = useState<File>(null!);
@@ -113,11 +116,12 @@ export default function ProfileSettingsDialog(
                 }
 
                 console.error(error);
+                await LoggerEndpoint.log((error as Error).stack!, LogType.ERROR);
             }                
         },
     });
 
-    const handleCancel = () => {
+    const cancelHandler = () => {
         if (isLoginDialog) {
             setIsDialogOpen(false);
 
@@ -145,15 +149,13 @@ export default function ProfileSettingsDialog(
     useEffect(() => {
         (async () => {
             if (state.user) {
-                setTimeout(async () => {
-                    const userProfile = await UserProfileEndpoint.getUserProfileByUserProfileId(state.user?.userProfileId!);
-                    setUserProfile(userProfile);
-                    
-                    read(userProfile);
-                    setDidSubmit(false);
+                const userProfile = await UserProfileEndpoint.getUserProfileByUserProfileId(state.user?.userProfileId!);
+                setUserProfile(userProfile);
+                
+                read(userProfile);
+                setDidSubmit(false);
 
-                    birthDateField.setValue(userProfile?.birthDateUtc?.split('T')[0] ?? '');
-                }, isLoginDialog ? 0 : 2000);
+                birthDateField.setValue(userProfile?.birthDateUtc?.split('T')[0] ?? '');
             }
         })();
     }, [state.user, didSubmit]);
@@ -161,7 +163,7 @@ export default function ProfileSettingsDialog(
     return (
         <Dialog
             headerTitle='Profile Settings'
-            className='profile-settings-dialog'
+            className={blockName}
             draggable={false}
             modeless={false}
             opened={isDialogOpen}
@@ -170,14 +172,18 @@ export default function ProfileSettingsDialog(
             }}
             footerRenderer={() =>
                 <>
-                    <Button className='profile-settings-dialog-close-button mr-auto' theme='tertiary' onClick={handleCancel}>Close</Button>
-                    <Button className='profile-settings-dialog-save-button' theme='primary' onClick={(event) => {
+                    <Button className={`${blockName}-close-button mr-auto`} theme='tertiary' onClick={cancelHandler}>
+                        Close
+                    </Button>
+                    <Button className={`${blockName}-save-button`} theme='primary' onClick={(event) => {
                         event.stopPropagation();
                         submit();
-                    }}>Save</Button>
+                    }}>
+                        Save
+                    </Button>
                 </>
             }>
-            <Icon icon='vaadin:close-small' className='profile-settings-dialog-close-icon' onClick={handleCancel} />
+            <Icon icon='vaadin:close-small' className={`${blockName}-close-icon`} onClick={cancelHandler} />
             {isLoginDialog && <h6 className='pb-m'>Welcome to {siteName}! Before your first log in, please, fill in the form below!</h6>}
             <h6>Personal Information</h6>
             <TextField

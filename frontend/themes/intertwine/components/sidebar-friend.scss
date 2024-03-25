@@ -1,4 +1,6 @@
-.sidebar-friend-list-item {
+@import "../variables/variables.scss";
+
+.sidebar-friend {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
@@ -10,5 +12,12 @@
         border-radius: 50%;
         object-fit: cover;
         margin-right: 10px;
+        cursor: pointer;
+    }
+
+    &:hover {
+        .sidebar-friend-name {
+            color: $primary-color;
+        }
     }
 }

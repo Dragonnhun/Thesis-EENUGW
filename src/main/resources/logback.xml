@@ -1,6 +1,7 @@
 <configuration>
     <conversionRule conversionWord="pid" converterClass="hu.eenugw.core.helpers.ProcessIdConverter" />
 
+    <!-- Console logging. -->
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
     </root>
@@ -11,12 +12,73 @@
         </encoder>
     </appender>
 
+    <!-- Socket IO logging. -->
     <logger name="hu.eenugw.socketio.configuration.SocketIOConfiguration" level="INFO">
         <appender-ref ref="SOCKET-IO"/>
     </logger>
 
     <appender name="SOCKET-IO" class="ch.qos.logback.core.FileAppender">
         <file>logs/socket-io.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %pid --- [%t] %-40.40logger{39} : %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Debug logging. -->
+    <logger name="hu.eenugw.core.services.LoggerService" level="DEBUG">
+        <appender-ref ref="DEBUG"/>
+    </logger>
+
+    <appender name="DEBUG" class="ch.qos.logback.core.FileAppender">
+        <file>logs/debug.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %pid --- [%t] %-40.40logger{39} : %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Error logging. -->
+    <logger name="hu.eenugw.core.services.LoggerService" level="ERROR">
+        <appender-ref ref="ERROR"/>
+    </logger>
+
+    <appender name="ERROR" class="ch.qos.logback.core.FileAppender">
+        <file>logs/error.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %pid --- [%t] %-40.40logger{39} : %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Info logging. -->
+    <logger name="hu.eenugw.core.services.LoggerService" level="INFO">
+        <appender-ref ref="INFO"/>
+    </logger>
+
+    <appender name="INFO" class="ch.qos.logback.core.FileAppender">
+        <file>logs/info.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %pid --- [%t] %-40.40logger{39} : %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Trace logging. -->
+    <logger name="hu.eenugw.core.services.LoggerService" level="TRACE">
+        <appender-ref ref="TRACE"/>
+    </logger>
+
+    <appender name="TRACE" class="ch.qos.logback.core.FileAppender">
+        <file>logs/trace.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %pid --- [%t] %-40.40logger{39} : %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Warn logging. -->
+    <logger name="hu.eenugw.core.services.LoggerService" level="WARN">
+        <appender-ref ref="WARN"/>
+    </logger>
+
+    <appender name="WARN" class="ch.qos.logback.core.FileAppender">
+        <file>logs/warn.log</file>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %pid --- [%t] %-40.40logger{39} : %m%n</pattern>
         </encoder>

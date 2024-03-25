@@ -4,18 +4,21 @@ import UserProfilePostComment from 'Frontend/generated/hu/eenugw/userprofilemana
 import Pair from 'Frontend/generated/org/springframework/data/util/Pair';
 import ReactionType from 'Frontend/generated/hu/eenugw/userprofilemanagement/constants/ReactionType';
 import MenuBarHelpers from 'Frontend/helpers/menuBarHelpers';
+import LogType from 'Frontend/generated/hu/eenugw/core/constants/LogType';
 import { DateTime } from 'luxon';
 import { Avatar } from '@hilla/react-components/Avatar.js';
 import { TDate, format } from 'timeago.js';
 import { useEffect, useState } from 'react';
 import { useAuth } from 'Frontend/util/auth';
-import { UserProfilePostCommentEndpoint } from 'Frontend/generated/endpoints';
+import { LoggerEndpoint, UserProfilePostCommentEndpoint } from 'Frontend/generated/endpoints';
 import { Notification } from '@hilla/react-components/Notification.js';
 import { MenuBar } from '@hilla/react-components/MenuBar.js';
 import { Icon } from '@hilla/react-components/Icon.js';
 import { Link } from 'react-router-dom';
 
-export default function Comment({userProfileAndPostComment, setDidDeleteComment}: {userProfileAndPostComment?: Pair, setDidDeleteComment: (wasCommentDeleted: boolean) => void}) {
+export default function Comment(
+    {userProfileAndPostComment, setDidDeleteComment}:
+        {userProfileAndPostComment?: Pair, setDidDeleteComment: (wasCommentDeleted: boolean) => void}) {
     const assetsFolder = import.meta.env.VITE_ASSETS_FOLDER;
     const blockName = 'comment';
     const reactionBlockName = `${blockName}-reaction`;
@@ -82,13 +85,19 @@ export default function Comment({userProfileAndPostComment, setDidDeleteComment}
             }
         } catch (error) {
             console.error(error);
+            await LoggerEndpoint.log((error as Error).stack!, LogType.ERROR);
         }
     }
 
     const deleteCommentHandler = async (userProfilePostCommentId: string) => {
-        const result = await UserProfilePostCommentEndpoint.deleteUserProfilePostCommentByUserProfilePostCommentId(userProfilePostCommentId);
-        if (result) {
-            setDidDeleteComment(true);
+        try {
+            const result = await UserProfilePostCommentEndpoint.deleteUserProfilePostCommentByUserProfilePostCommentId(userProfilePostCommentId);
+            if (result) {
+                setDidDeleteComment(true);
+            }   
+        } catch (error) {
+            console.error(error);
+            await LoggerEndpoint.log((error as Error).stack!, LogType.ERROR);
         }
     }
 
@@ -113,27 +122,23 @@ export default function Comment({userProfileAndPostComment, setDidDeleteComment}
                             <img
                                 className={isLiked ? `${reactionBlockName}-like-icon active` : `${reactionBlockName}-like-icon`}
                                 src='images/like.png'
-                                onClick={() => reactionHandler(ReactionType.LIKE)}
-                            />
+                                onClick={() => reactionHandler(ReactionType.LIKE)} />
                         ) : (
                             <img
                                 className={isHearted ? `${reactionBlockName}-heart-icon active` : `${reactionBlockName}-heart-icon`}
                                 src='images/heart.png'
-                                onClick={() => reactionHandler(ReactionType.HEART)}
-                            />
+                                onClick={() => reactionHandler(ReactionType.HEART)} />
                         )}
                         {likeCount >= heartCount ? (
                             <img
                                 className={isHearted ? `${reactionBlockName}-heart-icon active` : `${reactionBlockName}-heart-icon`}
                                 src='images/heart.png'
-                                onClick={() => reactionHandler(ReactionType.HEART)}
-                            />
+                                onClick={() => reactionHandler(ReactionType.HEART)} />
                         ) : (
                             <img
                                 className={isLiked ? `${reactionBlockName}-like-icon active` : `${reactionBlockName}-like-icon`}
                                 src='images/like.png'
-                                onClick={() => reactionHandler(ReactionType.LIKE)}
-                            />
+                                onClick={() => reactionHandler(ReactionType.LIKE)} />
                         )}
                         <span className={`${reactionBlockName}-like-counter`}>{likeCount + heartCount} {likeCount + heartCount <= 1 ? 'person likes it' : 'people like it'}</span>
                     </div>
@@ -141,12 +146,12 @@ export default function Comment({userProfileAndPostComment, setDidDeleteComment}
                 <span className={`${blockName}-date`}>{format(creationDateLocal as TDate)}</span>
                 {state.user?.userProfileId === userProfilePostComment?.userProfileId && (
                     <MenuBar
-                        className={`${blockName}-details-menu-bar`}
+                        className={`${detailsBlockName}-menu-bar`}
                         items={
                             [
                                 {
                                     component: MenuBarHelpers.renderMenuComponent(
-                                        <Icon className={`${blockName}-details-menu-bar-icon fa fa-ellipsis-v`} />
+                                        <Icon className={`${detailsBlockName}-menu-bar-icon fa fa-ellipsis-v`} />
                                     ),
                                     children: [
                                         {
@@ -162,7 +167,7 @@ export default function Comment({userProfileAndPostComment, setDidDeleteComment}
                                 deleteCommentHandler(userProfilePostComment?.id!);
                             }
                         }} />
-                    )}
+                )}
             </div>
         </>
     )
