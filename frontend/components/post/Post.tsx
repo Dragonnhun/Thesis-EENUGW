@@ -171,7 +171,7 @@ export default function Post(
                                         key={index}
                                         value={option}
                                         label={option}
-                                        checked={userProfilePostPollReaction?.reaction === option ?? false}
+                                        checked={userProfilePostPollReaction?.reaction === option}
                                         onClick={async () => {
                                             const result = await UserProfilePostEndpoint.votePoll(userProfilePost?.id!, state.user?.userProfileId!, option);
                                             if (result) {

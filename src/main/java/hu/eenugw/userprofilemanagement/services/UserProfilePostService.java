@@ -183,7 +183,17 @@ public class UserProfilePostService {
             return false;
         }
 
-        _userProfilePostRepository.delete(optionalUserProfilePost.get());
+        var userProfilePost = optionalUserProfilePost.get();
+
+        if (userProfilePost.getPostType() == PostType.POLL || userProfilePost.getPostType() == PostType.EVENT) {
+            var userProfilePostPollReactions = userProfilePost.getUserProfilePostPollReactions();
+
+            if (!userProfilePostPollReactions.isEmpty()) {
+                _userProfilePostPollReactionRepository.deleteAll(userProfilePostPollReactions);
+            }
+        }
+
+        _userProfilePostRepository.delete(userProfilePost);
 
         return true;
     }
