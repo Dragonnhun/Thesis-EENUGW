@@ -4,9 +4,11 @@ import java.time.Instant;
 import java.util.List;
 
 import hu.eenugw.core.helpers.InstantConverter;
+import hu.eenugw.userprofilemanagement.constants.PostType;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Convert;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -44,12 +46,17 @@ public class UserProfilePostEntity {
     private int version;
 
     @Size(max = 1000)
-    public String description;
+    private String description;
 
-    public String photoPath;
+    private String photoPath;
 
     @Convert(converter = InstantConverter.class)
-    public Instant creationDateUtc;
+    private Instant creationDateUtc;
+
+    private PostType postType;
+
+    @ElementCollection
+    private List<String> pollOptions;
 
     @Nullable
     @ManyToOne(
@@ -85,4 +92,14 @@ public class UserProfilePostEntity {
         joinColumns = @JoinColumn(name = "user_profile_post_id"),
         inverseJoinColumns = @JoinColumn(name = "user_profile_id"))
     private List<UserProfileEntity> userProfileHearts;
+
+    @Nullable
+    @ManyToMany(
+        targetEntity = UserProfilePostPollReactionEntity.class,
+        fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "user_profile_post_poll_user_profile_reactions",
+        joinColumns = @JoinColumn(name = "user_profile_post_id"),
+        inverseJoinColumns = @JoinColumn(name = "user_profile_post_poll_reaction_id"))
+    private List<UserProfilePostPollReactionEntity> userProfilePostPollReactions;
 }

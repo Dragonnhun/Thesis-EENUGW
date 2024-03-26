@@ -10,6 +10,7 @@ import org.springframework.data.util.Pair;
 import dev.hilla.Endpoint;
 import hu.eenugw.userprofilemanagement.constants.ReactionType;
 import hu.eenugw.userprofilemanagement.models.UserProfilePost;
+import hu.eenugw.userprofilemanagement.models.UserProfilePostPollReaction;
 import hu.eenugw.userprofilemanagement.services.UserProfilePostService;
 import jakarta.annotation.security.RolesAllowed;
 
@@ -74,5 +75,23 @@ public class UserProfilePostEndpoint {
         }
 
         return _userProfilePostService.deleteUserProfilePostByUserProfilePostId(userProfilePostId);
+    }
+
+    public Optional<UserProfilePostPollReaction> votePoll(String userProfilePostId, String userProfileId, String pollOption) {
+        return _userProfilePostService
+            .votePoll(userProfilePostId, userProfileId, pollOption)
+            .map(_userProfilePostService::convertUserProfilePostPollReactionEntityToModel);
+    }
+
+    public Optional<UserProfilePostPollReaction> getPollReactionByUserProfilePostPollReactionId(String userProfilePostPollReactionId) {
+        return _userProfilePostService
+            .getUserProfilePostPollReactionByUserProfilePostPollReactionId(userProfilePostPollReactionId)
+            .map(_userProfilePostService::convertUserProfilePostPollReactionEntityToModel);
+    }
+
+    public Optional<UserProfilePostPollReaction> getPollReactionByUserProfilePostIdAndUserProfileId(String userProfilePostId, String userProfileId) {
+        return _userProfilePostService
+            .getUserProfilePostPollReactionByUserProfilePostIdAndUserProfileId(userProfilePostId, userProfileId)
+            .map(_userProfilePostService::convertUserProfilePostPollReactionEntityToModel);
     }
 }

@@ -45,7 +45,7 @@ public class UserProfilePostCommentEntity {
     private String comment;
 
     @Convert(converter = InstantConverter.class)
-    public Instant creationDateUtc;
+    private Instant creationDateUtc;
 
     @Nullable
     @ManyToMany(

@@ -6,6 +6,9 @@ import UserProfilePost from 'Frontend/generated/hu/eenugw/userprofilemanagement/
 import UserProfilePostModel from 'Frontend/generated/hu/eenugw/userprofilemanagement/models/UserProfilePostModel';
 import Pair from 'Frontend/generated/org/springframework/data/util/Pair';
 import LogType from 'Frontend/generated/hu/eenugw/core/constants/LogType';
+import PostType from 'Frontend/generated/hu/eenugw/userprofilemanagement/constants/PostType';
+import { RadioButton } from '@hilla/react-components/RadioButton.js';
+import { RadioGroup } from '@hilla/react-components/RadioGroup.js';
 import { Notification } from '@hilla/react-components/Notification.js';
 import { Avatar } from '@hilla/react-components/Avatar.js';
 import { Icon } from '@hilla/react-components/Icon.js';
@@ -15,6 +18,7 @@ import { useEffect, useRef, useState } from 'react';
 import { FileEndpoint, LoggerEndpoint, UserProfileEndpoint, UserProfilePostEndpoint } from 'Frontend/generated/endpoints';
 import { readAsDataURL } from 'promise-file-reader';
 import { useNavigate, useParams } from 'react-router-dom';
+import { TextField, TextFieldElement } from '@hilla/react-components/TextField.js';
 
 export default function Share({posted}: {posted?: () => void}){
     const assetsFolder = import.meta.env.VITE_ASSETS_FOLDER;
@@ -23,11 +27,15 @@ export default function Share({posted}: {posted?: () => void}){
     const { state } = useAuth();
     const [userProfile, setUserProfile] = useState<UserProfile>();
     const [file, setFile] = useState<File>(null!);
+    const [postType, setPostType] = useState<PostType>(PostType.TEXT);
+    const [pollOptions, setPollOptions] = useState<string[]>([]);
 
     const description = useRef<HTMLTextAreaElement>(undefined!);
 
     const navigate = useNavigate();
     const params = useParams();
+
+    const pollOptionRef = useRef<TextFieldElement>(undefined!);
 
     useEffect(() => {
         (async () => {
@@ -52,6 +60,12 @@ export default function Share({posted}: {posted?: () => void}){
 
                     description.current.value = '';
                     setFile(null!);
+
+                    if (postType === PostType.POLL || postType === PostType.EVENT) {
+                        setPostType(PostType.TEXT);
+                        pollOptionRef.current.value = '';
+                        pollOptions.splice(0, pollOptions.length);
+                    }
                 } else {
                     navigate(new URL(`profile/${userProfile?.profileDisplayId}`, document.baseURI).pathname);
                 }
@@ -71,6 +85,17 @@ export default function Share({posted}: {posted?: () => void}){
 
         post.description = description.current?.value!;
         post.userProfileId = userProfile?.id!;
+        post.postType = postType;
+
+        if (postType === PostType.POLL) {
+            if (pollOptions.length > 1) {
+                post.pollOptions = pollOptions;
+            } else {
+                post.postType = PostType.TEXT;
+            }
+        } else if (postType === PostType.EVENT) {
+            post.pollOptions = ['Going', 'Interested', 'Not Going'];
+        }
 
         if (file) {
             try {
@@ -107,6 +132,34 @@ export default function Share({posted}: {posted?: () => void}){
                         img={userProfile?.profilePicturePath ? assetsFolder + userProfile?.profilePicturePath : 'images/no-profile-picture.png'}
                         name={userProfile?.fullName} />
                     <textarea ref={description} className={`${blockName}-top-input`} placeholder={`What's on your mind ${userProfile?.firstName}?`} />
+                    {postType === PostType.POLL && (
+                        <>
+                            <RadioGroup label='Please choose an answer!' theme='vertical'>
+                                {pollOptions.map((option, index) => (
+                                    <RadioButton key={index} value={option} label={option} />
+                                ))}
+                                <TextField ref={pollOptionRef} className={`${blockName}-top-poll-add-option`} placeholder='Add option'>
+                                    <Icon className={`${blockName}-top-poll-add-option-icon`} icon={'vaadin:question'} slot='prefix' />
+                                    <Icon className={`${blockName}-top-poll-add-option-icon ${blockName}-top-poll-add-option-icon-check`} icon={'vaadin:check'} slot='suffix' onClick={() => {
+                                        if (pollOptionRef.current?.value === '' || pollOptions.includes(pollOptionRef.current?.value ?? '')) return;
+
+                                        setPollOptions([...pollOptions, pollOptionRef.current?.value]);
+
+                                        pollOptionRef.current.value = '';
+                                    }} />
+                                </TextField>
+                            </RadioGroup>
+                        </>
+                    )}
+                    {postType === PostType.EVENT && (
+                        <>
+                            <RadioGroup label='Please choose an answer!' theme='vertical'>
+                                <RadioButton value='Going' label='Going' />
+                                <RadioButton value='Interested' label='Interested' />
+                                <RadioButton value='Not Going' label='Not Going' />
+                            </RadioGroup>
+                        </>
+                    )}
                 </div>
                 <hr className={`${blockName}-line`} />
                 {file && (
@@ -138,17 +191,25 @@ export default function Share({posted}: {posted?: () => void}){
                                 }
                             }} />
                         </label>
-                        <div className={`${blockName}-bottom-options-item`}>
-                            <Icon style={{color: 'blue'}} className={`${blockName}-bottom-options-item-icon fa fa-user-tag`} />
-                            <span className={`${blockName}-bottom-options-item-text`}>Tag - WIP</span>
+                        <div className={`${blockName}-bottom-options-item`} onClick={() => {
+                            if (postType === PostType.POLL) {
+                                setPostType(PostType.TEXT);
+                            } else {
+                                setPostType(PostType.POLL);
+                            }
+                        }}>
+                            <Icon style={{color: 'blue'}} className={`${blockName}-bottom-options-item-icon fa fa-poll`} />
+                            <span className={`${blockName}-bottom-options-item-text`}>Poll</span>
                         </div>
-                        <div className={`${blockName}-bottom-options-item`}>
-                            <Icon style={{color: 'green'}} className={`${blockName}-bottom-options-item-icon fa fa-location-dot`} />
-                            <span className={`${blockName}-bottom-options-item-text`}>Location - WIP</span>
-                        </div>
-                        <div className={`${blockName}-bottom-options-item`}>
-                            <Icon style={{color: 'goldenrod'}} className={`${blockName}-bottom-options-item-icon fa fa-smile`} />
-                            <span className={`${blockName}-bottom-options-item-text`}>Feelings - WIP</span>
+                        <div className={`${blockName}-bottom-options-item`} onClick={() => {
+                            if (postType === PostType.EVENT) {
+                                setPostType(PostType.TEXT);
+                            } else {
+                                setPostType(PostType.EVENT);
+                            }
+                        }}>
+                            <Icon style={{color: 'green'}} className={`${blockName}-bottom-options-item-icon fa fa-calendar-alt`} />
+                            <span className={`${blockName}-bottom-options-item-text`}>Event</span>
                         </div>
                     </div>
                     <Button theme='primary' onClick={submitHandler} className={`${blockName}-bottom-share-button`}>

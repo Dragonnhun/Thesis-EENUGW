@@ -5,16 +5,20 @@ import ReactionType from 'Frontend/generated/hu/eenugw/userprofilemanagement/con
 import MenuBarHelpers from 'Frontend/helpers/menuBarHelpers';
 import Comments from 'Frontend/components/comments/Comments';
 import LogType from 'Frontend/generated/hu/eenugw/core/constants/LogType';
+import PostType from 'Frontend/generated/hu/eenugw/userprofilemanagement/constants/PostType';
+import UserProfilePostPollReaction from 'Frontend/generated/hu/eenugw/userprofilemanagement/models/UserProfilePostPollReaction';
 import { Link } from 'react-router-dom';
 import { Avatar } from '@hilla/react-components/Avatar.js';
 import { Icon } from '@hilla/react-components/Icon.js';
-import { useEffect, useState } from 'react';
+import { Key, useEffect, useState } from 'react';
 import { TDate, format } from 'timeago.js';
 import { LoggerEndpoint, UserProfileEndpoint, UserProfilePostEndpoint } from 'Frontend/generated/endpoints';
 import { DateTime } from 'luxon';
 import { useAuth } from 'Frontend/util/auth';
 import { MenuBar } from '@hilla/react-components/MenuBar.js';
 import { Notification } from '@hilla/react-components/Notification.js';
+import { RadioGroup } from '@hilla/react-components/RadioGroup.js';
+import { RadioButton } from '@hilla/react-components/RadioButton.js';
 
 export default function Post(
     {userProfilePost, deletePostHandler}:
@@ -24,9 +28,11 @@ export default function Post(
 
     const { state } = useAuth();
     const [userProfile, setUserProfile] = useState<UserProfile | undefined>();
+    const [userProfilePostPollReaction, setUserProfilePostPollReaction] = useState<UserProfilePostPollReaction | undefined>();
     const [likeCount, setLikeCount] = useState(0);
     const [heartCount, setHeartCount] = useState(0);
     const [commentCount, setCommentCount] = useState(0);
+    const [votesCount, setVotesCount] = useState(0);
     const [isLiked, setIsLiked] = useState(false);
     const [isHearted, setIsHearted] = useState(false);
     const [creationDateLocal, setCreationDateLocal] = useState(DateTime.local().toISO() as string);
@@ -47,6 +53,11 @@ export default function Post(
             setCommentCount(userProfilePost?.userProfilePostCommentIds?.length ?? 0);
             setIsLiked(userProfilePost?.userProfileLikeIds?.includes(state.user?.userProfileId!) ?? false);
             setIsHearted(userProfilePost?.userProfileHeartIds?.includes(state.user?.userProfileId!) ?? false);
+
+            const userProfilePostPollReaction = await UserProfilePostEndpoint.getPollReactionByUserProfilePostIdAndUserProfileId(userProfilePost?.id!, state.user?.userProfileId!);
+            setUserProfilePostPollReaction(userProfilePostPollReaction);
+
+            setVotesCount(userProfilePost?.userProfilePostPollReactionIds?.length ?? 0);
         })();
     }, [state, userProfilePost]);
 
@@ -152,6 +163,31 @@ export default function Post(
                 </div>
                 <div className={`${blockName}-center`}>
                     <span className={`${blockName}-center-text`}>{userProfilePost?.description}</span>
+                    {(userProfilePost?.postType === PostType.POLL || userProfilePost?.postType === PostType.EVENT) && (
+                        <div className={`${blockName}-center-poll`}>
+                            <RadioGroup label='Please choose an answer!' theme='vertical'>
+                                {userProfilePost?.pollOptions.map((option: string, index: Key) => (
+                                    <RadioButton 
+                                        key={index}
+                                        value={option}
+                                        label={option}
+                                        checked={userProfilePostPollReaction?.reaction === option ?? false}
+                                        onClick={async () => {
+                                            const result = await UserProfilePostEndpoint.votePoll(userProfilePost?.id!, state.user?.userProfileId!, option);
+                                            if (result) {
+                                                setUserProfilePostPollReaction(result);
+
+                                                if (!userProfilePost.userProfilePostPollReactionIds?.includes(result.id)) {
+                                                    userProfilePost.userProfilePostPollReactionIds?.push(result.id);
+                                                    setVotesCount(votesCount + 1);
+                                                }
+                                            }
+                                        }} />
+                                ))}
+                            </RadioGroup>
+                            <span className={`${blockName}-center-poll-text`}>Total votes: {votesCount}</span>
+                        </div>
+                    )}
                     {userProfilePost?.photoPath && <img className={`${blockName}-center-image`} src={assetsFolder + userProfilePost?.photoPath} />}
                 </div>
                 <div className={`${blockName}-bottom`}>

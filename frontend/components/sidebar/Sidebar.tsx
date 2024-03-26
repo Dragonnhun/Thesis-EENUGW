@@ -50,18 +50,6 @@ export default function Sidebar() {
                                 <span className={`${listItemBlockName}-text`}>Groups - WIP</span>
                             </li>
                             <li className={listItemBlockName}>
-                                <Icon className={`${listItemBlockName}-icon`} icon='vaadin:bookmark' />
-                                <span className={`${listItemBlockName}-text`}>Bookmarks - WIP</span>
-                            </li>
-                            <li className={listItemBlockName}>
-                                <Icon className={`${listItemBlockName}-icon`} icon='vaadin:question-circle-o' />
-                                <span className={`${listItemBlockName}-text`}>Questions - WIP</span>
-                            </li>
-                            <li className={listItemBlockName}>
-                                <Icon className={`${listItemBlockName}-icon`} icon='vaadin:briefcase' />
-                                <span className={`${listItemBlockName}-text`}>Jobs - WIP</span>
-                            </li>
-                            <li className={listItemBlockName}>
                                 <Icon className={`${listItemBlockName}-icon`} icon='vaadin:calendar' />
                                 <span className={`${listItemBlockName}-text`}>Events - WIP</span>
                             </li>
