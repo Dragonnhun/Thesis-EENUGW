@@ -72,13 +72,6 @@ public class EmailService {
                             <span style="position: absolute; top: 40%; left: 50%; transform: translateX(-50%); color: white; font-family: Arial; font-size: 20px;">
                                 <a href="mailto:[[SITE_EMAIL]]" style="color: white; text-decoration: none;">Contact us at: [[SITE_EMAIL]]</a>    
                             </span>
-                            <span style="position: absolute; top: 60%; left: 50%; transform: translateX(-50%); color: white; font-family: Arial; font-size: 16px;">
-                                <a href="#" style="color: white; text-decoration: none;">About us</a> | 
-                                <a href="#" style="color: white; text-decoration: none;">Services</a> | 
-                                <a href="#" style="color: white; text-decoration: none;">FAQ</a> | 
-                                <a href="#" style="color: white; text-decoration: none;">Terms of Service</a> | 
-                                <a href="#" style="color: white; text-decoration: none;">Privacy Policy</a>
-                            </span>
                             <span style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); color: white; font-family: Arial; font-size: 14px;">© [[CURRENT_YEAR]] [[SITE_NAME]]. All Rights Reserved.</span>
                         </div>
                     </div>

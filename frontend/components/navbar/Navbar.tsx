@@ -125,7 +125,6 @@ export default function Navbar() {
                     <Link to='/'>
                         <div className={`${blockname}-icon-item`}>
                             <Icon icon='vaadin:home' />
-                            <span className='navbar-icon-badge'>0</span>
                         </div>
                     </Link>
                     <Link to='/messenger'>
