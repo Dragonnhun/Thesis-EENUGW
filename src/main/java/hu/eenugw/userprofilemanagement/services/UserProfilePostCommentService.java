@@ -110,7 +110,7 @@ public class UserProfilePostCommentService {
 
     @Transactional
     public UserProfilePostCommentEntity createComment(UserProfilePostCommentEntity userProfilePostCommentEntity) {
-        userProfilePostCommentEntity.creationDateUtc = InstantHelpers.utcNow();
+        userProfilePostCommentEntity.setCreationDateUtc(InstantHelpers.utcNow());
 
         return _userProfilePostCommentRepository.save(userProfilePostCommentEntity);
     }

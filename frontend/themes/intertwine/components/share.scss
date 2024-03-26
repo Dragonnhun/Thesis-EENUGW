@@ -33,6 +33,18 @@
                 outline: none;
             }
         }
+
+        &-poll {
+            &-add-option {
+                &-icon {
+                    color: $primary-color;
+
+                    &-check {
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
     }
 
     &-line {

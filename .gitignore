@@ -13,3 +13,6 @@ vite.generated.ts
 
 # Logging does not need to be in the repository.
 logs/
+
+# Assets do not need to be in the repository as they should be handled separately.
+frontend/assets/

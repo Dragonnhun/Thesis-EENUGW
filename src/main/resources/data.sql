@@ -46,18 +46,18 @@ INSERT INTO user_profiles (version, id, profile_display_id, first_name, full_nam
 (1, 'e70e1427-9d44-4d6c-9941-3dd6710e51bd', UUID(), 'Susan', 'Susan Simmons', 'Simmons', '87da0537-3383-46c3-a001-c7105d6a4385', 'images/profile-pictures/9.jpg', 'images/cover-pictures/9.jpg');
 
 -- Inserting example users' posts.
-INSERT INTO user_profile_posts (version, id, description, photo_path, creation_date_utc, user_profile_id) VALUES
-(1, '25a29b97-83b4-4efa-bdb7-78997fc94a48', 'Example post text.', 'images/post-pictures/1.jpg', UTC_TIMESTAMP(), '2bb10c7f-33e1-4a32-971a-aa80cfb72059'),
-(1, 'a607600a-a798-4798-8ccf-7441eff40358', 'Example post text 2.', 'images/post-pictures/2.jpg', UTC_TIMESTAMP(), '7470937e-c439-4f4d-ade7-2c6b3c71b870'),
-(1, 'def28656-ea84-4ba9-86df-ab6165cf895c', 'Example post text 3.', 'images/post-pictures/3.jpg', UTC_TIMESTAMP(), '7c1f40bf-660e-4359-b413-a18c8e4f76fe'),
-(1, 'a690627b-1ba9-4388-af83-7a2dadf6777e', '', 'images/post-pictures/4.jpg', UTC_TIMESTAMP(), 'ca3aadaf-f9fb-41a8-ab4c-4dc981d615f8'),
-(1, '2e8d1977-5460-4755-9cd4-4a40f9fcf941', '', 'images/post-pictures/5.jpg', UTC_TIMESTAMP(), '4cfc19e7-f633-44f9-9373-2d6a06b5e03b'),
-(1, '21e36f9c-6c9a-45df-97fb-b3015b4150dd', 'Example post text 4.', 'images/post-pictures/6.jpg', UTC_TIMESTAMP(), 'd5a05f8c-199d-4588-a2d3-9a248b5c0928'),
-(1, '6d48edcf-4288-4bc5-8808-69af63b88eba', '', 'images/post-pictures/7.jpg', UTC_TIMESTAMP(), 'dceecce0-f6d2-4c8c-8c84-3408bbb46224'),
-(1, 'e6f201ce-b2b8-499e-9856-b5d8627e55d4', 'Example post text 5.', 'images/post-pictures/8.jpg', UTC_TIMESTAMP(), 'ebe6c797-ba0c-433c-af18-fb7dbdc10884'),
-(1, 'f528e6f9-409a-4661-a7cd-f2c5d07b7ded', '', 'images/post-pictures/9.jpg', UTC_TIMESTAMP(), 'd92c4174-2f41-4e06-859c-dbe5d91d337a'),
-(1, '342b1214-13b8-41b3-8b29-46a4ee58ce4b', '', 'images/post-pictures/10.jpg', UTC_TIMESTAMP(), '99eb7897-6da4-4607-bc5c-5a65b783690b'),
-(1, '5871f22c-990e-4528-9689-7c08e5447305', 'Example post text 6.', 'images/post-pictures/11.jpg', UTC_TIMESTAMP(), 'e70e1427-9d44-4d6c-9941-3dd6710e51bd');
+INSERT INTO user_profile_posts (version, id, description, photo_path, creation_date_utc, user_profile_id, post_type) VALUES
+(1, '25a29b97-83b4-4efa-bdb7-78997fc94a48', 'Example post text.', 'images/post-pictures/1.jpg', UTC_TIMESTAMP(), '2bb10c7f-33e1-4a32-971a-aa80cfb72059', 0),
+(1, 'a607600a-a798-4798-8ccf-7441eff40358', 'Example post text 2.', 'images/post-pictures/2.jpg', UTC_TIMESTAMP(), '7470937e-c439-4f4d-ade7-2c6b3c71b870', 0),
+(1, 'def28656-ea84-4ba9-86df-ab6165cf895c', 'Example post text 3.', 'images/post-pictures/3.jpg', UTC_TIMESTAMP(), '7c1f40bf-660e-4359-b413-a18c8e4f76fe', 0),
+(1, 'a690627b-1ba9-4388-af83-7a2dadf6777e', '', 'images/post-pictures/4.jpg', UTC_TIMESTAMP(), 'ca3aadaf-f9fb-41a8-ab4c-4dc981d615f8', 0),
+(1, '2e8d1977-5460-4755-9cd4-4a40f9fcf941', '', 'images/post-pictures/5.jpg', UTC_TIMESTAMP(), '4cfc19e7-f633-44f9-9373-2d6a06b5e03b', 0),
+(1, '21e36f9c-6c9a-45df-97fb-b3015b4150dd', 'Example post text 4.', 'images/post-pictures/6.jpg', UTC_TIMESTAMP(), 'd5a05f8c-199d-4588-a2d3-9a248b5c0928', 0),
+(1, '6d48edcf-4288-4bc5-8808-69af63b88eba', '', 'images/post-pictures/7.jpg', UTC_TIMESTAMP(), 'dceecce0-f6d2-4c8c-8c84-3408bbb46224', 0),
+(1, 'e6f201ce-b2b8-499e-9856-b5d8627e55d4', 'Example post text 5.', 'images/post-pictures/8.jpg', UTC_TIMESTAMP(), 'ebe6c797-ba0c-433c-af18-fb7dbdc10884', 0),
+(1, 'f528e6f9-409a-4661-a7cd-f2c5d07b7ded', '', 'images/post-pictures/9.jpg', UTC_TIMESTAMP(), 'd92c4174-2f41-4e06-859c-dbe5d91d337a', 0),
+(1, '342b1214-13b8-41b3-8b29-46a4ee58ce4b', '', 'images/post-pictures/10.jpg', UTC_TIMESTAMP(), '99eb7897-6da4-4607-bc5c-5a65b783690b', 0),
+(1, '5871f22c-990e-4528-9689-7c08e5447305', 'Example post text 6.', 'images/post-pictures/11.jpg', UTC_TIMESTAMP(), 'e70e1427-9d44-4d6c-9941-3dd6710e51bd', 0);
 
 -- Inserting example users' user profile followings.
 INSERT INTO user_profile_followings VALUES

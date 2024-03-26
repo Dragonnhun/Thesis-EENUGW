@@ -73,6 +73,20 @@
             max-height: 500px;
             object-fit: contain;
         }
+
+        &-poll {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            &-text {
+                cursor: pointer;
+
+                &:hover {
+                    color: $primary-color;
+                }
+            }
+        }
     }
 
     &-bottom {
@@ -97,6 +111,10 @@
                 &.active {
                     border-radius: 50%;
                     border: 3px solid $primary-color;
+                }
+
+                &:hover {
+                    transform: scale(1.1);
                 }
             }
 
