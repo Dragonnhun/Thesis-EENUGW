@@ -182,12 +182,23 @@ export default function Share({posted}: {posted?: () => void}){
                             <span className={`${blockName}-bottom-options-item-text`}>Photo or Video</span>
                             <input className={`${blockName}-bottom-options-item-upload`} type='file' id='post-file' accept='.png,.jpeg,.jpg' onChange={(event) => {
                                 if (event.target.files) {
-                                    setFile(event.target.files[0]);
-
-                                    Notification.show('File ' + event.target.files[0].name + ' has been selected for post!', {
-                                        position: 'top-center',
-                                        duration: 3000,
-                                    });
+                                    const selectedFile = event.target.files[0];
+                                    // 5 MB.
+                                    const maxSizeInBytes = 5 * 1024 * 1024;
+                                    if (selectedFile.size > maxSizeInBytes) {
+                                        Notification.show('File size exceeds the limit (5 MB). Please select a smaller file.', {
+                                            position: 'top-center',
+                                            theme: 'error',
+                                            duration: 3000,
+                                        });
+                                    } else {
+                                        setFile(selectedFile);
+                                        Notification.show('File ' + selectedFile.name + ' has been selected for post!', {
+                                            position: 'top-center',
+                                            theme: 'success',
+                                            duration: 3000,
+                                        });
+                                    }
                                 }
                             }} />
                         </label>

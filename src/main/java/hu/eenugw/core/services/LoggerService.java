@@ -1,6 +1,6 @@
 package hu.eenugw.core.services;
 
-import static hu.eenugw.core.extensions.StringExtensions.isNullOrEmptyOrBlank;
+import static hu.eenugw.core.extensions.StringExtensions.isNullOrBlank;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +13,7 @@ public class LoggerService {
     private static final Logger logger = LoggerFactory.getLogger(LoggerService.class);
 
     public void log(String message, LogType logType) {
-        if (isNullOrEmptyOrBlank(message) || logType == null) return;
+        if (isNullOrBlank(message) || logType == null) return;
 
         switch (logType) {
             case DEBUG:

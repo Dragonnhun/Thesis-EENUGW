@@ -1,6 +1,6 @@
 package hu.eenugw.userprofilemanagement.endpoints;
 
-import static hu.eenugw.core.extensions.StringExtensions.isNullOrEmptyOrBlank;
+import static hu.eenugw.core.extensions.StringExtensions.isNullOrBlank;
 
 import java.util.List;
 import java.util.Optional;
@@ -70,7 +70,7 @@ public class UserProfilePostEndpoint {
     }
 
     public boolean deleteUserProfilePostByUserProfilePostId(String userProfilePostId) {
-        if (isNullOrEmptyOrBlank(userProfilePostId)) {
+        if (isNullOrBlank(userProfilePostId)) {
             Optional.empty();
         }
 

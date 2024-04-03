@@ -1,6 +1,6 @@
 package hu.eenugw.userprofilemanagement.services;
 
-import static hu.eenugw.core.extensions.StringExtensions.isNullOrEmptyOrBlank;
+import static hu.eenugw.core.extensions.StringExtensions.isNullOrBlank;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,7 @@ public class UserProfilePostCommentService {
     }
 
     public List<UserProfilePostCommentEntity> getUserProfilePostCommentsByUserProfilePostId(String userProfilePostId) {
-        if (isNullOrEmptyOrBlank(userProfilePostId)) {
+        if (isNullOrBlank(userProfilePostId)) {
             return List.of();
         }
 
@@ -44,7 +44,7 @@ public class UserProfilePostCommentService {
     }
 
     public List<Pair<UserProfileEntity, UserProfilePostCommentEntity>> getUserProfilesAndUserProfilePostCommentsByUserProfilePostId(String userProfilePostId) {
-        if (isNullOrEmptyOrBlank(userProfilePostId)) {
+        if (isNullOrBlank(userProfilePostId)) {
             return List.of();
         }
 
@@ -56,7 +56,7 @@ public class UserProfilePostCommentService {
 
     @Transactional
     public Pair<Boolean, String> likeDislikeComment(String userProfileCommentId, String userProfileId, ReactionType reactionType) {
-        if (isNullOrEmptyOrBlank(userProfileCommentId) || isNullOrEmptyOrBlank(userProfileId)) {
+        if (isNullOrBlank(userProfileCommentId) || isNullOrBlank(userProfileId)) {
             return Pair.of(false, "Comment ID or User ID is not provided.");
         }
 
@@ -117,7 +117,7 @@ public class UserProfilePostCommentService {
 
     @Transactional
     public boolean deleteUserProfilePostCommentByUserProfilePostCommentId(String userProfilePostCommentId) {
-        if (isNullOrEmptyOrBlank(userProfilePostCommentId)) {
+        if (isNullOrBlank(userProfilePostCommentId)) {
             return false;
         }
 

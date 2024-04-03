@@ -1,6 +1,6 @@
 package hu.eenugw.socketio.configuration;
 
-import static hu.eenugw.core.extensions.StringExtensions.isNullOrEmptyOrBlank;
+import static hu.eenugw.core.extensions.StringExtensions.isNullOrBlank;
 
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.Configuration;
@@ -63,7 +63,7 @@ public class SocketIOConfiguration {
         server.addEventListener("connectUser", String.class, new DataListener<String>() {
             @Override
             public void onData(SocketIOClient client, String userProfileId, AckRequest ackRequest) {
-                if (isNullOrEmptyOrBlank(userProfileId)) {
+                if (isNullOrBlank(userProfileId)) {
                     logger.info("Cannot connect user profile. ID is empty or null: " + userProfileId);
 
                     return;
@@ -86,7 +86,7 @@ public class SocketIOConfiguration {
         server.addEventListener("disconnectUser", String.class, new DataListener<String>() {
             @Override
             public void onData(SocketIOClient client, String userProfileId, AckRequest ackRequest) {
-                if (isNullOrEmptyOrBlank(userProfileId)) {
+                if (isNullOrBlank(userProfileId)) {
                     logger.info("Cannot disconnect user profile. ID is empty or null: " + userProfileId);
 
                     return;

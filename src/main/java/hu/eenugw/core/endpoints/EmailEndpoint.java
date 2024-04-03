@@ -2,10 +2,15 @@ package hu.eenugw.core.endpoints;
 
 import java.io.UnsupportedEncodingException;
 
+import com.vaadin.flow.server.auth.AnonymousAllowed;
+
+import dev.hilla.Endpoint;
 import hu.eenugw.core.models.Email;
 import hu.eenugw.core.services.EmailService;
 import jakarta.mail.MessagingException;
 
+@Endpoint
+@AnonymousAllowed
 public class EmailEndpoint {
     private final EmailService _emailService;
 
