@@ -5,6 +5,7 @@ import Pair from 'Frontend/generated/org/springframework/data/util/Pair';
 import ReactionType from 'Frontend/generated/hu/eenugw/userprofilemanagement/constants/ReactionType';
 import MenuBarHelpers from 'Frontend/helpers/menuBarHelpers';
 import LogType from 'Frontend/generated/hu/eenugw/core/constants/LogType';
+import Role from 'Frontend/generated/hu/eenugw/usermanagement/constants/Role';
 import { DateTime } from 'luxon';
 import { Avatar } from '@hilla/react-components/Avatar.js';
 import { TDate, format } from 'timeago.js';
@@ -144,7 +145,7 @@ export default function Comment(
                     </div>
                 </div>
                 <span className={`${blockName}-date`}>{format(creationDateLocal as TDate)}</span>
-                {state.user?.userProfileId === userProfilePostComment?.userProfileId && (
+                {(state.user?.userProfileId === userProfilePostComment?.userProfileId) || state.user?.roles.includes(Role.ADMIN) && (
                     <MenuBar
                         className={`${detailsBlockName}-menu-bar`}
                         items={

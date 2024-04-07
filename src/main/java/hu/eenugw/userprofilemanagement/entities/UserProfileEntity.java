@@ -148,6 +148,6 @@ public class UserProfileEntity {
 
     @PrePersist
     protected void prePersist() {
-        fullName = firstName + " " + lastName;
+        setFullName(firstName + " " + lastName);
     }
 }
