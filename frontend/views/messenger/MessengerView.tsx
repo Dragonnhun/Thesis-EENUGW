@@ -39,6 +39,7 @@ export default function MessengerView() {
 
             socket.current.on('receivePrivateMessage', (data) => {
                 const arrivingPrivateMessage = PrivateMessageModel.createEmptyValue();
+
                 arrivingPrivateMessage.id = UUIDHelpers.generateUUID();
                 arrivingPrivateMessage.senderUserProfileId = data.senderUserProfileId;
                 arrivingPrivateMessage.message = data.message;
@@ -149,6 +150,7 @@ export default function MessengerView() {
         }
 
         const newPrivateMessageModel = PrivateMessageModel.createEmptyValue();
+        
         newPrivateMessageModel.senderUserProfileId = userProfile?.id!;
         newPrivateMessageModel.privateConversationId = currentPrivateConversation?.id!;
         newPrivateMessageModel.message = newPrivateMessage;
