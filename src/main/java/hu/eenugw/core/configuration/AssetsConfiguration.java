@@ -1,5 +1,7 @@
 package hu.eenugw.core.configuration;
 
+import java.io.File;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
@@ -9,10 +11,11 @@ import org.springframework.web.servlet.function.ServerResponse;
 
 @Configuration
 public class AssetsConfiguration {
-    private static final FileSystemResource ASSETS_FILE_SYSTEM_RESOURCE = new FileSystemResource("././././././././frontend/assets/");
+    private static final FileSystemResource ASSETS_FILE_SYSTEM_RESOURCE =
+        new FileSystemResource(new File("").getAbsolutePath() + "/frontend/assets/");
 
     @Bean
-    public RouterFunction<ServerResponse> assetsRouter() {
+    protected RouterFunction<ServerResponse> assetsRouter() {
         return RouterFunctions.resources("/assets/**", ASSETS_FILE_SYSTEM_RESOURCE);
     }
 

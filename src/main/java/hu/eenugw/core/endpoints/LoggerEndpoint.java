@@ -1,12 +1,13 @@
 package hu.eenugw.core.endpoints;
 
+import com.vaadin.flow.server.auth.AnonymousAllowed;
+
 import dev.hilla.Endpoint;
 import hu.eenugw.core.constants.LogType;
 import hu.eenugw.core.services.LoggerService;
-import jakarta.annotation.security.RolesAllowed;
 
 @Endpoint
-@RolesAllowed("ROLE_USER")
+@AnonymousAllowed
 public class LoggerEndpoint {
     private final LoggerService _loggerService;
 

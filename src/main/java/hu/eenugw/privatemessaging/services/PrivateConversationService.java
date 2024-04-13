@@ -1,6 +1,6 @@
 package hu.eenugw.privatemessaging.services;
 
-import static hu.eenugw.core.extensions.StringExtensions.isNullOrEmptyOrBlank;
+import static hu.eenugw.core.extensions.StringExtensions.isNullOrBlank;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ public class PrivateConversationService {
     }
 
     public Optional<PrivateConversationEntity> getPrivateConversationEntityById(String privateConversationId) {
-        if (isNullOrEmptyOrBlank(privateConversationId)) {
+        if (isNullOrBlank(privateConversationId)) {
             return Optional.empty();
         }
 
@@ -35,7 +35,7 @@ public class PrivateConversationService {
     }
 
     public Optional<PrivateConversationEntity> getOrCreatePrivateConversationEntityByUserProfileIds(String senderUserProfileId, String receiverUserProfileId) {
-        if (isNullOrEmptyOrBlank(senderUserProfileId) || isNullOrEmptyOrBlank(receiverUserProfileId)) {
+        if (isNullOrBlank(senderUserProfileId) || isNullOrBlank(receiverUserProfileId)) {
             return Optional.empty();
         }
 
@@ -72,7 +72,7 @@ public class PrivateConversationService {
     }
 
     public Optional<PrivateConversationEntity> createPrivateConversationEntity(String senderUserProfileId, String receiverUserProfileId) {
-        if (isNullOrEmptyOrBlank(senderUserProfileId) || isNullOrEmptyOrBlank(receiverUserProfileId)) {
+        if (isNullOrBlank(senderUserProfileId) || isNullOrBlank(receiverUserProfileId)) {
             return Optional.empty();
         }
 
@@ -108,7 +108,7 @@ public class PrivateConversationService {
     }
 
     public List<PrivateConversationEntity> getPrivateConversationEntitiesByUserProfileId(String userProfileId) {
-        if (isNullOrEmptyOrBlank(userProfileId)) {
+        if (isNullOrBlank(userProfileId)) {
             return List.of();
         }
 

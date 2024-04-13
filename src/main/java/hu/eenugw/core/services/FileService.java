@@ -1,6 +1,6 @@
 package hu.eenugw.core.services;
 
-import static hu.eenugw.core.extensions.StringExtensions.isNullOrEmptyOrBlank;
+import static hu.eenugw.core.extensions.StringExtensions.isNullOrBlank;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,7 +17,7 @@ import hu.eenugw.core.models.Image;
 @Service
 public class FileService {
     public Pair<Boolean, String> uploadImage(Image image, ImageType imageType) {
-        if (isNullOrEmptyOrBlank(image.getBase64()) || isNullOrEmptyOrBlank(image.getExtension()) || imageType == null) {
+        if (isNullOrBlank(image.getBase64()) || isNullOrBlank(image.getExtension()) || imageType == null) {
             return Pair.of(false, "Image or type is not provided.");
         }
 
@@ -59,7 +59,7 @@ public class FileService {
     }
 
     public Pair<Boolean, String> deleteImage(String imageName, ImageType imageType) {
-        if (isNullOrEmptyOrBlank(imageName) || imageType == null) {
+        if (isNullOrBlank(imageName) || imageType == null) {
             return Pair.of(false, "Image name or type is not provided.");
         }
 

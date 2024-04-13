@@ -1,13 +1,14 @@
 import 'themes/intertwine/views/forgotten-password-form.scss';
 import validator from 'validator';
 import Pair from 'Frontend/generated/org/springframework/data/util/Pair';
+import LogType from 'Frontend/generated/hu/eenugw/core/constants/LogType';
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { Button } from '@hilla/react-components/Button.js';
 import { Icon } from '@hilla/react-components/Icon.js';
 import { EmailField } from '@hilla/react-components/EmailField.js';
 import { Notification } from '@hilla/react-components/Notification.js';
-import { RouteEndpoint, SiteEndpoint, UserEndpoint } from 'Frontend/generated/endpoints';
+import { LoggerEndpoint, RouteEndpoint, SiteEndpoint, UserEndpoint } from 'Frontend/generated/endpoints';
 import { useAuth } from 'Frontend/util/auth';
 import { StringModel } from '@hilla/form';
 import { useForm } from '@hilla/react-form';
@@ -55,7 +56,7 @@ export default function ForgottenPasswordView() {
         
                 const result = await UserEndpoint.requestResettingForgottenPassword(email) as Pair;
         
-                if (result.first === "Error") {
+                if (!(result.first as boolean)) {
                     Notification.show(result.second as string, {
                         position: 'top-center',
                         duration: 4000,
@@ -83,7 +84,8 @@ export default function ForgottenPasswordView() {
                 }, 30000);
             } catch (error) {
                 console.error(error);
-    
+                await LoggerEndpoint.log((error as Error).stack!, LogType.ERROR);
+
                 Notification.show('An error occurred while requesting resetting forgotten password!', {
                     position: 'top-center',
                     duration: 4000,

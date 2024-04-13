@@ -74,6 +74,10 @@
     width: 5px;
 }
 
+::-webkit-scrollbar:horizontal {
+    height: 5px;
+}
+
 ::-webkit-scrollbar-track {
     background-color: $secondary-color;
 }

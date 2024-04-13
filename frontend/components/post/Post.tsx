@@ -7,6 +7,7 @@ import Comments from 'Frontend/components/comments/Comments';
 import LogType from 'Frontend/generated/hu/eenugw/core/constants/LogType';
 import PostType from 'Frontend/generated/hu/eenugw/userprofilemanagement/constants/PostType';
 import UserProfilePostPollReaction from 'Frontend/generated/hu/eenugw/userprofilemanagement/models/UserProfilePostPollReaction';
+import Role from 'Frontend/generated/hu/eenugw/usermanagement/constants/Role';
 import { Link } from 'react-router-dom';
 import { Avatar } from '@hilla/react-components/Avatar.js';
 import { Icon } from '@hilla/react-components/Icon.js';
@@ -135,7 +136,7 @@ export default function Post(
                         <span className={`${blockName}-top-left-date`}>{format(creationDateLocal as TDate)}</span>
                     </div>
                     <div className={`${blockName}-top-right`}>
-                        {state.user?.userProfileId === userProfilePost?.userProfileId && (
+                        {(state.user?.userProfileId === userProfilePost?.userProfileId) || state.user?.roles.includes(Role.ADMIN) && (
                             <MenuBar
                                 className={`${blockName}-menu-bar`}
                                 items={

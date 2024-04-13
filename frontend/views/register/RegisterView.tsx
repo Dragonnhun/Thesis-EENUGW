@@ -155,7 +155,8 @@ export default function RegisterView() {
                             Log In
                         </Button>
                     </section>
-                </div>) : (
+                </div>
+            ) : (
                 <div className={`${blockName}-container`}>
                     <section className={`${blockName}-section`}>
                         <div className={`${blockName}-header`}>
@@ -208,7 +209,8 @@ export default function RegisterView() {
                             Log In
                         </Button>
                     </section>
-                </div> )}
+                </div> 
+            )}
         </>
     )
 }

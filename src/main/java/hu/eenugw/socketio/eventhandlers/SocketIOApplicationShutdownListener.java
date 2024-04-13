@@ -9,10 +9,10 @@ import com.corundumstudio.socketio.SocketIOServer;
 @Component
 public class SocketIOApplicationShutdownListener implements ApplicationListener<ContextClosedEvent> {
     @Autowired
-    private SocketIOServer socketIOServer;
+    private SocketIOServer _socketIOServer;
 
     @Override
     public void onApplicationEvent(ContextClosedEvent event) {
-        socketIOServer.stop();
+        _socketIOServer.stop();
     }
 }

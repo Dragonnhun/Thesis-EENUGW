@@ -11,10 +11,10 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -50,9 +50,9 @@ public class PrivateMessageEntity {
         fetch = FetchType.LAZY)
     private UserProfileEntity senderUserProfile;
 
-    @Lob
+    @Size(max = 1000)
     private String message;
 
     @Convert(converter = InstantConverter.class)
-    public Instant creationDateUtc;
+    private Instant creationDateUtc;
 }

@@ -78,9 +78,9 @@ export default function Navbar() {
                 {
                     text: 'Settings',
                 },
-                {
-                    text: 'Help - WIP',
-                },
+                // {
+                //     text: 'Help - WIP',
+                // },
                 {
                     text: 'Log out',
                 },
@@ -108,7 +108,7 @@ export default function Navbar() {
                             }
                         }}>
                     </input>
-                    <Button onClick={submitSearch} className={`${searchbarBlockName}-bottom`} theme='tertiary'>Search</Button>
+                    <Button onClick={submitSearch} className={`${searchbarBlockName}-button`} theme='tertiary'>Search</Button>
                 </div>
             </div>
             <div slot='navbar' className={`${blockname}-right`}>
@@ -130,14 +130,14 @@ export default function Navbar() {
                     <Link to='/messenger'>
                         <div className={`${blockname}-icon-item`}>
                             <Icon icon='vaadin:chat' />
-                            <span className='navbar-icon-badge'>0</span>
+                            {/* <span className='navbar-icon-badge'>0</span> */}
                         </div>
                     </Link>
-                    <div className={`${blockname}-icon-item`}>
+                    {/* <div className={`${blockname}-icon-item`}>
                         <Icon icon='vaadin:bell' />
                         (WIP)
                         <span className='navbar-icon-badge'>0</span>
-                    </div>
+                    </div> */}
                 </div>
                 <MenuBar
                     className={`${blockname}-menu-bar`}

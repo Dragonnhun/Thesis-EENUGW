@@ -15,9 +15,8 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 @Theme(value = "intertwine", variant = "light")
-@PWA(name = "intertwine", shortName = "intertwine", offlineResources = {})
+@PWA(name = "intertwine", shortName = "iTw", offlinePath = "offline.html")
 public class Application implements AppShellConfigurator {
-
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }

@@ -3,7 +3,6 @@ package hu.eenugw.core.services;
 import java.io.UnsupportedEncodingException;
 import java.time.Instant;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -13,7 +12,6 @@ import jakarta.mail.MessagingException;
 
 @Service
 public class EmailService {
-    @Autowired
     private final JavaMailSender _javaMailSender;
     private final SiteService _siteService;
 
@@ -23,6 +21,8 @@ public class EmailService {
     }
 
     public void sendEmail(Email email) throws MessagingException, UnsupportedEncodingException {
+        if (email == null) return;
+
         var toAddress = email.getToAddress();
         var fromAddress = email.getFromAddress();
         var senderName = email.getSenderName();

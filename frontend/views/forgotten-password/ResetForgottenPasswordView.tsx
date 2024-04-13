@@ -50,7 +50,7 @@ export default function ResetForgottenPasswordView() {
         
                 var result = await UserEndpoint.resetForgottenPassword(forgottenPasswordToken!, newPassword!) as Pair;
         
-                if (result.first === "Error") {
+                if (!(result.first as boolean)) {
                     Notification.show(result.second as string, {
                         position: 'top-center',
                         duration: 4000,
@@ -112,7 +112,7 @@ export default function ResetForgottenPasswordView() {
                             <Icon slot="prefix" icon="vaadin:lock" />
                         </PasswordField>
                         <Button 
-                            disabled={newPassword != repeatNewPassword || newPassword == undefined || repeatNewPassword == undefined}
+                            disabled={newPassword != repeatNewPassword || newPassword == undefined || repeatNewPassword == undefined || newPassword.length < 8 || repeatNewPassword.length < 8}
                             onClick={submit}
                             theme='primary contained submit'
                             title='Reset Password'

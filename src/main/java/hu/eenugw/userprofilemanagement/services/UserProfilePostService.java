@@ -1,6 +1,6 @@
 package hu.eenugw.userprofilemanagement.services;
 
-import static hu.eenugw.core.extensions.StringExtensions.isNullOrEmptyOrBlank;
+import static hu.eenugw.core.extensions.StringExtensions.isNullOrBlank;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +47,7 @@ public class UserProfilePostService {
     }
 
     public Optional<UserProfilePostEntity> getUserProfilePostByUserProfilePostId(String userProfilePostId) {
-        if (isNullOrEmptyOrBlank(userProfilePostId)) {
+        if (isNullOrBlank(userProfilePostId)) {
             return Optional.empty();
         }
 
@@ -55,7 +55,7 @@ public class UserProfilePostService {
     }
 
     public List<UserProfilePostEntity> getAllUserProfilePostsByUserProfileId(String userProfileId) {
-        if (isNullOrEmptyOrBlank(userProfileId)) {
+        if (isNullOrBlank(userProfileId)) {
             return new ArrayList<UserProfilePostEntity>();
         }
 
@@ -63,7 +63,7 @@ public class UserProfilePostService {
     }
 
     public List<UserProfilePostEntity> getAllUserProfilePostsByProfileDisplayId(String profileDisplayId) {
-        if (isNullOrEmptyOrBlank(profileDisplayId)) {
+        if (isNullOrBlank(profileDisplayId)) {
             return new ArrayList<UserProfilePostEntity>();
         }
 
@@ -79,7 +79,7 @@ public class UserProfilePostService {
     }
 
     public List<UserProfilePostEntity> getTimelineByUserProfileId(String userProfileId) {
-        if (isNullOrEmptyOrBlank(userProfileId)) {
+        if (isNullOrBlank(userProfileId)) {
             return new ArrayList<UserProfilePostEntity>();
         }
 
@@ -112,7 +112,7 @@ public class UserProfilePostService {
 
     @Transactional
     public Pair<Boolean, String> likeDislikePost(String userProfilePostId, String userProfileId, ReactionType reactionType) {
-        if (isNullOrEmptyOrBlank(userProfilePostId) || isNullOrEmptyOrBlank(userProfileId)) {
+        if (isNullOrBlank(userProfilePostId) || isNullOrBlank(userProfileId)) {
             return Pair.of(false, "Post ID or User ID is not provided.");
         }
 
@@ -173,7 +173,7 @@ public class UserProfilePostService {
 
     @Transactional
     public boolean deleteUserProfilePostByUserProfilePostId(String userProfilePostId) {
-        if (isNullOrEmptyOrBlank(userProfilePostId)) {
+        if (isNullOrBlank(userProfilePostId)) {
             return false;
         }
 
@@ -200,7 +200,7 @@ public class UserProfilePostService {
 
     @Transactional
     public Optional<UserProfilePostPollReactionEntity> votePoll(String userProfilePostId, String userProfileId, String pollOption) {
-        if (isNullOrEmptyOrBlank(userProfilePostId) || isNullOrEmptyOrBlank(userProfileId) || isNullOrEmptyOrBlank(pollOption)) {
+        if (isNullOrBlank(userProfilePostId) || isNullOrBlank(userProfileId) || isNullOrBlank(pollOption)) {
             return Optional.empty();
         }
 
@@ -255,7 +255,7 @@ public class UserProfilePostService {
     }
 
     public Optional<UserProfilePostPollReactionEntity> getUserProfilePostPollReactionByUserProfilePostPollReactionId(String userProfilePostPollReactionId) {
-        if (isNullOrEmptyOrBlank(userProfilePostPollReactionId)) {
+        if (isNullOrBlank(userProfilePostPollReactionId)) {
             return Optional.empty();
         }
 
@@ -263,7 +263,7 @@ public class UserProfilePostService {
     }
 
     public Optional<UserProfilePostPollReactionEntity> getUserProfilePostPollReactionByUserProfilePostIdAndUserProfileId(String userProfilePostId, String userProfileId) {
-        if (isNullOrEmptyOrBlank(userProfilePostId) || isNullOrEmptyOrBlank(userProfileId)) {
+        if (isNullOrBlank(userProfilePostId) || isNullOrBlank(userProfileId)) {
             return Optional.empty();
         }
 

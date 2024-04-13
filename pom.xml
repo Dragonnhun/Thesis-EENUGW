@@ -5,8 +5,8 @@
     <!-- Project from https://start.vaadin.com/project/42578f3c-951c-49fc-a6d3-fce568867d4c -->
     <groupId>hu.eenugw</groupId>
     <artifactId>intertwine</artifactId>
-    <name>intertwine</name>
-    <version>1.0-SNAPSHOT</version>
+    <name>InterTwine</name>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -115,11 +115,6 @@
             <artifactId>netty-socketio</artifactId>
             <version>2.0.8</version>
         </dependency>
-
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-        </dependency>
     </dependencies>
 
     <build>
@@ -140,8 +135,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.12.1</version>
                 <configuration>
-                    <source>21</source>
-                    <target>21</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>
